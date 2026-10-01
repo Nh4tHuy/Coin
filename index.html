@@ -124,12 +124,12 @@
       <!-- Live Price & 10m Quick Stats -->
       <div class="flex items-center space-x-2 sm:space-x-3">
         <div class="flex flex-col">
-          <span id="nav-price" class="text-sm sm:text-lg font-bold font-mono text-brand-buy leading-tight">77.000₫</span>
+          <span id="nav-price" class="text-sm sm:text-lg font-bold font-mono text-brand-buy leading-tight">177.000₫</span>
           <span id="nav-change" class="text-[10px] sm:text-[11px] font-mono font-semibold text-brand-buy leading-none">+0.00%</span>
         </div>
         <div class="hidden md:flex items-center space-x-3 text-[10px] font-mono text-brand-textMuted border-l border-brand-border pl-3">
-          <div>10P Cao: <b id="stat-24h-high" class="text-slate-200">77.500 ₫</b></div>
-          <div>10P Thấp: <b id="stat-24h-low" class="text-slate-200">76.200 ₫</b></div>
+          <div>10P Cao: <b id="stat-24h-high" class="text-slate-200">177.500 ₫</b></div>
+          <div>10P Thấp: <b id="stat-24h-low" class="text-slate-200">176.200 ₫</b></div>
         </div>
       </div>
     </div>
@@ -153,7 +153,7 @@
         <div id="speed-popover" class="absolute right-0 top-full mt-1.5 w-60 bg-brand-panel/95 backdrop-blur border border-brand-border rounded-xl p-3 shadow-2xl z-40 hidden">
           <div class="flex items-center justify-between text-[11px] mb-2">
             <span class="text-brand-textMuted flex items-center">
-              <i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Tốc độ mô phỏng
+              <i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Tốc độ
             </span>
             <span id="speed-slider-val" class="font-mono font-bold text-amber-400 text-xs">x1</span>
           </div>
@@ -1140,7 +1140,7 @@
     const WIKY_SPEC = {
       name: "WIKY Coin",
       symbol: "WIKY",
-      basePrice: 77000,
+      basePrice: 177000,
       volatility: 0.0040,   // 0.40%
       tickSize: 100,
       closeDelaySec: 0      // Instant (0s)
@@ -1156,7 +1156,7 @@
 
     /* Built-in accounts database (Fallback memory synced with GAS) */
     const localUsersDb = {
-      'admin': { password: 'admin', role: 'admin', balance: 10000000 },
+      'admin': { password: 'admin', role: 'user', balance: 10000000 },
       'trader': { password: '123', role: 'user', balance: 1000000 }
     };
 
@@ -1579,10 +1579,10 @@
       const giftModal = document.getElementById('giftcode-modal');
       const inputGift = document.getElementById('input-giftcode');
       giftModal.classList.remove('hidden');
-      inputGift.value = '7777';
+      inputGift.value = 'VIP777';
 
       if (!currentUser) {
-        showToast("Bạn đã nhận mã VIP777! Vui lòng đăng nhập để nạp tiền vào ví.", "info");
+        showToast("Bạn đã nhận mã VIP777! Vui lòng đăng nhập để nhận tiền vào ví.", "info");
       } else {
         handleRedeemGiftcode('VIP777');
       }
@@ -2548,7 +2548,7 @@
     document.getElementById('btn-zoom-out').addEventListener('click', () => zoomChart(-1));
     document.getElementById('btn-reset-price-scale').addEventListener('click', () => {
       resetPriceScale();
-      showToast("Đã khôi phục khung giá tự động (Auto Scale).", "info");
+      showToast("Đã khôi phục khung giá tự động.", "info");
     });
 
     document.getElementById('btn-random-source').addEventListener('click', () => {
