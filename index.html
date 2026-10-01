@@ -101,21 +101,21 @@
             <span class="font-bold text-sm sm:text-base tracking-wide">WIKY</span>
             <span class="text-[9px] sm:text-[10px] bg-amber-400/10 text-amber-400 px-1 py-0.2 rounded font-mono font-semibold">/VNĐ</span>
           </div>
-          <span class="text-[8px] sm:text-[9px] text-brand-textMuted uppercase tracking-wider font-semibold">v3.2 Pro</span>
+          <span class="text-[8px] sm:text-[9px] text-brand-textMuted uppercase tracking-wider font-semibold">v2.3 Pro</span>
         </div>
       </div>
 
       <div class="h-6 w-px bg-brand-border hidden xs:block"></div>
 
-      <!-- Live Price & 24h Quick Stats -->
+      <!-- Live Price & 10m Quick Stats -->
       <div class="flex items-center space-x-2 sm:space-x-3">
         <div class="flex flex-col">
           <span id="nav-price" class="text-sm sm:text-lg font-bold font-mono text-brand-buy leading-tight">77.000₫</span>
           <span id="nav-change" class="text-[10px] sm:text-[11px] font-mono font-semibold text-brand-buy leading-none">+0.00%</span>
         </div>
         <div class="hidden md:flex items-center space-x-3 text-[10px] font-mono text-brand-textMuted border-l border-brand-border pl-3">
-          <div>24h Cao: <b id="stat-24h-high" class="text-slate-200">77.500 ₫</b></div>
-          <div>24h Thấp: <b id="stat-24h-low" class="text-slate-200">76.200 ₫</b></div>
+          <div>10P Cao: <b id="stat-24h-high" class="text-slate-200">77.500 ₫</b></div>
+          <div>10P Thấp: <b id="stat-24h-low" class="text-slate-200">76.200 ₫</b></div>
         </div>
       </div>
     </div>
@@ -141,10 +141,10 @@
           
           <div class="grid grid-cols-5 gap-1 text-[10px] font-mono">
             <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="1">1x</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="5">5x</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="20">20x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="10">10x</button>
             <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="50">50x</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="100">100x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="100">100x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="200">200x</button>
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@
         <span class="hidden sm:inline">Đổi Data</span>
       </button>
 
-      <!-- Compact Google Sheets Status Indicator (Chỉ hiển thị icon và chấm trạng thái) -->
+      <!-- Compact Google Sheets Status Indicator -->
       <div id="gas-status-badge" title="Google Sheet: Đang kết nối..." class="h-8 w-8 px-0 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center relative cursor-help">
         <i class="fa-solid fa-cloud text-xs text-brand-textMuted"></i>
         <span id="gas-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse absolute top-1.5 right-1.5"></span>
@@ -232,13 +232,18 @@
           <button class="tf-btn px-2 py-0.5 rounded text-brand-textMuted hover:text-white" data-tf="1w">1W</button>
         </div>
 
-        <!-- Indicators (MA & BOLL) & Chart Reset Tools -->
+        <!-- Indicators, Chart Tools & Audio Toggle -->
         <div class="flex items-center space-x-1.5 sm:space-x-2 text-xs">
           <!-- Real Market Label Badge -->
           <div id="real-data-badge" class="hidden sm:flex items-center space-x-1 px-2 py-0.5 rounded bg-brand-bg border border-brand-border text-[10px] font-mono text-brand-textMuted">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span id="market-source-name">Nguồn: BTC</span>
           </div>
+
+          <!-- Sound Effects Toggle Button -->
+          <button id="btn-toggle-sound" title="Bật/Tắt âm thanh hiệu ứng" class="px-2 py-0.5 rounded bg-brand-bg border border-brand-border text-amber-400 hover:text-white font-mono text-[11px] transition flex items-center space-x-1">
+            <i id="sound-icon" class="fa-solid fa-volume-high text-[10px]"></i>
+          </button>
 
           <!-- Live Snap Button -->
           <button id="btn-chart-recenter" title="Quay lại nến mới nhất" class="flex items-center space-x-1 px-2 py-0.5 rounded bg-brand-bg border border-brand-border text-brand-textMuted hover:text-amber-400 font-mono text-[11px] transition">
@@ -320,12 +325,12 @@
             <div class="space-y-1">
               <h3 class="text-sm sm:text-base font-bold text-white tracking-wide">Vui Lòng Đăng Nhập</h3>
               <p class="text-[11px] text-brand-textMuted leading-relaxed">
-                Để mở khóa biểu đồ và các tính năng giao dịch.
+                Đăng nhập hoặc đăng ký tài khoản để mở khóa biểu đồ và các tính năng của web.
               </p>
             </div>
             <button id="btn-overlay-login" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-bold text-xs shadow-lg transition flex items-center justify-center space-x-2">
               <i class="fa-solid fa-arrow-right-to-bracket"></i>
-              <span>ĐĂNG KÝ NGAY</span>
+              <span>ĐĂNG NHẬP NGAY</span>
             </button>
           </div>
         </div>
@@ -372,9 +377,9 @@
           </div>
         </div>
 
-        <!-- Tab 1: Positions Table -->
+        <!-- Tab 1: Positions Table with Quick BE & Reverse -->
         <div id="tab-pos" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto">
-          <table class="w-full text-left text-[11px] font-mono min-w-[620px]">
+          <table class="w-full text-left text-[11px] font-mono min-w-[660px]">
             <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border">
               <tr>
                 <th class="py-1.5 px-3">VỊ THẾ</th>
@@ -383,6 +388,7 @@
                 <th class="py-1.5 px-2">THỊ TRƯỜNG</th>
                 <th class="py-1.5 px-2">TP / SL</th>
                 <th class="py-1.5 px-2">LÃI / LỖ (%)</th>
+                <th class="py-1.5 px-2 text-center">TIỆN ÍCH</th>
                 <th class="py-1.5 px-3 text-right">ĐÓNG</th>
               </tr>
             </thead>
@@ -412,8 +418,24 @@
           </div>
         </div>
 
-        <!-- Tab 3: History Table -->
-        <div id="tab-history" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto hidden">
+        <!-- Tab 3: History Table with Stats Summary -->
+        <div id="tab-history" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto hidden flex flex-col">
+          <!-- Trading Performance Summary Card -->
+          <div id="history-stats-bar" class="p-2 bg-brand-bg/80 border-b border-brand-border grid grid-cols-3 gap-2 text-center text-[10px] font-mono flex-shrink-0">
+            <div class="bg-brand-panel p-1.5 rounded border border-brand-border">
+              <span class="text-brand-textMuted block text-[9px]">Tổng Lãi/Lỗ:</span>
+              <b id="stat-total-closed-pnl" class="text-brand-buy text-xs">0 ₫</b>
+            </div>
+            <div class="bg-brand-panel p-1.5 rounded border border-brand-border">
+              <span class="text-brand-textMuted block text-[9px]">Tỷ Lệ Thắng:</span>
+              <b id="stat-win-rate" class="text-amber-400 text-xs">0.0%</b>
+            </div>
+            <div class="bg-brand-panel p-1.5 rounded border border-brand-border">
+              <span class="text-brand-textMuted block text-[9px]">Tổng Lệnh Đóng:</span>
+              <b id="stat-total-trades-count" class="text-slate-200 text-xs">0 (0W - 0L)</b>
+            </div>
+          </div>
+
           <table class="w-full text-left text-[11px] font-mono min-w-[500px]">
             <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border">
               <tr>
@@ -436,28 +458,28 @@
     <!-- Right Sidebar: Order Form & Compact Orderbook -->
     <div id="section-trade" class="hidden lg:flex w-full lg:w-72 xl:w-80 flex-col bg-brand-panel flex-shrink-0 h-full overflow-y-auto">
       
-      <!-- Compact Orderbook Live Depth -->
+      <!-- Compact Orderbook: 3 Nearest Levels with Visual Depth -->
       <div class="p-2 border-b border-brand-border">
         <div class="flex justify-between items-center text-[10px] text-brand-textMuted mb-1">
-          <span>Sổ Lệnh WIKY</span>
-          <span class="font-mono text-emerald-400" id="ob-summary">Thanh khoản cao</span>
+          <span class="flex items-center"><i class="fa-solid fa-chart-column mr-1 text-amber-400"></i> Số Lệnh</span>
+          <span class="font-mono text-emerald-400 text-[9px]" id="ob-summary">Thanh khoản</span>
         </div>
         
-        <div class="grid grid-cols-2 text-[9px] text-brand-textMuted font-mono mb-0.5">
-          <span>Giá (VNĐ)</span>
-          <span class="text-right">Số Lượng</span>
+        <div class="grid grid-cols-2 text-[9px] text-brand-textMuted font-mono mb-0.5 px-1">
+          <span>Giá</span>
+          <span class="text-right">Khối Lượng</span>
         </div>
 
-        <!-- Mini Asks (Bán / Đỏ) -->
+        <!-- 3 Mini Asks (Bán / Đỏ) -->
         <div id="mini-asks" class="space-y-0.5 font-mono text-[10px]"></div>
 
         <!-- Mid Price -->
-        <div class="py-0.5 px-1 my-0.5 rounded bg-brand-bg border border-brand-border/60 flex items-center justify-between font-mono">
+        <div class="py-1 px-1.5 my-1 rounded bg-brand-bg border border-brand-border/80 flex items-center justify-between font-mono shadow-inner">
           <span id="ob-mid-price" class="text-xs font-bold text-brand-buy">77.000 ₫</span>
-          <span class="text-[9px] text-brand-textMuted">Tức thì</span>
+          <span class="text-[9px] text-brand-textMuted flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 animate-ping"></span> Live</span>
         </div>
 
-        <!-- Mini Bids (Mua / Xanh) -->
+        <!-- 3 Mini Bids (Mua / Xanh) -->
         <div id="mini-bids" class="space-y-0.5 font-mono text-[10px]"></div>
       </div>
 
@@ -507,15 +529,18 @@
           </div>
         </div>
 
-        <!-- TP / SL Controls -->
+        <!-- TP / SL Controls with Clear & Preview -->
         <div class="bg-brand-bg p-2 rounded-lg border border-brand-border space-y-1.5">
           <div class="text-[10px] font-semibold text-brand-textMuted flex items-center justify-between">
             <span><i class="fa-solid fa-shield-halved text-amber-400 mr-1"></i> Chốt Lời / Cắt Lỗ</span>
+            <button type="button" id="btn-clear-tp-sl" title="Xóa trắng TP/SL" class="text-[9px] text-brand-textMuted hover:text-white hover:underline">
+              Xóa nhanh
+            </button>
           </div>
           <div class="space-y-1">
             <div>
               <div class="flex justify-between items-center text-[9px] text-brand-textMuted mb-0.5">
-                <span class="text-emerald-400 font-semibold">Chốt Lời (TP)</span>
+                <span class="text-emerald-400 font-semibold">Chốt Lời</span>
                 <div class="flex space-x-1 font-mono">
                   <button type="button" class="tp-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-emerald-400" data-pct="10">+10%</button>
                   <button type="button" class="tp-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-emerald-400" data-pct="25">+25%</button>
@@ -523,12 +548,12 @@
                   <button type="button" class="tp-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-emerald-400" data-pct="100">+100%</button>
                 </div>
               </div>
-              <input type="number" id="input-tp" step="100" placeholder="Giá Chốt Lời (VNĐ)" class="w-full bg-brand-panel border border-brand-border rounded px-2 py-1 text-[11px] font-mono text-emerald-400 focus:outline-none">
+              <input type="number" id="input-tp" step="100" placeholder="Giá Chốt Lời" class="w-full bg-brand-panel border border-brand-border rounded px-2 py-1 text-[11px] font-mono text-emerald-400 focus:outline-none">
             </div>
 
             <div>
               <div class="flex justify-between items-center text-[9px] text-brand-textMuted mb-0.5">
-                <span class="text-rose-400 font-semibold">Cắt Lỗ (SL)</span>
+                <span class="text-rose-400 font-semibold">Cắt Lỗ</span>
                 <div class="flex space-x-1 font-mono">
                   <button type="button" class="sl-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-rose-400" data-pct="10">-10%</button>
                   <button type="button" class="sl-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-rose-400" data-pct="25">-25%</button>
@@ -537,6 +562,22 @@
                 </div>
               </div>
               <input type="number" id="input-sl" step="100" placeholder="Giá Cắt Lỗ (VNĐ)" class="w-full bg-brand-panel border border-brand-border rounded px-2 py-1 text-[11px] font-mono text-rose-400 focus:outline-none">
+            </div>
+          </div>
+
+          <!-- R:R & Expected PnL Estimation Card -->
+          <div id="rr-preview-box" class="hidden p-1.5 rounded bg-brand-panel border border-brand-border/60 text-[9px] font-mono space-y-0.5 text-brand-textMuted">
+            <div class="flex justify-between">
+              <span>Lời dự kiến:</span>
+              <span id="preview-tp-val" class="text-emerald-400 font-bold">+0 ₫</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Lỗ dự kiến:</span>
+              <span id="preview-sl-val" class="text-rose-400 font-bold">-0 ₫</span>
+            </div>
+            <div class="flex justify-between border-t border-brand-border/40 pt-0.5 text-amber-400 font-bold">
+              <span>Tỷ lệ Risk:Reward:</span>
+              <span id="preview-rr-ratio">1 : 1</span>
             </div>
           </div>
         </div>
@@ -575,7 +616,7 @@
           <div class="w-7 h-7 rounded-lg bg-amber-400 flex items-center justify-center text-black font-black text-xs">
             W
           </div>
-          <h3 class="text-sm font-bold text-white">Wiky Trade</h3>
+          <h3 class="text-sm font-bold text-white">WIKY TRADE</h3>
         </div>
         <button id="btn-close-auth" class="text-brand-textMuted hover:text-white p-1">
           <i class="fa-solid fa-xmark text-lg"></i>
@@ -604,7 +645,7 @@
         </div>
 
         <div id="auth-admin-hint" class="text-[10px] text-brand-textMuted font-mono">
-          * Nạp <b>50.000 đ</b> để có toàn quyền quản trị hệ thống.
+          * Nạp ngay <b class="text-amber-400">50.000 vnđ</b> để có toàn quyền quản trị hệ thống.
         </div>
 
         <button type="submit" id="btn-submit-auth" class="w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs shadow-lg transition flex items-center justify-center space-x-2">
@@ -632,7 +673,7 @@
         <button id="tab-btn-admin-config" class="py-1.5 rounded-lg bg-brand-panelLight text-amber-400 font-bold transition">Cài Đặt Sàn</button>
         <button id="tab-btn-admin-users" class="py-1.5 rounded-lg text-brand-textMuted hover:text-white transition flex items-center justify-center space-x-1.5">
           <i class="fa-solid fa-users-gear text-[11px]"></i>
-          <span>Quản Lý Vốn User</span>
+          <span>Quản Lý User</span>
         </button>
       </div>
 
@@ -659,7 +700,7 @@
             <label class="text-brand-textMuted block mb-1">Mẫu Hình Dữ Liệu Nguồn</label>
             <select id="setting-source-asset" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
               <option value="RANDOM">Ngẫu nhiên từ Binance</option>
-              <option value="BNBUSDT">Binance Coin </option>
+              <option value="BNBUSDT">Binance Coin</option>
               <option value="BTCUSDT">Bitcoin - Thanh khoản dồi dào</option>
               <option value="ETHUSDT">Ethereum - Sóng mượt</option>
               <option value="SOLUSDT">Solana - Bứt phá mạnh</option>
@@ -668,10 +709,10 @@
           </div>
 
           <!-- Dynamic Capital Adjustment Panel For Current Admin Account -->
-           <div class="bg-brand-panelLight/40 border border-brand-border rounded-xl p-3 space-y-2.5">
+          <div class="bg-brand-panelLight/40 border border-brand-border rounded-xl p-3 space-y-2.5">
             <div class="flex items-center justify-between">
               <span class="font-bold text-[11px] text-amber-400 flex items-center">
-                <i class="fa-solid fa-coins mr-1.5"></i> Vốn Ví Của Admin Hiện Tại
+                <i class="fa-solid fa-coins mr-1.5"></i> Ví Của Admin
               </span>
               <span id="live-unlocked-balance" class="font-mono font-bold text-emerald-400 text-xs">10.000.000 ₫</span>
             </div>
@@ -741,7 +782,7 @@
             Hủy
           </button>
           <button id="btn-save-settings" class="w-2/3 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition">
-            LƯU & ÁP DỤNG
+            LƯU & ÁP DỤNG LÊN SHEET
           </button>
         </div>
       </div>
@@ -772,7 +813,7 @@
               <tr>
                 <th class="py-2 px-2.5">User</th>
                 <th class="py-2 px-2">Quyền</th>
-                <th class="py-2 px-2 text-right">Số Dư</th>
+                <th class="py-2 px-2 text-right">Số Dư (VNĐ)</th>
                 <th class="py-2 px-2.5 text-center">Chỉnh Sửa</th>
               </tr>
             </thead>
@@ -817,7 +858,7 @@
                 <span>LƯU</span>
               </button>
             </div>
-           
+            <p class="text-[9px] text-brand-textMuted">* Thay đổi sẽ lập tức ghi vào hàng tương ứng của User trên Google Sheet.</p>
           </div>
         </div>
       </div>
@@ -833,7 +874,7 @@
           W
         </div>
       </div>
-      <span id="global-loading-text" class="text-xs font-semibold text-slate-200 font-mono">Đang đồng bộ Google Sheet...</span>
+      <span id="global-loading-text" class="text-xs font-semibold text-slate-200 font-mono">Đang đồng bộ...</span>
     </div>
   </div>
 
@@ -849,6 +890,61 @@
       }).format(Math.round(value));
     }
 
+    /* Web Audio Synthesizer (No external sound files required) */
+    let isSoundEnabled = true;
+    let audioCtx = null;
+
+    function playAudioTone(type) {
+      if (!isSoundEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'fill') {
+          // Khớp lệnh: 2 tiếng beep nhẹ
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587, now); // D5
+          osc.frequency.setValueAtTime(880, now + 0.08); // A5
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } else if (type === 'win') {
+          // Chốt lời: Hợp âm vui tươi
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523, now); // C5
+          osc.frequency.setValueAtTime(659, now + 0.08); // E5
+          osc.frequency.setValueAtTime(784, now + 0.16); // G5
+          osc.frequency.setValueAtTime(1046, now + 0.24); // C6
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+          osc.start(now);
+          osc.stop(now + 0.45);
+        } else if (type === 'loss') {
+          // Cắt lỗ / Thanh lý: Âm trầm
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(160, now + 0.3);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+          osc.start(now);
+          osc.stop(now + 0.32);
+        }
+      } catch (e) {
+        console.warn("Audio play blocked or unavailable:", e);
+      }
+    }
+
     /* Core Token Spec */
     const WIKY_SPEC = {
       name: "WIKY Coin",
@@ -859,7 +955,7 @@
       closeDelaySec: 0      // Instant (0s)
     };
 
-    /* Hardcoded Google Apps Script Web App Endpoint - Tự động đồng bộ */
+    /* Hardcoded Google Apps Script Web App Endpoint */
     const GAS_APP_URL = "https://script.google.com/macros/s/AKfycbzTc5Elw9Y9o6t81dZSETOrlUbRvaPmVVUSzwC8uRPeeVEePlpeOlCzzTflBTQi-Twh/exec";
     let isGasConnected = false;
 
@@ -869,8 +965,8 @@
 
     /* Built-in accounts database (Fallback memory synced with GAS) */
     const localUsersDb = {
-      'admin': { password: 'admin777', role: 'admin', balance: 1000000 },
-      'trader': { password: '123', role: 'user', balance: 100000 }
+      'admin': { password: 'admin', role: 'user', balance: 1000000 },
+      'trader': { password: '12345', role: 'user', balance: 1000000 }
     };
 
     /* Simulation and Chart State */
@@ -892,8 +988,8 @@
     };
 
     /* Portfolio State: Initial Balance 1,000,000 VND */
-    let initialBalance = 1000000;
-    let balance = 1000000;
+    let initialBalance = 1000007;
+    let balance = 1000007;
     let positions = [];
     let pendingOrders = [];
     let tradeHistory = [];
@@ -949,103 +1045,6 @@
     const RIGHT_PADDING = 24;
 
     const REAL_CRYPTO_ASSETS = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'DOGEUSDT', 'AVAXUSDT', 'NEARUSDT'];
-
-    const GAS_TEMPLATE_CODE = `/* WIKY PRO TRADE - GOOGLE APPS SCRIPT WEB APP BACKEND */
-function doPost(e) {
-  try {
-    var data = JSON.parse(e.postData.contents);
-    var action = data.action;
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    
-    // Khởi tạo các Sheet chuẩn
-    var usersSheet = ss.getSheetByName('Users') || ss.insertSheet('Users');
-    var tradesSheet = ss.getSheetByName('Trades') || ss.insertSheet('Trades');
-    var settingsSheet = ss.getSheetByName('Settings') || ss.insertSheet('Settings');
-    
-    if (usersSheet.getLastRow() === 0) {
-      usersSheet.appendRow(['Username', 'Password', 'Role', 'Balance', 'Created_At']);
-      usersSheet.appendRow(['admin', 'admin', 'admin', 1000000, new Date().toISOString()]);
-      usersSheet.appendRow(['trader', '123', 'user', 1000000, new Date().toISOString()]);
-    }
-    if (tradesSheet.getLastRow() === 0) {
-      tradesSheet.appendRow(['Timestamp', 'Username', 'Type', 'Shares', 'EntryPrice', 'ExitPrice', 'PnL', 'Reason']);
-    }
-    
-    if (action === 'getUsers') {
-      var rows = usersSheet.getDataRange().getValues();
-      var users = [];
-      for (var i = 1; i < rows.length; i++) {
-        users.push({
-          username: String(rows[i][0]),
-          role: String(rows[i][2]),
-          balance: Number(rows[i][3])
-        });
-      }
-      return createJsonResponse({ status: 'ok', users: users });
-    }
-
-    if (action === 'login') {
-      var rows = usersSheet.getDataRange().getValues();
-      for (var i = 1; i < rows.length; i++) {
-        if (rows[i][0] == data.username && String(rows[i][1]) == String(data.password)) {
-          return createJsonResponse({ status: 'ok', username: rows[i][0], role: rows[i][2], balance: Number(rows[i][3]) });
-        }
-      }
-      return createJsonResponse({ status: 'error', message: 'Sai tài khoản hoặc mật khẩu' });
-    }
-    
-    if (action === 'register') {
-      var rows = usersSheet.getDataRange().getValues();
-      for (var i = 1; i < rows.length; i++) {
-        if (rows[i][0] == data.username) {
-          return createJsonResponse({ status: 'error', message: 'Tên tài khoản đã tồn tại' });
-        }
-      }
-      var role = data.username.toLowerCase() === 'admin' ? 'admin' : 'user';
-      var initBal = 1000000;
-      usersSheet.appendRow([data.username, data.password, role, initBal, new Date().toISOString()]);
-      return createJsonResponse({ status: 'ok', username: data.username, role: role, balance: initBal });
-    }
-    
-    if (action === 'updateBalance') {
-      var rows = usersSheet.getDataRange().getValues();
-      for (var i = 1; i < rows.length; i++) {
-        if (rows[i][0] == data.username) {
-          usersSheet.getRange(i + 1, 4).setValue(data.balance);
-          return createJsonResponse({ status: 'ok', balance: data.balance });
-        }
-      }
-    }
-    
-    if (action === 'logTrade') {
-      tradesSheet.appendRow([new Date().toISOString(), data.username, data.type, data.shares, data.entryPrice, data.exitPrice, data.pnl, data.reason]);
-      return createJsonResponse({ status: 'ok' });
-    }
-    
-    if (action === 'saveSettings') {
-      settingsSheet.clear();
-      settingsSheet.appendRow(['Key', 'Value']);
-      settingsSheet.appendRow(['basePrice', data.settings.basePrice]);
-      settingsSheet.appendRow(['volatility', data.settings.volatility]);
-      settingsSheet.appendRow(['tickSize', data.settings.tickSize]);
-      settingsSheet.appendRow(['closeDelaySec', data.settings.closeDelaySec]);
-      settingsSheet.appendRow(['sourceAsset', data.settings.sourceAsset]);
-      return createJsonResponse({ status: 'ok' });
-    }
-    
-    return createJsonResponse({ status: 'unknown_action' });
-  } catch(err) {
-    return createJsonResponse({ status: 'error', message: err.toString() });
-  }
-}
-
-function doGet(e) {
-  return createJsonResponse({ status: 'ok', message: 'WIKY Pro Trade GAS API is Running!' });
-}
-
-function createJsonResponse(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
-}`;
 
     /* Global Loading Overlay Helpers */
     function showLoading(text = "Đang xử lý...") {
@@ -1141,7 +1140,7 @@ function createJsonResponse(obj) {
         if (canvasEl) canvasEl.classList.remove('blur-sm', 'opacity-30');
       } else {
         balance = 0;
-        initialBalance = 1000000;
+        initialBalance = 1000007;
         if (overlay) overlay.classList.remove('hidden');
         if (canvasEl) canvasEl.classList.add('blur-sm', 'opacity-30');
       }
@@ -1432,8 +1431,8 @@ function createJsonResponse(obj) {
       if (allCandles.length === 0) return;
 
       const totalCandleSpan = candleWidth + candleGap;
-      const priceAxisWidth = PRICE_AXIS_WIDTH; // 58px snug width
-      const rightPadding = RIGHT_PADDING;     // 24px padding
+      const priceAxisWidth = PRICE_AXIS_WIDTH;
+      const rightPadding = RIGHT_PADDING;
       const chartPlotWidth = w - priceAxisWidth;
       const effectiveDrawWidth = chartPlotWidth - rightPadding;
       const visibleCount = Math.ceil(effectiveDrawWidth / totalCandleSpan) + 4;
@@ -2141,6 +2140,23 @@ function createJsonResponse(obj) {
       showToast("Đã căn về nến thời gian thực.", "info");
     });
 
+    // Sound toggle
+    const btnToggleSound = document.getElementById('btn-toggle-sound');
+    const soundIcon = document.getElementById('sound-icon');
+    btnToggleSound.addEventListener('click', () => {
+      isSoundEnabled = !isSoundEnabled;
+      if (isSoundEnabled) {
+        soundIcon.className = 'fa-solid fa-volume-high text-[10px] text-amber-400';
+        btnToggleSound.className = 'px-2 py-0.5 rounded bg-brand-bg border border-brand-border text-amber-400 hover:text-white font-mono text-[11px] transition flex items-center space-x-1';
+        playAudioTone('fill');
+        showToast("Đã bật âm thanh hiệu ứng", "info");
+      } else {
+        soundIcon.className = 'fa-solid fa-volume-xmark text-[10px] text-brand-textMuted';
+        btnToggleSound.className = 'px-2 py-0.5 rounded bg-brand-bg border border-brand-border text-brand-textMuted hover:text-white font-mono text-[11px] transition flex items-center space-x-1';
+        showToast("Đã tắt âm thanh hiệu ứng", "info");
+      }
+    });
+
     document.getElementById('btn-toggle-ma').addEventListener('click', function() {
       showMA = !showMA;
       this.className = showMA 
@@ -2226,8 +2242,12 @@ function createJsonResponse(obj) {
         candles.push({ ...currentCandle });
         if (candles.length > 500) candles.shift();
 
+        const nextTime = (currentCandle && currentCandle.time) 
+          ? currentCandle.time + (timeframeMinutes * 60 * 1000) 
+          : Date.now();
+
         currentCandle = {
-          time: Date.now(),
+          time: nextTime,
           open: newPrice,
           high: newPrice,
           low: newPrice,
@@ -2262,6 +2282,7 @@ function createJsonResponse(obj) {
             tp: order.tp,
             sl: order.sl
           });
+          playAudioTone('fill');
           showToast(`Lệnh chờ khớp: ${order.type} ${order.shares} WIKY tại ${formatVND(order.price)}`, "success");
         }
       }
@@ -2271,16 +2292,16 @@ function createJsonResponse(obj) {
         let reason = null;
 
         if (pos.tp) {
-          if (pos.type === 'LONG' && currentPrice >= pos.tp) reason = "Chốt Lời (TP Hit)";
-          if (pos.type === 'SHORT' && currentPrice <= pos.tp) reason = "Chốt Lời (TP Hit)";
+          if (pos.type === 'LONG' && currentPrice >= pos.tp) reason = "Chốt Lời";
+          if (pos.type === 'SHORT' && currentPrice <= pos.tp) reason = "Chốt Lời";
         }
         if (pos.sl && !reason) {
-          if (pos.type === 'LONG' && currentPrice <= pos.sl) reason = "Cắt Lỗ (SL Hit)";
-          if (pos.type === 'SHORT' && currentPrice >= pos.sl) reason = "Cắt Lỗ (SL Hit)";
+          if (pos.type === 'LONG' && currentPrice <= pos.sl) reason = "Cắt Lỗ";
+          if (pos.type === 'SHORT' && currentPrice >= pos.sl) reason = "Cắt Lỗ";
         }
         if (pos.liqPrice && !reason) {
-          if (pos.type === 'LONG' && currentPrice <= pos.liqPrice) reason = "Thanh Lý (Cháy Margin)";
-          if (pos.type === 'SHORT' && currentPrice >= pos.liqPrice) reason = "Thanh Lý (Cháy Margin)";
+          if (pos.type === 'LONG' && currentPrice <= pos.liqPrice) reason = "Thanh Lý";
+          if (pos.type === 'SHORT' && currentPrice >= pos.liqPrice) reason = "Thanh Lý";
         }
 
         if (reason) {
@@ -2320,8 +2341,48 @@ function createJsonResponse(obj) {
       if (currentUser) {
         callGasApi('updateBalance', { username: currentUser.username, balance: balance });
       }
+      playAudioTone('fill');
       updateHeaderBalances();
       updatePositionsTable();
+    }
+
+    /* Tiện ích vị thế: Dời Cắt Lỗ về Hòa Vốn (Breakeven) */
+    function setBreakeven(posId) {
+      const pos = positions.find(p => p.id === posId);
+      if (!pos) return;
+
+      pos.sl = pos.entryPrice;
+      showToast(`Đã dời SL về mức hòa vốn (${formatVND(pos.entryPrice)}) cho vị thế #${pos.id}!`, "info");
+      updatePositionsTable();
+      renderChart();
+    }
+
+    /* Tiện ích vị thế: Đảo Chiều Lệnh (Reverse Position) */
+    function reversePosition(posId) {
+      const index = positions.findIndex(p => p.id === posId);
+      if (index === -1) return;
+
+      const oldPos = positions[index];
+      const curPrice = currentCandle ? currentCandle.close : oldPos.entryPrice;
+      const newType = oldPos.type === 'LONG' ? 'SHORT' : 'LONG';
+      const shares = oldPos.shares;
+      const lev = oldPos.leverage;
+
+      // 1. Đóng vị thế cũ
+      executePositionExit(posId, curPrice, `Đảo chiều sang ${newType}`);
+
+      // 2. Mở vị thế mới ngược chiều
+      setTimeout(() => {
+        openPosition({
+          type: newType,
+          shares: shares,
+          entryPrice: curPrice,
+          leverage: lev,
+          tp: null,
+          sl: null
+        });
+        showToast(`Đã đảo chiều sang ${newType} ${shares} WIKY tại ${formatVND(curPrice)}!`, "success");
+      }, 50);
     }
 
     function requestClosePosition(posId) {
@@ -2400,8 +2461,10 @@ function createJsonResponse(obj) {
       }
 
       if (pnl >= 0) {
+        playAudioTone('win');
         showToast(`+${formatVND(pnl)} - ${reason}`, "success");
       } else {
+        playAudioTone('loss');
         showToast(`${formatVND(pnl)} - ${reason}`, "error");
       }
 
@@ -2469,31 +2532,61 @@ function createJsonResponse(obj) {
       }, 1000);
     });
 
+    /* Nâng cấp Sổ Lệnh: Hiển thị đúng 3 mức giá gần nhất kèm Depth Volume Bar */
     function updateMiniOrderBook(currentPrice) {
       const asksEl = document.getElementById('mini-asks');
       const bidsEl = document.getElementById('mini-bids');
+      if (!asksEl || !bidsEl) return;
       asksEl.innerHTML = '';
       bidsEl.innerHTML = '';
 
-      for (let i = 4; i >= 1; i--) {
+      const maxSampleVol = 60;
+
+      // 3 mức giá Bán (Asks) gần nhất (từ cao xuống tiệm cận mid price)
+      for (let i = 3; i >= 1; i--) {
         const p = currentPrice + (i * WIKY_SPEC.tickSize);
-        const qty = Math.floor(Math.random() * 45 + 10);
+        const qty = Math.floor(Math.random() * 40 + 12);
+        const depthPct = Math.min(100, Math.round((qty / maxSampleVol) * 100));
+
         const div = document.createElement('div');
-        div.className = 'flex justify-between text-brand-sell cursor-pointer hover:bg-rose-950/20';
-        div.innerHTML = `<span>${formatVND(p)}</span><span>${qty}</span>`;
-        div.onclick = () => { document.getElementById('input-limit-price').value = p; };
+        div.className = 'relative flex justify-between items-center px-1.5 py-0.5 rounded cursor-pointer hover:bg-rose-950/40 text-brand-sell overflow-hidden group transition';
+        div.title = `Click để điền giá ${formatVND(p)} vào lệnh chờ`;
+        div.innerHTML = `
+          <div class="absolute right-0 top-0 bottom-0 bg-rose-500/15 pointer-events-none group-hover:bg-rose-500/25 transition-all" style="width: ${depthPct}%"></div>
+          <span class="relative z-10 font-bold">${formatVND(p)}</span>
+          <span class="relative z-10 text-slate-300 font-mono text-[9px]">${qty}</span>
+        `;
+        div.onclick = () => {
+          document.getElementById('input-limit-price').value = p;
+          if (orderType !== 'limit') document.getElementById('type-limit').click();
+          updateEstimates();
+          showToast(`Đã chọn giá từ sổ lệnh: ${formatVND(p)}`, "info");
+        };
         asksEl.appendChild(div);
       }
 
       document.getElementById('ob-mid-price').textContent = formatVND(currentPrice);
 
-      for (let i = 1; i <= 4; i++) {
+      // 3 mức giá Mua (Bids) gần nhất (từ tiệm cận mid price xuống thấp hơn)
+      for (let i = 1; i <= 3; i++) {
         const p = currentPrice - (i * WIKY_SPEC.tickSize);
-        const qty = Math.floor(Math.random() * 45 + 10);
+        const qty = Math.floor(Math.random() * 40 + 12);
+        const depthPct = Math.min(100, Math.round((qty / maxSampleVol) * 100));
+
         const div = document.createElement('div');
-        div.className = 'flex justify-between text-brand-buy cursor-pointer hover:bg-emerald-950/20';
-        div.innerHTML = `<span>${formatVND(p)}</span><span>${qty}</span>`;
-        div.onclick = () => { document.getElementById('input-limit-price').value = p; };
+        div.className = 'relative flex justify-between items-center px-1.5 py-0.5 rounded cursor-pointer hover:bg-emerald-950/40 text-brand-buy overflow-hidden group transition';
+        div.title = `Click để điền giá ${formatVND(p)} vào lệnh chờ`;
+        div.innerHTML = `
+          <div class="absolute right-0 top-0 bottom-0 bg-emerald-500/15 pointer-events-none group-hover:bg-emerald-500/25 transition-all" style="width: ${depthPct}%"></div>
+          <span class="relative z-10 font-bold">${formatVND(p)}</span>
+          <span class="relative z-10 text-slate-300 font-mono text-[9px]">${qty}</span>
+        `;
+        div.onclick = () => {
+          document.getElementById('input-limit-price').value = p;
+          if (orderType !== 'limit') document.getElementById('type-limit').click();
+          updateEstimates();
+          showToast(`Đã chọn giá từ sổ lệnh: ${formatVND(p)}`, "info");
+        };
         bidsEl.appendChild(div);
       }
     }
@@ -2515,16 +2608,26 @@ function createJsonResponse(obj) {
         cEl.className = 'text-[10px] sm:text-[11px] font-mono font-semibold text-brand-sell leading-none';
       }
 
-      let h24 = price;
-      let l24 = price;
-      candles.slice(-40).forEach(c => {
-        if (c.high > h24) h24 = c.high;
-        if (c.low < l24) l24 = c.low;
-      });
+      // Giá trị cao nhất/thấp nhất trong phạm vi 10 phút thị trường
+      const windowMs = 10 * 60 * 1000;
+      const curTime = currentCandle ? currentCandle.time : Date.now();
+      let h10m = currentCandle ? currentCandle.high : price;
+      let l10m = currentCandle ? currentCandle.low : price;
+
+      for (let i = candles.length - 1; i >= 0; i--) {
+        const c = candles[i];
+        if (curTime - c.time <= windowMs) {
+          if (c.high > h10m) h10m = c.high;
+          if (c.low < l10m) l10m = c.low;
+        } else {
+          break;
+        }
+      }
+
       const highEl = document.getElementById('stat-24h-high');
       const lowEl = document.getElementById('stat-24h-low');
-      if (highEl) highEl.textContent = formatVND(h24);
-      if (lowEl) lowEl.textContent = formatVND(l24);
+      if (highEl) highEl.textContent = formatVND(h10m);
+      if (lowEl) lowEl.textContent = formatVND(l10m);
 
       updateHeaderBalances();
     }
@@ -2593,6 +2696,16 @@ function createJsonResponse(obj) {
           <td class="py-2 px-2 font-bold ${isUp ? 'text-brand-buy' : 'text-brand-sell'}">
             ${isUp ? '+' : ''}${formatVND(pnl)} (${isUp ? '+' : ''}${roe.toFixed(1)}%)
           </td>
+          <td class="py-2 px-2 text-center">
+            <div class="inline-flex space-x-1">
+              <button title="Dời SL về giá vào lệnh (Hòa vốn)" onclick="setBreakeven(${pos.id})" class="px-1.5 py-0.5 rounded bg-brand-panelLight hover:bg-slate-700 text-sky-400 border border-brand-border text-[9px] font-bold">
+                BE
+              </button>
+              <button title="Đảo chiều vị thế" onclick="reversePosition(${pos.id})" class="px-1.5 py-0.5 rounded bg-brand-panelLight hover:bg-slate-700 text-amber-400 border border-brand-border text-[9px] font-bold">
+                Rev
+              </button>
+            </div>
+          </td>
           <td class="py-2 px-3 text-right">
             <button class="px-2.5 py-1 rounded ${isClosing ? 'bg-amber-600 animate-pulse cursor-wait' : 'bg-rose-600 hover:bg-rose-500'} font-bold text-white shadow transition text-[10px]" 
               ${isClosing ? 'disabled' : ''} 
@@ -2638,6 +2751,30 @@ function createJsonResponse(obj) {
       const empty = document.getElementById('history-empty');
       tbody.innerHTML = '';
 
+      let totalPnl = 0;
+      let wins = 0;
+      let losses = 0;
+
+      tradeHistory.forEach(h => {
+        totalPnl += h.pnl;
+        if (h.pnl > 0) wins++;
+        else if (h.pnl < 0) losses++;
+      });
+
+      const totalClosed = tradeHistory.length;
+      const winRate = totalClosed > 0 ? ((wins / totalClosed) * 100).toFixed(1) : '0.0';
+
+      const statPnl = document.getElementById('stat-total-closed-pnl');
+      const statWinRate = document.getElementById('stat-win-rate');
+      const statCount = document.getElementById('stat-total-trades-count');
+
+      if (statPnl) {
+        statPnl.textContent = (totalPnl >= 0 ? '+' : '') + formatVND(totalPnl);
+        statPnl.className = totalPnl >= 0 ? 'text-brand-buy text-xs' : 'text-brand-sell text-xs';
+      }
+      if (statWinRate) statWinRate.textContent = `${winRate}%`;
+      if (statCount) statCount.textContent = `${totalClosed} (${wins}W - ${losses}L)`;
+
       if (tradeHistory.length === 0) {
         empty.classList.remove('hidden');
         return;
@@ -2677,6 +2814,40 @@ function createJsonResponse(obj) {
       const maxS = Math.floor((balance * activeLev) / price);
       const maxEl = document.getElementById('max-shares');
       if (maxEl) maxEl.textContent = maxS > 0 ? maxS.toLocaleString() : '0';
+
+      // TP / SL & R:R Ratio Preview
+      const tpVal = parseFloat(document.getElementById('input-tp').value);
+      const slVal = parseFloat(document.getElementById('input-sl').value);
+      const rrBox = document.getElementById('rr-preview-box');
+
+      if ((tpVal > 0 || slVal > 0) && shares > 0) {
+        rrBox.classList.remove('hidden');
+        let potentialWin = 0;
+        let potentialLoss = 0;
+
+        if (tpVal > 0) {
+          potentialWin = Math.abs(tpVal - price) * shares;
+          document.getElementById('preview-tp-val').textContent = `+${formatVND(potentialWin)}`;
+        } else {
+          document.getElementById('preview-tp-val').textContent = '--';
+        }
+
+        if (slVal > 0) {
+          potentialLoss = Math.abs(price - slVal) * shares;
+          document.getElementById('preview-sl-val').textContent = `-${formatVND(potentialLoss)}`;
+        } else {
+          document.getElementById('preview-sl-val').textContent = '--';
+        }
+
+        if (potentialWin > 0 && potentialLoss > 0) {
+          const ratio = (potentialWin / potentialLoss).toFixed(2);
+          document.getElementById('preview-rr-ratio').textContent = `1 : ${ratio}`;
+        } else {
+          document.getElementById('preview-rr-ratio').textContent = '--';
+        }
+      } else {
+        rrBox.classList.add('hidden');
+      }
     }
 
     document.getElementById('mode-spot').addEventListener('click', function() {
@@ -2733,6 +2904,16 @@ function createJsonResponse(obj) {
 
     document.getElementById('input-shares').addEventListener('input', updateEstimates);
     document.getElementById('input-limit-price').addEventListener('input', updateEstimates);
+    document.getElementById('input-tp').addEventListener('input', updateEstimates);
+    document.getElementById('input-sl').addEventListener('input', updateEstimates);
+
+    // Clear TP / SL Button
+    document.getElementById('btn-clear-tp-sl').addEventListener('click', () => {
+      document.getElementById('input-tp').value = '';
+      document.getElementById('input-sl').value = '';
+      updateEstimates();
+      showToast("Đã xóa trắng cài đặt TP/SL", "info");
+    });
 
     // Quick TP & SL Presets
     document.querySelectorAll('.tp-pct-btn').forEach(btn => {
@@ -2742,6 +2923,7 @@ function createJsonResponse(obj) {
         const refPrice = orderType === 'market' ? curPrice : (parseFloat(document.getElementById('input-limit-price').value) || curPrice);
         const tpPrice = Math.round(refPrice * (1 + pct) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
         document.getElementById('input-tp').value = tpPrice;
+        updateEstimates();
         showToast(`Đã đặt TP +${pct * 100}% (${formatVND(tpPrice)})`, "info");
       });
     });
@@ -2753,6 +2935,7 @@ function createJsonResponse(obj) {
         const refPrice = orderType === 'market' ? curPrice : (parseFloat(document.getElementById('input-limit-price').value) || curPrice);
         const slPrice = Math.max(1000, Math.round(refPrice * (1 - pct) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize);
         document.getElementById('input-sl').value = slPrice;
+        updateEstimates();
         showToast(`Đã đặt SL -${pct * 100}% (${formatVND(slPrice)})`, "info");
       });
     });
@@ -2805,6 +2988,7 @@ function createJsonResponse(obj) {
           tp: tp,
           sl: sl
         });
+        playAudioTone('fill');
         showToast(`Đã đặt lệnh chờ Limit: ${side} ${shares} WIKY`, "info");
         updateOrdersTable();
       }
@@ -2907,7 +3091,7 @@ function createJsonResponse(obj) {
       submitBtn.disabled = true;
       submitBtn.classList.add('opacity-50');
 
-      showLoading(authMode === 'login' ? 'Đang đăng nhập...' : 'Đang đăng ký...');
+      showLoading(authMode === 'login' ? 'Đang đăng nhập, chờ xíu...' : 'Đang đăng ký, chờ xíu...');
 
       const res = await callGasApi(authMode, { username, password });
       submitBtn.disabled = false;
@@ -3095,7 +3279,7 @@ function createJsonResponse(obj) {
         return;
       }
 
-      showLoading(`Đang cập nhật vốn cho tài khoản "${currentEditingUser.username}" lên Google Sheet...`);
+      showLoading(`Đang cập nhật cho tài khoản "${currentEditingUser.username}"...`);
       const res = await callGasApi('updateBalance', {
         username: currentEditingUser.username,
         balance: newBal
@@ -3108,7 +3292,6 @@ function createJsonResponse(obj) {
           localUsersDb[currentEditingUser.username].balance = newBal;
         }
 
-        // If the edited user is currently the active logged-in admin user, update active session state as well
         if (currentUser && currentUser.username === currentEditingUser.username) {
           balance = newBal;
           updateHeaderBalances();
@@ -3117,9 +3300,9 @@ function createJsonResponse(obj) {
 
         document.getElementById('editing-current-bal').textContent = formatVND(newBal);
         renderAdminUsersTable(cachedUsersList);
-        showToast(`Đã đồng bộ vốn của "${currentEditingUser.username}" thành ${formatVND(newBal)} lên Google Sheet!`, "success");
+        showToast(`Đã đồng bộ của "${currentEditingUser.username}" thành ${formatVND(newBal)} lên Google Sheet!`, "success");
       } else {
-        showToast("Lỗi khi cập nhật vốn lên Google Sheet!", "error");
+        showToast("Lỗi khi cập nhật lên Google Sheet!", "error");
       }
     });
 
@@ -3175,7 +3358,7 @@ function createJsonResponse(obj) {
       callGasApi('updateBalance', { username: currentUser.username, balance: balance });
       updateHeaderBalances();
       updateEstimates();
-      showToast(`Đã nạp thêm ${formatVND(amt)} vào vốn ví!`, "success");
+      showToast(`Đã nạp thêm ${formatVND(amt)} vào ví!`, "success");
     });
 
     document.getElementById('btn-withdraw-capital').addEventListener('click', () => {
@@ -3195,7 +3378,7 @@ function createJsonResponse(obj) {
       callGasApi('updateBalance', { username: currentUser.username, balance: balance });
       updateHeaderBalances();
       updateEstimates();
-      showToast(`Đã rút ${formatVND(amt)} khỏi vốn ví!`, "success");
+      showToast(`Đã rút ${formatVND(amt)} khỏi ví!`, "success");
     });
 
     const settingVolRange = document.getElementById('setting-volatility-range');
@@ -3260,7 +3443,6 @@ function createJsonResponse(obj) {
 
       showLoading("Đang lưu các tham số cài đặt lên Google Sheet...");
 
-      // Đồng bộ thông số lên Google Sheet
       await callGasApi('saveSettings', {
         settings: {
           basePrice: WIKY_SPEC.basePrice,
@@ -3410,7 +3592,7 @@ function createJsonResponse(obj) {
       // Mặc định ban đầu chưa đăng nhập: làm mờ biểu đồ và hiện thông báo
       setAuthenticatedUser(null);
 
-      // Tự động kiểm tra và đồng bộ kết nối Google Apps Script ngay lập tức
+      // Tự động kiểm tra và đồng bộ kết nối Google Apps Script
       callGasApi('doGet').then((res) => {
         if (res && res.status === 'ok') {
           updateGasStatus(true);
