@@ -93,11 +93,18 @@
     .glow-gift {
       animation: pulseGlow 2s infinite;
     }
+    .mobile-menu-enter {
+      animation: menuSlideDown 0.22s ease-out forwards;
+    }
+    @keyframes menuSlideDown {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col">
 
-  <header class="h-14 bg-brand-panel border-b border-brand-border flex items-center justify-between px-2.5 sm:px-4 flex-shrink-0 z-30 shadow-md">
+  <header class="h-14 bg-brand-panel border-b border-brand-border flex items-center justify-between px-2.5 sm:px-4 flex-shrink-0 z-30 shadow-md relative">
     <div class="flex items-center space-x-2 sm:space-x-4">
       <div class="flex items-center space-x-2">
         <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black font-black text-sm shadow-md flex-shrink-0">
@@ -127,12 +134,12 @@
       </div>
     </div>
 
-    <!-- Quick Controls: Giftcode Button, Speed, Real Data, Sheets Status, Balance & User Auth / Admin Settings -->
-    <div class="flex items-center space-x-1.5 sm:space-x-2.5">
-      <!-- Giftcode Redeem Button (Always visible on mobile & laptop) -->
+    <!-- Right Controls: Desktop View (Visible >= md) -->
+    <div class="hidden md:flex items-center space-x-1.5 sm:space-x-2.5">
+      <!-- Giftcode Redeem Button -->
       <button id="btn-open-giftcode" title="Nhập Giftcode nhận tiền vào ví" class="h-8 px-2 sm:px-2.5 rounded-lg bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-400/50 text-amber-300 font-bold text-xs flex items-center space-x-1.5 transition glow-gift">
         <i class="fa-solid fa-gift text-amber-400 text-xs sm:text-sm"></i>
-        <span class="font-mono hidden xs:inline">Giftcode</span>
+        <span class="font-mono">Giftcode</span>
       </button>
 
       <!-- Fast-Forward Multiplier with Popover Slider -->
@@ -162,19 +169,14 @@
         </div>
       </div>
 
-      <!-- Real Data Source Button (Icon-only on mobile) -->
-      <button id="btn-random-source" title="Đổi kịch bản nến từ nguồn Binance thật" class="h-8 w-8 sm:w-auto px-0 sm:px-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-xs font-mono flex items-center justify-center space-x-1.5 transition">
+      <!-- Real Data Source Button -->
+      <button id="btn-random-source" title="Đổi kịch bản nến từ nguồn Binance thật" class="h-8 px-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-xs font-mono flex items-center justify-center space-x-1.5 transition">
         <i class="fa-solid fa-shuffle text-[11px]"></i>
-        <span class="hidden sm:inline">Đổi Data</span>
+        <span>Đổi Data</span>
       </button>
 
-      <!-- Compact Google Sheets Status Indicator -->
-      <!--<div id="gas-status-badge" title="Google Sheet: Đang kết nối..." class="h-8 w-8 px-0 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center relative cursor-help">
-
-      </div>-->
-
       <!-- Balance Display (Desktop view) -->
-      <div class="bg-brand-bg border border-brand-border px-3 py-1 rounded-lg text-right hidden sm:block">
+      <div class="bg-brand-bg border border-brand-border px-3 py-1 rounded-lg text-right">
         <div class="text-[9px] text-brand-textMuted font-medium uppercase leading-none">Ví khả dụng</div>
         <div id="nav-balance" class="text-xs font-mono font-bold text-amber-400">0 ₫</div>
       </div>
@@ -182,16 +184,16 @@
       <!-- User Auth State: Login / Register Button OR User Profile Pill -->
       <div id="auth-header-container">
         <!-- Guest View -->
-        <button id="btn-open-auth" class="h-8 px-2.5 sm:px-3 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-bold text-xs flex items-center space-x-1.5 shadow-md transition">
+        <button id="btn-open-auth" class="h-8 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-bold text-xs flex items-center space-x-1.5 shadow-md transition">
           <i class="fa-solid fa-user-lock text-[11px]"></i>
-          <span class="hidden sm:inline">Đăng Nhập</span>
+          <span>Đăng Nhập</span>
         </button>
 
         <!-- Logged In View -->
         <div id="user-profile-pill" class="hidden items-center space-x-1.5">
-          <div class="h-8 px-2 sm:px-2.5 rounded-lg bg-brand-bg border border-brand-border flex items-center space-x-1.5 text-xs font-mono">
+          <div class="h-8 px-2.5 rounded-lg bg-brand-bg border border-brand-border flex items-center space-x-1.5 text-xs font-mono">
             <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-            <span id="header-username" class="font-bold text-white max-w-[80px] sm:max-w-[110px] truncate">User</span>
+            <span id="header-username" class="font-bold text-white max-w-[110px] truncate">User</span>
             <span id="header-user-role" class="text-[9px] px-1 py-0.2 rounded font-bold bg-amber-400/20 text-amber-400">USER</span>
           </div>
 
@@ -202,11 +204,93 @@
         </div>
       </div>
 
-      <!-- Admin-Only Settings Button (Icon-only on mobile) -->
-      <button id="btn-open-settings" title="Cài đặt hệ thống (Dành cho Quản trị viên Admin)" class="h-8 w-8 sm:w-auto px-0 sm:px-3 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-400 hover:bg-amber-500/20 text-xs font-semibold hidden items-center justify-center space-x-1.5 transition">
+      <!-- Admin-Only Settings Button -->
+      <button id="btn-open-settings" title="Cài đặt hệ thống (Dành cho Quản trị viên Admin)" class="h-8 px-3 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-400 hover:bg-amber-500/20 text-xs font-semibold hidden items-center justify-center space-x-1.5 transition">
         <i class="fa-solid fa-crown text-[11px]"></i>
-        <span class="hidden sm:inline">Quản Trị</span>
+        <span>Quản Trị</span>
       </button>
+    </div>
+
+    <!-- Mobile Header Quick Row (Hamburger Button & Compact Balance) -->
+    <div class="flex items-center space-x-2 md:hidden">
+      <div class="bg-brand-bg border border-brand-border px-2 py-0.5 rounded-lg text-right">
+        <div class="text-[8px] text-brand-textMuted font-medium uppercase leading-none">Ví khả dụng</div>
+        <div id="nav-balance-mob" class="text-[11px] font-mono font-bold text-amber-400">0 ₫</div>
+      </div>
+
+      <!-- Mobile 3-Bar Hamburger Menu Toggle Button -->
+      <button id="btn-mobile-header-menu" title="Mở danh mục tính năng" class="h-8 w-8 rounded-lg bg-brand-bg border border-brand-border text-amber-400 hover:text-white flex items-center justify-center text-sm shadow active:scale-95 transition">
+        <i id="mobile-menu-icon" class="fa-solid fa-bars text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown Menu Container (Appears when hamburger is clicked) -->
+    <div id="mobile-header-dropdown" class="absolute top-14 left-0 right-0 bg-brand-panel/95 backdrop-blur-md border-b border-brand-border p-3.5 shadow-2xl z-40 hidden md:hidden mobile-menu-enter">
+      <div class="flex flex-col space-y-3">
+        
+        <!-- User Profile / Auth State inside Mobile Menu -->
+        <div class="flex items-center justify-between pb-2.5 border-b border-brand-border">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-400 text-xs font-bold">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="flex flex-col">
+              <span id="mob-username" class="text-xs font-bold text-white">Khách (Chưa đăng nhập)</span>
+              <span id="mob-user-role" class="text-[9px] font-mono text-brand-textMuted">Đăng nhập để lưu giao dịch</span>
+            </div>
+          </div>
+
+          <div id="mob-auth-actions">
+            <!-- Mobile Login Button -->
+            <button id="btn-mob-open-auth" class="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs shadow transition">
+              Đăng Nhập
+            </button>
+            <!-- Mobile Logout Button -->
+            <button id="btn-mob-logout" class="hidden px-2.5 py-1.5 rounded-lg bg-brand-panelLight text-rose-400 border border-brand-border text-xs font-semibold">
+              <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Đăng xuất
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="grid grid-cols-2 gap-2">
+          <!-- Giftcode Button -->
+          <button id="btn-mob-giftcode" class="py-2 px-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-400/50 text-amber-300 font-bold text-xs flex items-center justify-center space-x-2 glow-gift active:scale-95 transition">
+            <i class="fa-solid fa-gift text-amber-400"></i>
+            <span>Nhập Giftcode</span>
+          </button>
+
+          <!-- Random Data Button -->
+          <button id="btn-mob-random-source" class="py-2 px-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 font-bold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
+            <i class="fa-solid fa-shuffle"></i>
+            <span>Đổi Nến Thật</span>
+          </button>
+        </div>
+
+        <!-- Speed Multiplier Widget Inside Mobile Menu -->
+        <div class="bg-brand-bg/80 border border-brand-border rounded-xl p-2.5 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-brand-textMuted flex items-center">
+              <i class="fa-solid fa-gauge-high text-amber-400 mr-1.5"></i> Tốc độ mô phỏng
+            </span>
+            <span id="mob-speed-slider-val" class="font-mono font-bold text-amber-400 text-xs">x1</span>
+          </div>
+          <input type="range" id="mob-speed-range-slider" min="1" max="100" step="1" value="1" class="w-full custom-range bg-brand-panelLight h-2 rounded-lg appearance-none cursor-pointer">
+          <div class="grid grid-cols-5 gap-1 text-[10px] font-mono">
+            <button class="mob-quick-speed-btn py-1 rounded bg-brand-panel text-brand-textMuted" data-sp="1">x1</button>
+            <button class="mob-quick-speed-btn py-1 rounded bg-brand-panel text-brand-textMuted" data-sp="10">x10</button>
+            <button class="mob-quick-speed-btn py-1 rounded bg-brand-panel text-brand-textMuted" data-sp="50">x50</button>
+            <button class="mob-quick-speed-btn py-1 rounded bg-brand-panel text-brand-textMuted" data-sp="100">x100</button>
+            <button class="mob-quick-speed-btn py-1 rounded bg-brand-panel text-amber-400 font-bold" data-sp="150">x150</button>
+          </div>
+        </div>
+
+        <!-- Admin Only Settings in Mobile Menu -->
+        <button id="btn-mob-open-settings" class="w-full py-2 px-3 rounded-xl bg-amber-500/10 border border-amber-500/40 text-amber-400 font-bold text-xs hidden items-center justify-center space-x-2 active:scale-95 transition">
+          <i class="fa-solid fa-crown"></i>
+          <span>Bảng Điều Khiển Quản Trị Viên (Admin)</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -272,7 +356,6 @@
         </div>
       </div>
 
-      <!-- Chart Canvas Viewport with Default-Collapsed Floating Drawing Toolbox -->
       <div id="chart-viewport" class="relative flex-1 bg-brand-bg overflow-hidden cursor-crosshair">
         
         <!-- Collapsible Floating Drawing Toolbox (Collapsed by default) -->
@@ -361,11 +444,13 @@
         </div>
       </div>
 
-      <div id="section-positions" class="h-48 sm:h-52 lg:h-56 flex-shrink-0 bg-brand-panel border-t border-brand-border flex flex-col transition-all duration-200">
-        <div class="h-8 border-b border-brand-border flex items-center justify-between px-3 text-xs bg-brand-bg/60 select-none">
-          <div class="flex items-center space-x-3 sm:space-x-4">
-            <button id="btn-toggle-positions-drawer" title="Thu gọn / Mở rộng bảng" class="p-1 rounded text-brand-textMuted hover:text-white hover:bg-brand-panelLight transition">
+      <div id="section-positions" class="h-44 sm:h-52 lg:h-56 flex-shrink-0 bg-brand-panel border-t border-brand-border flex flex-col transition-all duration-200">
+        <div id="positions-header-bar" class="h-8.5 border-b border-brand-border flex items-center justify-between px-2 sm:px-3 text-xs bg-brand-bg/80 select-none cursor-pointer">
+          <div class="flex items-center space-x-2 sm:space-x-4">
+            <!-- Collapse / Expand Button -->
+            <button id="btn-toggle-positions-drawer" title="Thu gọn / Mở rộng bảng" class="p-1 sm:p-1.5 rounded bg-brand-panelLight/60 text-amber-400 hover:text-white transition flex items-center space-x-1">
               <i id="drawer-toggle-icon" class="fa-solid fa-chevron-down text-[11px]"></i>
+              <span class="text-[9px] font-mono sm:hidden font-bold" id="drawer-toggle-text">Thu gọn</span>
             </button>
             <button data-tab="tab-pos" class="bot-tab-btn font-semibold text-brand-accent border-b-2 border-brand-accent pb-1">
               Vị Thế (<span id="count-positions">0</span>)
@@ -373,13 +458,13 @@
             <button data-tab="tab-orders" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1">
               Lệnh Chờ (<span id="count-orders">0</span>)
             </button>
-            <button data-tab="tab-history" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1 flex items-center space-x-1.5">
+            <button data-tab="tab-history" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1 flex items-center space-x-1">
               <span>Lịch Sử</span>
               <span id="history-sync-indicator" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             </button>
           </div>
-          <div class="flex items-center space-x-2">
-            <div class="font-mono text-[11px] hidden sm:block">
+          <div class="flex items-center space-x-1.5 sm:space-x-2">
+            <div class="font-mono text-[10px] sm:text-[11px]">
               PnL: <span id="total-unrealized-pnl" class="font-bold text-white">0 ₫</span>
             </div>
             <button id="btn-close-all-positions" title="Đóng tất cả các vị thế đang mở" class="px-2 py-0.5 rounded bg-brand-sell/20 border border-brand-sell/40 text-brand-sell hover:bg-brand-sell hover:text-white text-[10px] font-bold font-mono transition flex items-center space-x-1">
@@ -1024,7 +1109,6 @@
         const now = audioCtx.currentTime;
 
         if (type === 'fill') {
-          // Khớp lệnh: 2 tiếng beep nhẹ
           osc.type = 'sine';
           osc.frequency.setValueAtTime(587, now); // D5
           osc.frequency.setValueAtTime(880, now + 0.08); // A5
@@ -1033,7 +1117,6 @@
           osc.start(now);
           osc.stop(now + 0.22);
         } else if (type === 'win') {
-          // Chốt lời: Hợp âm vui tươi
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(523, now); // C5
           osc.frequency.setValueAtTime(659, now + 0.08); // E5
@@ -1044,7 +1127,6 @@
           osc.start(now);
           osc.stop(now + 0.45);
         } else if (type === 'loss') {
-          // Cắt lỗ / Thanh lý: Âm trầm
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(320, now);
           osc.frequency.exponentialRampToValueAtTime(160, now + 0.3);
@@ -1258,17 +1340,6 @@
 
     function updateGasStatus(connected) {
       isGasConnected = connected;
-      const dot = document.getElementById('gas-status-dot');
-      const badge = document.getElementById('gas-status-badge');
-      if (dot && badge) {
-        if (connected) {
-          dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse absolute top-1.5 right-1.5';
-          badge.setAttribute('title', 'Google Sheet: Đã kết nối & Đồng bộ tốt');
-        } else {
-          dot.className = 'w-2 h-2 rounded-full bg-amber-400 absolute top-1.5 right-1.5';
-          badge.setAttribute('title', 'Google Sheet: Chạy bộ nhớ cục bộ (Offline)');
-        }
-      }
     }
 
     function setAuthenticatedUser(user) {
@@ -1294,6 +1365,13 @@
       const headerUserRole = document.getElementById('header-user-role');
       const btnOpenSettings = document.getElementById('btn-open-settings');
 
+      // Mobile sync elements
+      const mobUsername = document.getElementById('mob-username');
+      const mobUserRole = document.getElementById('mob-user-role');
+      const btnMobOpenAuth = document.getElementById('btn-mob-open-auth');
+      const btnMobLogout = document.getElementById('btn-mob-logout');
+      const btnMobOpenSettings = document.getElementById('btn-mob-open-settings');
+
       if (user) {
         btnOpenAuth.classList.add('hidden');
         userProfilePill.classList.remove('hidden');
@@ -1301,18 +1379,30 @@
         headerUsername.textContent = user.username;
         headerUserRole.textContent = user.role.toUpperCase();
 
+        if (mobUsername) mobUsername.textContent = user.username;
+        if (mobUserRole) mobUserRole.textContent = `Quyền: ${user.role.toUpperCase()} • Đã kết nối`;
+        if (btnMobOpenAuth) btnMobOpenAuth.classList.add('hidden');
+        if (btnMobLogout) btnMobLogout.classList.remove('hidden');
+
         if (user.role === 'admin') {
           headerUserRole.className = 'text-[9px] px-1 py-0.2 rounded font-bold bg-amber-400 text-black';
           btnOpenSettings.classList.remove('hidden');
           btnOpenSettings.classList.add('flex');
+          if (btnMobOpenSettings) {
+            btnMobOpenSettings.classList.remove('hidden');
+            btnMobOpenSettings.classList.add('flex');
+          }
         } else {
           headerUserRole.className = 'text-[9px] px-1 py-0.2 rounded font-bold bg-emerald-400/20 text-emerald-400';
           btnOpenSettings.classList.add('hidden');
           btnOpenSettings.classList.remove('flex');
+          if (btnMobOpenSettings) {
+            btnMobOpenSettings.classList.add('hidden');
+            btnMobOpenSettings.classList.remove('flex');
+          }
         }
 
         showToast(`Chào mừng ${user.username}! Vốn: ${formatVND(balance)}`, "success");
-        // Tự động tải lại lịch sử tài khoản từ Google Sheet khi đăng nhập
         syncTradeHistoryFromSheet();
       } else {
         btnOpenAuth.classList.remove('hidden');
@@ -1320,6 +1410,15 @@
         userProfilePill.classList.remove('flex');
         btnOpenSettings.classList.add('hidden');
         btnOpenSettings.classList.remove('flex');
+
+        if (mobUsername) mobUsername.textContent = "Khách (Chưa đăng nhập)";
+        if (mobUserRole) mobUserRole.textContent = "Đăng nhập để lưu giao dịch";
+        if (btnMobOpenAuth) btnMobOpenAuth.classList.remove('hidden');
+        if (btnMobLogout) btnMobLogout.classList.add('hidden');
+        if (btnMobOpenSettings) {
+          btnMobOpenSettings.classList.add('hidden');
+          btnMobOpenSettings.classList.remove('flex');
+        }
       }
 
       updateHeaderBalances();
@@ -1382,6 +1481,83 @@
       }
     }
 
+    const mobileHeaderMenuBtn = document.getElementById('btn-mobile-header-menu');
+    const mobileHeaderDropdown = document.getElementById('mobile-header-dropdown');
+    const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+    function toggleMobileHeaderMenu() {
+      const isHidden = mobileHeaderDropdown.classList.contains('hidden');
+      if (isHidden) {
+        mobileHeaderDropdown.classList.remove('hidden');
+        mobileMenuIcon.className = 'fa-solid fa-xmark text-sm';
+      } else {
+        mobileHeaderDropdown.classList.add('hidden');
+        mobileMenuIcon.className = 'fa-solid fa-bars text-sm';
+      }
+    }
+
+    function closeMobileHeaderMenu() {
+      if (!mobileHeaderDropdown.classList.contains('hidden')) {
+        mobileHeaderDropdown.classList.add('hidden');
+        mobileMenuIcon.className = 'fa-solid fa-bars text-sm';
+      }
+    }
+
+    mobileHeaderMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMobileHeaderMenu();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileHeaderDropdown.contains(e.target) && e.target !== mobileHeaderMenuBtn && !mobileHeaderMenuBtn.contains(e.target)) {
+        closeMobileHeaderMenu();
+      }
+    });
+
+    // Mobile Dropdown Buttons bindings
+    document.getElementById('btn-mob-open-auth').addEventListener('click', () => {
+      closeMobileHeaderMenu();
+      document.getElementById('auth-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-mob-logout').addEventListener('click', () => {
+      closeMobileHeaderMenu();
+      currentUser = null;
+      setAuthenticatedUser(null);
+      showToast("Đã đăng xuất tài khoản an toàn!", "info");
+    });
+
+    document.getElementById('btn-mob-giftcode').addEventListener('click', () => {
+      closeMobileHeaderMenu();
+      document.getElementById('giftcode-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-mob-random-source').addEventListener('click', () => {
+      closeMobileHeaderMenu();
+      initNewMarketScenario(null, true);
+    });
+
+    document.getElementById('btn-mob-open-settings').addEventListener('click', () => {
+      closeMobileHeaderMenu();
+      document.getElementById('btn-open-settings').click();
+    });
+
+    // Mobile Speed Slider Sync
+    const mobSpeedSlider = document.getElementById('mob-speed-range-slider');
+    const mobSpeedSliderVal = document.getElementById('mob-speed-slider-val');
+
+    mobSpeedSlider.addEventListener('input', (e) => {
+      const spd = parseInt(e.target.value);
+      setSpeed(spd);
+    });
+
+    document.querySelectorAll('.mob-quick-speed-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const spd = parseInt(e.currentTarget.getAttribute('data-sp'));
+        setSpeed(spd);
+      });
+    });
+
     /* POPUP TỰ ĐỘNG SAU 60 GIÂY: "TẶNG CODE 7777" */
     function init60sGiftcodePopupTimer() {
       setTimeout(() => {
@@ -1390,7 +1566,7 @@
           popup.classList.remove('hidden');
           playAudioTone('win');
         }
-      }, 60000); // 60 giây sau khi truy cập
+      }, 60000);
     }
 
     document.getElementById('btn-close-60s-popup').addEventListener('click', () => {
@@ -1416,7 +1592,6 @@
       }
     });
 
-    /* Nút mở Modal Giftcode trên Header */
     document.getElementById('btn-open-giftcode').addEventListener('click', () => {
       document.getElementById('giftcode-modal').classList.remove('hidden');
     });
@@ -1424,7 +1599,6 @@
       document.getElementById('giftcode-modal').classList.add('hidden');
     });
 
-    /* Chọn nhanh các code mẫu */
     document.querySelectorAll('.btn-quick-fill-code').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const code = e.currentTarget.getAttribute('data-code');
@@ -1432,14 +1606,12 @@
       });
     });
 
-    /* Xử lý gửi Form Giftcode */
     document.getElementById('giftcode-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const code = document.getElementById('input-giftcode').value;
       handleRedeemGiftcode(code);
     });
 
-    /* Xử lý nút Đồng Bộ Lịch Sử Sheet trong Tab History */
     document.getElementById('btn-sync-history-sheet').addEventListener('click', () => {
       syncTradeHistoryFromSheet(true);
     });
@@ -1725,7 +1897,6 @@
         return (chartPlotWidth - rightPadding) - (offsetFromEnd * totalCandleSpan);
       };
 
-      // Compact axis badge drawing helper
       const drawAxisBadge = (y, bgColor, textColor, label, borderColor = null) => {
         const badgeH = 15;
         const badgeW = priceAxisWidth - 3;
@@ -2622,10 +2793,8 @@
       const shares = oldPos.shares;
       const lev = oldPos.leverage;
 
-      // 1. Đóng vị thế cũ
       executePositionExit(posId, curPrice, `Đảo chiều sang ${newType}`);
 
-      // 2. Mở vị thế mới ngược chiều
       setTimeout(() => {
         openPosition({
           type: newType,
@@ -2702,7 +2871,6 @@
 
       tradeHistory.unshift(closedTrade);
 
-      // Synchronize trade and balance to Google Sheets
       if (currentUser) {
         callGasApi('updateBalance', { username: currentUser.username, balance: balance });
         callGasApi('logTrade', {
@@ -2901,6 +3069,9 @@
       const navBal = document.getElementById('nav-balance');
       if (navBal) navBal.textContent = formatVND(totalEquity);
 
+      const navBalMob = document.getElementById('nav-balance-mob');
+      if (navBalMob) navBalMob.textContent = formatVND(totalEquity);
+
       const liveCapBadge = document.getElementById('live-unlocked-balance');
       if (liveCapBadge) liveCapBadge.textContent = formatVND(balance);
 
@@ -3071,7 +3242,6 @@
       const maxEl = document.getElementById('max-shares');
       if (maxEl) maxEl.textContent = maxS > 0 ? maxS.toLocaleString() : '0';
 
-      // TP / SL & R:R Ratio Preview
       const tpVal = parseFloat(document.getElementById('input-tp').value);
       const slVal = parseFloat(document.getElementById('input-sl').value);
       const rrBox = document.getElementById('rr-preview-box');
@@ -3163,7 +3333,6 @@
     document.getElementById('input-tp').addEventListener('input', updateEstimates);
     document.getElementById('input-sl').addEventListener('input', updateEstimates);
 
-    // Clear TP / SL Button
     document.getElementById('btn-clear-tp-sl').addEventListener('click', () => {
       document.getElementById('input-tp').value = '';
       document.getElementById('input-sl').value = '';
@@ -3171,7 +3340,6 @@
       showToast("Đã xóa trắng cài đặt TP/SL", "info");
     });
 
-    // Quick TP & SL Presets
     document.querySelectorAll('.tp-pct-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const pct = parseFloat(e.currentTarget.getAttribute('data-pct')) / 100;
@@ -3253,7 +3421,6 @@
     document.getElementById('btn-buy').addEventListener('click', () => submitOrder('LONG'));
     document.getElementById('btn-sell').addEventListener('click', () => submitOrder('SHORT'));
 
-    // Timeframe selector buttons
     document.querySelectorAll('.tf-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         document.querySelectorAll('.tf-btn').forEach(b => {
@@ -3280,7 +3447,7 @@
       simTimer = setInterval(simulatePriceStep, interval);
     }
 
-    // Fast-Forward Speed Popover
+    // Speed Popover (Desktop)
     const speedPopover = document.getElementById('speed-popover');
     const speedDisplayBtn = document.getElementById('speed-display-btn');
     const speedSlider = document.getElementById('speed-range-slider');
@@ -3302,6 +3469,11 @@
       speedDisplayBtn.textContent = timeScale + 'x';
       speedSliderVal.textContent = timeScale + 'x';
       speedSlider.value = timeScale;
+      
+      // Sync mobile controls
+      if (mobSpeedSlider) mobSpeedSlider.value = timeScale;
+      if (mobSpeedSliderVal) mobSpeedSliderVal.textContent = timeScale + 'x';
+
       startSimulationLoop();
     }
 
@@ -3396,7 +3568,6 @@
     const modalSimDot = document.getElementById('modal-sim-status-dot');
     const modalSimText = document.getElementById('modal-sim-status-text');
 
-    /* Admin Sub-Tabs Navigation */
     const tabBtnAdminConfig = document.getElementById('tab-btn-admin-config');
     const tabBtnAdminUsers = document.getElementById('tab-btn-admin-users');
     const adminViewConfig = document.getElementById('admin-view-config');
@@ -3417,7 +3588,6 @@
       loadAllUsersList();
     });
 
-    /* Admin All-Users Capital Management */
     let cachedUsersList = [];
     let currentEditingUser = null;
 
@@ -3583,7 +3753,6 @@
       showToast(isPaused ? "Đã tạm dừng mô phỏng thị trường." : "Đã tiếp tục chạy mô phỏng.", "info");
     });
 
-    // Admin Capital Modifiers
     document.querySelectorAll('.btn-quick-adjust-cap').forEach(btn => {
       btn.addEventListener('click', (e) => {
         if (!currentUser || currentUser.role !== 'admin') return;
@@ -3722,28 +3891,53 @@
       showToast("Admin đã lưu và đồng bộ toàn bộ cài đặt lên Google Sheet!", "success");
     });
 
-    // Positions Drawer Collapse Toggle
     const posDrawer = document.getElementById('section-positions');
     const drawerIcon = document.getElementById('drawer-toggle-icon');
+    const drawerToggleText = document.getElementById('drawer-toggle-text');
 
-    document.getElementById('btn-toggle-positions-drawer').addEventListener('click', () => {
-      isDrawerCollapsed = !isDrawerCollapsed;
-      if (isDrawerCollapsed) {
-        posDrawer.classList.remove('h-48', 'sm:h-52', 'lg:h-56');
-        posDrawer.classList.add('h-8');
-        drawerIcon.className = 'fa-solid fa-chevron-up text-[11px]';
-        showToast("Đã thu gọn bảng vị thế để mở rộng biểu đồ.", "info");
+    function togglePositionsDrawer(forcedState = null) {
+      if (forcedState !== null) {
+        isDrawerCollapsed = forcedState;
       } else {
-        posDrawer.classList.remove('h-8');
-        posDrawer.classList.add('h-48', 'sm:h-52', 'lg:h-56');
+        isDrawerCollapsed = !isDrawerCollapsed;
+      }
+
+      if (isDrawerCollapsed) {
+        posDrawer.classList.remove('h-44', 'sm:h-52', 'lg:h-56');
+        posDrawer.classList.add('h-8.5');
+        drawerIcon.className = 'fa-solid fa-chevron-up text-[11px]';
+        if (drawerToggleText) drawerToggleText.textContent = "Mở rộng";
+        showToast("Đã thu gọn bảng vị thế để mở rộng không gian biểu đồ.", "info");
+      } else {
+        posDrawer.classList.remove('h-8.5');
+        posDrawer.classList.add('h-44', 'sm:h-52', 'lg:h-56');
         drawerIcon.className = 'fa-solid fa-chevron-down text-[11px]';
+        if (drawerToggleText) drawerToggleText.textContent = "Thu gọn";
       }
       setTimeout(resizeCanvas, 220);
+    }
+
+    document.getElementById('btn-toggle-positions-drawer').addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePositionsDrawer();
+    });
+
+    document.getElementById('positions-header-bar').addEventListener('click', (e) => {
+      // If clicking directly on tab buttons or close all button, don't collapse
+      if (e.target.closest('.bot-tab-btn') || e.target.closest('#btn-close-all-positions') || e.target.closest('#btn-toggle-positions-drawer')) {
+        return;
+      }
+      togglePositionsDrawer();
     });
 
     // Bottom drawer tabs
     document.querySelectorAll('.bot-tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
+        // If drawer was collapsed, expand it when user clicks tab
+        if (isDrawerCollapsed) {
+          togglePositionsDrawer(false);
+        }
+
         document.querySelectorAll('.bot-tab-btn').forEach(b => {
           b.className = 'bot-tab-btn text-brand-textMuted hover:text-white pb-1';
         });
@@ -3753,7 +3947,6 @@
         document.querySelectorAll('.bot-tab-content').forEach(c => c.classList.add('hidden'));
         document.getElementById(t).classList.remove('hidden');
 
-        // Khi người dùng bấm sang tab lịch sử thì đồng bộ ngay từ Google Sheet
         if (t === 'tab-history') {
           syncTradeHistoryFromSheet();
         }
@@ -3784,19 +3977,28 @@
         secPos.classList.remove('hidden');
         secPos.classList.remove('flex-1');
         if (!isDrawerCollapsed) {
-          secPos.classList.add('h-48', 'sm:h-52', 'lg:h-56');
+          secPos.classList.add('h-44', 'sm:h-52', 'lg:h-56');
         }
         return;
       }
 
       if (view === 'chart') {
+        // View Chart: Displays chart with collapsible positions underneath!
         secChart.classList.remove('hidden');
         timeframeBar.classList.remove('hidden');
         document.getElementById('chart-viewport').classList.remove('hidden');
-        secPos.classList.add('hidden');
+        secPos.classList.remove('hidden'); // SHOW positions under the chart
+        secPos.classList.remove('flex-1');
+        if (isDrawerCollapsed) {
+          secPos.classList.remove('h-44', 'sm:h-52', 'lg:h-56');
+          secPos.classList.add('h-8.5');
+        } else {
+          secPos.classList.remove('h-8.5');
+          secPos.classList.add('h-44', 'sm:h-52');
+        }
         secTrade.classList.add('hidden');
         secTrade.classList.remove('flex');
-        setTimeout(resizeCanvas, 50);
+        setTimeout(resizeCanvas, 60);
       } else if (view === 'trade') {
         secChart.classList.add('hidden');
         secPos.classList.add('hidden');
@@ -3809,14 +4011,9 @@
         secTrade.classList.add('hidden');
         secTrade.classList.remove('flex');
         secPos.classList.remove('hidden');
-        secPos.classList.remove('h-48', 'sm:h-52', 'h-8');
+        secPos.classList.remove('h-44', 'sm:h-52', 'h-8.5');
         secPos.classList.add('flex-1');
         syncTradeHistoryFromSheet();
-      }
-
-      if (view !== 'positions' && !isDrawerCollapsed) {
-        secPos.classList.remove('flex-1');
-        secPos.classList.add('h-48', 'sm:h-52');
       }
     }
 
@@ -3850,13 +4047,9 @@
       updateHeaderBalances();
       startSimulationLoop();
 
-      // Mặc định ban đầu chưa đăng nhập: làm mờ biểu đồ và hiện thông báo
       setAuthenticatedUser(null);
-
-      // Kích hoạt bộ đếm thời gian 60 giây xuất hiện popup tặng Giftcode 7777
       init60sGiftcodePopupTimer();
 
-      // Tự động kiểm tra và đồng bộ kết nối Google Apps Script
       callGasApi('doGet').then((res) => {
         if (res && res.status === 'ok') {
           updateGasStatus(true);
