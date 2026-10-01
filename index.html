@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>WIKY Pro Trade - Sàn Giả Lập Crypto</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              buy: '#0ecb81',       // Binance Green
+              buyHover: '#0ba368',
+              sell: '#f6465d',      // Binance Red
+              sellHover: '#d9384f',
+              accent: '#f0b90b',    // Binance Gold
+              bg: '#0b0e11',
+              panel: '#181a20',
+              panelLight: '#2b313a',
+              border: '#262930',
+              textMuted: '#848e9c'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      user-select: none;
+      background-color: #0b0e11;
+      color: #eaecef;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #trade-chart {
+      touch-action: none;
+    }
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0e11;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2b313a;
+      border-radius: 4px;
+    }
+    .custom-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #f0b90b;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .active-tool {
+      background-color: #f0b90b !important;
+      color: #000000 !important;
+    }
+    @keyframes toastFade {
+      0% { transform: translateY(10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .toast-anim {
+      animation: toastFade 0.2s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col">
+
+  <!-- Top Navigation Header -->
+  <header class="h-14 bg-brand-panel border-b border-brand-border flex items-center justify-between px-3 sm:px-4 flex-shrink-0 z-30 shadow-md">
+    <div class="flex items-center space-x-3 sm:space-x-5">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black font-black text-sm shadow-md">
+          W
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center space-x-1.5">
+            <span class="font-bold text-sm sm:text-base tracking-wide">WIKY</span>
+            <span class="text-[10px] bg-amber-400/10 text-amber-400 px-1.5 py-0.2 rounded font-mono font-semibold">/VNĐ</span>
+          </div>
+          <span class="text-[9px] text-brand-textMuted uppercase tracking-wider font-semibold">Version: 2.0 Pro</span>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-brand-border hidden sm:block"></div>
+
+      <!-- Live Price & 24h Quick Stats -->
+      <div class="flex items-center space-x-3">
+        <div class="flex flex-col">
+          <span id="nav-price" class="text-base sm:text-lg font-bold font-mono text-brand-buy leading-tight">77.000₫</span>
+          <span id="nav-change" class="text-[11px] font-mono font-semibold text-brand-buy leading-none">+0.00%</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-3 text-[10px] font-mono text-brand-textMuted border-l border-brand-border pl-3">
+          <div>24h Cao: <b id="stat-24h-high" class="text-slate-200">77.500 ₫</b></div>
+          <div>24h Thấp: <b id="stat-24h-low" class="text-slate-200">76.200 ₫</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Controls: Speed, Real Data, Balance & Settings -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
+      <!-- Fast-Forward Multiplier with Popover Slider -->
+      <div class="relative">
+        <button id="btn-toggle-speed-menu" class="px-2.5 py-1 rounded-lg bg-brand-bg border border-brand-border text-amber-400 font-mono font-bold flex items-center space-x-1.5 hover:text-white transition text-xs">
+          <span id="speed-display-btn">1x</span>
+          <i class="fa-solid fa-gauge-high text-[11px]"></i>
+        </button>
+
+        <!-- Speed Slider Popover Widget (1x to 100x) -->
+        <div id="speed-popover" class="absolute right-0 top-full mt-1.5 w-60 bg-brand-panel/95 backdrop-blur border border-brand-border rounded-xl p-3 shadow-2xl z-40 hidden">
+          <div class="flex items-center justify-between text-[11px] mb-2">
+            <span class="text-brand-textMuted flex items-center">
+              <i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Tốc độ
+            </span>
+            <span id="speed-slider-val" class="font-mono font-bold text-amber-400 text-xs">x1</span>
+          </div>
+          <input type="range" id="speed-range-slider" min="1" max="100" step="1" value="1" class="w-full custom-range bg-brand-panelLight h-2 rounded-lg appearance-none cursor-pointer mb-2.5">
+          
+          <div class="grid grid-cols-5 gap-1 text-[10px] font-mono">
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="1">x1</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="5">x5</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="20">x20</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="50">x50</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="100">x100</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Data Source Button -->
+      <button id="btn-random-source" title="Đổi kịch bản nến từ nguồn Binance thật" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-xs font-mono flex items-center space-x-1.5 transition">
+        <i class="fa-solid fa-shuffle text-[10px]"></i>
+        <span class="hidden sm:inline">Đổi Data</span>
+      </button>
+
+      <!-- Balance Display -->
+      <div class="bg-brand-bg border border-brand-border px-3 py-1 rounded-lg text-right hidden sm:block">
+        <div class="text-[9px] text-brand-textMuted font-medium uppercase leading-none">Ví khả dụng</div>
+        <div id="nav-balance" class="text-xs font-mono font-bold text-amber-400">5.000.000 ₫</div>
+      </div>
+
+      <!-- Settings Button -->
+      <button id="btn-open-settings" class="px-3 py-1.5 rounded-lg bg-brand-panelLight hover:bg-slate-700 text-xs font-semibold flex items-center space-x-1.5 transition text-slate-200 border border-brand-border">
+        <i class="fa-solid fa-sliders text-amber-400"></i>
+        <span>Cài Đặt</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Switcher (Chart / Trade / Positions) -->
+  <nav class="lg:hidden h-9 bg-brand-panel border-b border-brand-border grid grid-cols-3 text-xs font-semibold z-20 flex-shrink-0">
+    <button id="tab-nav-chart" class="mobile-tab-btn border-b-2 border-brand-accent text-brand-accent flex items-center justify-center space-x-1" data-view="chart">
+      <i class="fa-solid fa-chart-line text-[11px]"></i>
+      <span>Biểu Đồ</span>
+    </button>
+    <button id="tab-nav-trade" class="mobile-tab-btn border-b-2 border-transparent text-brand-textMuted flex items-center justify-center space-x-1" data-view="trade">
+      <i class="fa-solid fa-bolt text-[11px]"></i>
+      <span>Đặt Lệnh</span>
+    </button>
+    <button id="tab-nav-positions" class="mobile-tab-btn border-b-2 border-transparent text-brand-textMuted flex items-center justify-center space-x-1" data-view="positions">
+      <i class="fa-solid fa-wallet text-[11px]"></i>
+      <span>Vị Thế (<span id="mob-pos-count">0</span>)</span>
+    </button>
+  </nav>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+
+    <!-- Left & Center: Chart Zone & History Drawer -->
+    <div id="section-chart" class="flex-1 flex flex-col min-w-0 border-r border-brand-border overflow-hidden h-full relative">
+      
+      <!-- Timeframe and Utility Bar -->
+      <div id="timeframe-bar" class="h-9 bg-brand-panel border-b border-brand-border flex items-center justify-between px-2 sm:px-3 text-xs flex-shrink-0 overflow-x-auto select-none">
+        
+        <div class="flex items-center space-x-1 font-mono text-[11px]">
+          <span class="text-[10px] text-brand-textMuted font-sans mr-0.5 hidden xl:inline">Khung:</span>
+          <button class="tf-btn active px-2 py-0.5 rounded bg-brand-panelLight text-brand-accent font-bold" data-tf="5m">5P</button>
+          <button class="tf-btn px-2 py-0.5 rounded text-brand-textMuted hover:text-white" data-tf="15m">15P</button>
+          <button class="tf-btn px-2 py-0.5 rounded text-brand-textMuted hover:text-white" data-tf="1h">1H</button>
+          <button class="tf-btn px-2 py-0.5 rounded text-brand-textMuted hover:text-white" data-tf="4h">4H</button>
+          <button class="tf-btn px-2 py-0.5 rounded text-brand-textMuted hover:text-white" data-tf="1d">1D</button>
+          <button class="tf-btn px-2 py-0.5 rounded text-brand-textMuted hover:text-white" data-tf="1w">1W</button>
+        </div>
+
+        <!-- Indicators (MA & BOLL) & Chart Reset Tools -->
+        <div class="flex items-center space-x-1.5 sm:space-x-2 text-xs">
+          <!-- Real Market Label Badge -->
+          <div id="real-data-badge" class="hidden sm:flex items-center space-x-1 px-2 py-0.5 rounded bg-brand-bg border border-brand-border text-[10px] font-mono text-brand-textMuted">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="market-source-name">Nguồn: BTC</span>
+          </div>
+
+          <!-- Live Snap Button -->
+          <button id="btn-chart-recenter" title="Quay lại nến mới nhất" class="flex items-center space-x-1 px-2 py-0.5 rounded bg-brand-bg border border-brand-border text-brand-textMuted hover:text-amber-400 font-mono text-[11px] transition">
+            <i class="fa-solid fa-crosshairs text-[10px]"></i>
+            <span class="hidden sm:inline">Gim</span>
+          </button>
+
+          <!-- Toggle MA & BOLL -->
+          <button id="btn-toggle-ma" title="Bật/Tắt đường MA (20/50)" class="px-2 py-0.5 rounded bg-brand-panelLight text-blue-400 font-mono text-[11px] transition">
+            MA
+          </button>
+          <button id="btn-toggle-boll" title="Bật/Tắt Dải Bollinger Bands (20, 2)" class="px-2 py-0.5 rounded bg-brand-panelLight text-purple-400 font-mono text-[11px] font-bold transition">
+            BOLL
+          </button>
+        </div>
+      </div>
+
+      <!-- Chart Canvas Viewport with Collapsible Floating Drawing Toolbox -->
+      <div id="chart-viewport" class="relative flex-1 bg-brand-bg overflow-hidden cursor-crosshair">
+        
+        <!-- Upgraded Collapsible Floating Drawing Toolbox (TradingView Style) -->
+        <div id="drawing-toolbox" class="absolute left-2.5 top-2.5 z-20 flex flex-col bg-brand-panel/95 backdrop-blur border border-brand-border rounded-xl p-1 shadow-2xl transition-all duration-200">
+          <!-- Toggle Collapse / Expand Button -->
+          <button id="btn-toggle-toolbox" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs text-amber-400 hover:bg-brand-panelLight transition" title="Mở/Thu gọn thanh công cụ vẽ">
+            <i id="toolbox-chevron-icon" class="fa-solid fa-pen-nib"></i>
+          </button>
+
+          <!-- Expandable Tools Group -->
+          <div id="toolbox-items" class="flex flex-col space-y-1 pt-1 mt-1 border-t border-brand-border">
+            <button id="tool-cursor" class="draw-tool-btn active-tool w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs text-brand-textMuted hover:text-white transition" title="Con trỏ điều hướng (Kéo thả xem quá khứ)">
+              <i class="fa-solid fa-arrow-pointer"></i>
+            </button>
+            <button id="tool-line" class="draw-tool-btn w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs text-brand-textMuted hover:text-white transition" title="Vẽ Đường Xu Hướng (Trendline)">
+              <i class="fa-solid fa-pen-ruler"></i>
+            </button>
+            <button id="tool-hline" class="draw-tool-btn w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs text-brand-textMuted hover:text-white transition" title="Đường Ngang Hỗ Trợ/Kháng Cự">
+              <i class="fa-solid fa-ruler-horizontal"></i>
+            </button>
+            <div class="h-px bg-brand-border my-0.5"></div>
+            <button id="tool-clear" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs text-brand-sell hover:bg-rose-950/40 transition" title="Xóa tất cả hình vẽ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Zoom In/Out & Auto Scale Helper Buttons -->
+        <div class="absolute right-20 bottom-3 z-20 flex items-center space-x-1.5">
+          <button id="btn-reset-price-scale" title="Đặt lại tỷ lệ thanh giá (Auto Scale)" class="px-2 h-7 rounded-lg bg-brand-panel/90 border border-brand-border text-amber-400 hover:text-white flex items-center justify-center text-[10px] font-mono shadow-lg hidden">
+            AUTO
+          </button>
+          <button id="btn-zoom-in" title="Phóng to nến" class="w-7 h-7 rounded-lg bg-brand-panel/90 border border-brand-border text-slate-300 hover:text-white flex items-center justify-center text-xs shadow-lg active:scale-90">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+          <button id="btn-zoom-out" title="Thu nhỏ nến" class="w-7 h-7 rounded-lg bg-brand-panel/90 border border-brand-border text-slate-300 hover:text-white flex items-center justify-center text-xs shadow-lg active:scale-90">
+            <i class="fa-solid fa-minus"></i>
+          </button>
+        </div>
+
+        <!-- Interactive Drag Hint Badges -->
+        <div id="price-drag-hint" class="absolute right-2 top-2 z-10 px-2 py-0.5 bg-brand-panel/80 border border-brand-border rounded text-[9px] font-mono text-brand-textMuted pointer-events-none hidden">
+          Kéo dọc co giãn Y • Kích đúp Auto
+        </div>
+        <div id="time-drag-hint" class="absolute left-1/3 bottom-8 z-10 px-2 py-0.5 bg-brand-panel/80 border border-brand-border rounded text-[9px] font-mono text-brand-textMuted pointer-events-none hidden">
+          Kéo ngang để co giãn Trục X
+        </div>
+
+        <!-- Active Tool Status Hint Banner -->
+        <div id="draw-hint-banner" class="absolute top-2.5 right-20 z-10 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-lg text-[10px] font-mono text-amber-300 hidden pointer-events-none">
+          Chạm/Click 2 điểm để vẽ
+        </div>
+
+        <!-- Main Chart Canvas -->
+        <canvas id="trade-chart" class="w-full h-full block"></canvas>
+
+        <!-- Live OHLC Crosshair Tooltip -->
+        <div id="chart-tooltip" class="absolute top-2 left-12 sm:left-14 bg-brand-panel/90 border border-brand-border px-2 py-1 rounded font-mono text-[10px] sm:text-[11px] text-brand-textMuted pointer-events-none hidden shadow-xl z-10 flex flex-wrap gap-x-2">
+          <span>O: <b id="tip-open" class="text-white">--</b></span>
+          <span>H: <b id="tip-high" class="text-white">--</b></span>
+          <span>L: <b id="tip-low" class="text-white">--</b></span>
+          <span>C: <b id="tip-close" class="text-white">--</b></span>
+          <span class="hidden sm:inline">V: <b id="tip-vol" class="text-white">--</b></span>
+        </div>
+
+        <!-- Watermark Symbol -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] text-7xl sm:text-9xl font-black font-mono tracking-widest text-amber-300">
+          WIKY
+        </div>
+      </div>
+
+      <!-- Bottom Positions & History Tab Panel -->
+      <div id="section-positions" class="h-48 sm:h-52 lg:h-56 flex-shrink-0 bg-brand-panel border-t border-brand-border flex flex-col transition-all duration-200">
+        <!-- Sub Header Tabs with Collapse Toggle -->
+        <div class="h-8 border-b border-brand-border flex items-center justify-between px-3 text-xs bg-brand-bg/60 select-none">
+          <div class="flex items-center space-x-3 sm:space-x-4">
+            <button id="btn-toggle-positions-drawer" title="Thu gọn / Mở rộng bảng" class="p-1 rounded text-brand-textMuted hover:text-white hover:bg-brand-panelLight transition">
+              <i id="drawer-toggle-icon" class="fa-solid fa-chevron-down text-[11px]"></i>
+            </button>
+            <button data-tab="tab-pos" class="bot-tab-btn font-semibold text-brand-accent border-b-2 border-brand-accent pb-1">
+              Vị Thế (<span id="count-positions">0</span>)
+            </button>
+            <button data-tab="tab-orders" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1">
+              Lệnh Chờ (<span id="count-orders">0</span>)
+            </button>
+            <button data-tab="tab-history" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1">
+              Lịch Sử
+            </button>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="font-mono text-[11px] hidden sm:block">
+              PnL: <span id="total-unrealized-pnl" class="font-bold text-white">0 ₫</span>
+            </div>
+            <button id="btn-close-all-positions" title="Đóng tất cả các vị thế đang mở" class="px-2 py-0.5 rounded bg-brand-sell/20 border border-brand-sell/40 text-brand-sell hover:bg-brand-sell hover:text-white text-[10px] font-bold font-mono transition flex items-center space-x-1">
+              <i class="fa-solid fa-fire text-[10px]"></i>
+              <span id="close-all-text">Đóng Hết</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab 1: Positions Table -->
+        <div id="tab-pos" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto">
+          <table class="w-full text-left text-[11px] font-mono min-w-[620px]">
+            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border">
+              <tr>
+                <th class="py-1.5 px-3">VỊ THẾ</th>
+                <th class="py-1.5 px-2">KL</th>
+                <th class="py-1.5 px-2">GIÁ VÀO</th>
+                <th class="py-1.5 px-2">THỊ TRƯỜNG</th>
+                <th class="py-1.5 px-2">TP / SL</th>
+                <th class="py-1.5 px-2">LÃI / LỖ (%)</th>
+                <th class="py-1.5 px-3 text-right">ĐÓNG</th>
+              </tr>
+            </thead>
+            <tbody id="positions-tbody" class="divide-y divide-brand-border/40"></tbody>
+          </table>
+          <div id="positions-empty" class="p-6 text-center text-brand-textMuted text-xs">
+            Chưa có vị thế mở. Hãy dùng bảng Đặt Lệnh để bắt đầu!
+          </div>
+        </div>
+
+        <!-- Tab 2: Orders Table -->
+        <div id="tab-orders" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto hidden">
+          <table class="w-full text-left text-[11px] font-mono min-w-[500px]">
+            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border">
+              <tr>
+                <th class="py-1.5 px-3">LỆNH</th>
+                <th class="py-1.5 px-2">LOẠI</th>
+                <th class="py-1.5 px-2">GIÁ ĐẶT</th>
+                <th class="py-1.5 px-2">SỐ LƯỢNG</th>
+                <th class="py-1.5 px-3 text-right">HỦY</th>
+              </tr>
+            </thead>
+            <tbody id="orders-tbody" class="divide-y divide-brand-border/40"></tbody>
+          </table>
+          <div id="orders-empty" class="p-6 text-center text-brand-textMuted text-xs">
+            Không có lệnh chờ nào.
+          </div>
+        </div>
+
+        <!-- Tab 3: History Table -->
+        <div id="tab-history" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto hidden">
+          <table class="w-full text-left text-[11px] font-mono min-w-[500px]">
+            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border">
+              <tr>
+                <th class="py-1.5 px-3">THỜI GIAN</th>
+                <th class="py-1.5 px-2">CHIỀU</th>
+                <th class="py-1.5 px-2">GIÁ MỞ/ĐÓNG</th>
+                <th class="py-1.5 px-2">LÝ DO</th>
+                <th class="py-1.5 px-3 text-right">LÃI/LỖ</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody" class="divide-y divide-brand-border/40"></tbody>
+          </table>
+          <div id="history-empty" class="p-6 text-center text-brand-textMuted text-xs">
+            Chưa có lịch sử giao dịch.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar: Order Form & Compact Orderbook -->
+    <div id="section-trade" class="hidden lg:flex w-full lg:w-72 xl:w-80 flex-col bg-brand-panel flex-shrink-0 h-full overflow-y-auto">
+      
+      <!-- Compact Orderbook Live Depth -->
+      <div class="p-2 border-b border-brand-border">
+        <div class="flex justify-between items-center text-[10px] text-brand-textMuted mb-1">
+          <span>Sổ Lệnh WIKY</span>
+          <span class="font-mono text-emerald-400" id="ob-summary">Thanh khoản cao</span>
+        </div>
+        
+        <div class="grid grid-cols-2 text-[9px] text-brand-textMuted font-mono mb-0.5">
+          <span>Giá (VNĐ)</span>
+          <span class="text-right">Số Lượng</span>
+        </div>
+
+        <!-- Mini Asks (Bán / Đỏ) -->
+        <div id="mini-asks" class="space-y-0.5 font-mono text-[10px]"></div>
+
+        <!-- Mid Price -->
+        <div class="py-0.5 px-1 my-0.5 rounded bg-brand-bg border border-brand-border/60 flex items-center justify-between font-mono">
+          <span id="ob-mid-price" class="text-xs font-bold text-brand-buy">77.000 ₫</span>
+          <span class="text-[9px] text-brand-textMuted">Tức thì</span>
+        </div>
+
+        <!-- Mini Bids (Mua / Xanh) -->
+        <div id="mini-bids" class="space-y-0.5 font-mono text-[10px]"></div>
+      </div>
+
+      <!-- Streamlined Execution Form -->
+      <div class="p-2.5 flex-1 flex flex-col space-y-2.5 text-xs">
+        
+        <!-- Spot vs Margin Mode Switch -->
+        <div class="grid grid-cols-2 gap-1 bg-brand-bg p-1 rounded-lg border border-brand-border text-[11px]">
+          <button id="mode-spot" class="trade-mode-btn py-1 font-semibold rounded bg-brand-panelLight text-white">Giao Ngay</button>
+          <button id="mode-margin" class="trade-mode-btn py-1 font-semibold rounded text-brand-textMuted hover:text-white">Margin</button>
+        </div>
+
+        <!-- Leverage Slider (Shown in Margin Mode) -->
+        <div id="leverage-box" class="hidden bg-brand-bg p-2 rounded-lg border border-brand-border space-y-1">
+          <div class="flex justify-between text-[11px]">
+            <span class="text-brand-textMuted">Đòn bẩy:</span>
+            <span id="leverage-label" class="font-mono font-bold text-amber-400">5x</span>
+          </div>
+          <input type="range" id="leverage-slider" min="1" max="50" step="1" value="5" class="w-full custom-range bg-brand-panelLight h-1.5 rounded-lg appearance-none cursor-pointer">
+        </div>
+
+        <!-- Market vs Limit switch -->
+        <div class="grid grid-cols-2 border-b border-brand-border pb-1.5 text-[11px]">
+          <button id="type-market" class="order-type-btn font-bold text-brand-accent border-b-2 border-brand-accent pb-1">Thị Trường</button>
+          <button id="type-limit" class="order-type-btn text-brand-textMuted hover:text-white pb-1">Lệnh Chờ</button>
+        </div>
+
+        <!-- Limit Price Input (Hidden if Market) -->
+        <div id="limit-group" class="hidden space-y-1">
+          <label class="text-[10px] text-brand-textMuted">Giá đặt (VNĐ)</label>
+          <input type="number" id="input-limit-price" step="100" class="w-full bg-brand-bg border border-brand-border rounded p-1.5 text-xs font-mono text-white focus:outline-none focus:border-amber-400" placeholder="Nhập giá">
+        </div>
+
+        <!-- Volume / Quantity Input -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-[10px]">
+            <span class="text-brand-textMuted">Số Lượng (WIKY):</span>
+            <span class="text-brand-textMuted">Tối đa: <b id="max-shares" class="text-amber-400 font-mono">0</b></span>
+          </div>
+          <input type="number" id="input-shares" min="1" step="1" value="10" class="w-full bg-brand-bg border border-brand-border rounded p-1.5 text-xs font-mono text-white focus:outline-none focus:border-amber-400" placeholder="Số lượng WIKY">
+          
+          <!-- Percentage chips -->
+          <div class="grid grid-cols-4 gap-1 pt-0.5 font-mono text-[10px]">
+            <button type="button" class="pct-btn py-1 rounded bg-brand-bg border border-brand-border hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-pct="0.25">25%</button>
+            <button type="button" class="pct-btn py-1 rounded bg-brand-bg border border-brand-border hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-pct="0.50">50%</button>
+            <button type="button" class="pct-btn py-1 rounded bg-brand-bg border border-brand-border hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-pct="0.75">75%</button>
+            <button type="button" class="pct-btn py-1 rounded bg-brand-bg border border-brand-border hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-pct="1.00">100%</button>
+          </div>
+        </div>
+
+        <!-- TP / SL Controls -->
+        <div class="bg-brand-bg p-2 rounded-lg border border-brand-border space-y-1.5">
+          <div class="text-[10px] font-semibold text-brand-textMuted flex items-center justify-between">
+            <span><i class="fa-solid fa-shield-halved text-amber-400 mr-1"></i> Chốt Lời / Cắt Lỗ</span>
+          </div>
+          <div class="space-y-1">
+            <div>
+              <div class="flex justify-between items-center text-[9px] text-brand-textMuted mb-0.5">
+                <span class="text-emerald-400 font-semibold">Chốt Lời (TP)</span>
+                <div class="flex space-x-1 font-mono">
+                  <button type="button" class="tp-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-emerald-400" data-pct="10">+10%</button>
+                  <button type="button" class="tp-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-emerald-400" data-pct="25">+25%</button>
+                  <button type="button" class="tp-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-emerald-400" data-pct="50">+50%</button>
+                  <button type="button" class="tp-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-emerald-400" data-pct="100">+100%</button>
+                </div>
+              </div>
+              <input type="number" id="input-tp" step="100" placeholder="Giá Chốt Lời (VNĐ)" class="w-full bg-brand-panel border border-brand-border rounded px-2 py-1 text-[11px] font-mono text-emerald-400 focus:outline-none">
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center text-[9px] text-brand-textMuted mb-0.5">
+                <span class="text-rose-400 font-semibold">Cắt Lỗ (SL)</span>
+                <div class="flex space-x-1 font-mono">
+                  <button type="button" class="sl-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-rose-400" data-pct="10">-10%</button>
+                  <button type="button" class="sl-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-rose-400" data-pct="25">-25%</button>
+                  <button type="button" class="sl-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-rose-400" data-pct="50">-50%</button>
+                  <button type="button" class="sl-pct-btn px-1 py-0.2 rounded bg-brand-panelLight text-[9px] hover:text-rose-400" data-pct="75">-75%</button>
+                </div>
+              </div>
+              <input type="number" id="input-sl" step="100" placeholder="Giá Cắt Lỗ (VNĐ)" class="w-full bg-brand-panel border border-brand-border rounded px-2 py-1 text-[11px] font-mono text-rose-400 focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <!-- Cost & Margin Required Estimation -->
+        <div class="space-y-1 text-[10px] font-mono text-brand-textMuted border-t border-brand-border pt-1.5">
+          <div class="flex justify-between">
+            <span>Giá trị:</span>
+            <span id="order-cost" class="text-white font-bold">0 ₫</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Ký quỹ:</span>
+            <span id="order-margin" class="text-amber-400">0 ₫</span>
+          </div>
+        </div>
+
+        <!-- Buy / Sell Action Buttons -->
+        <div class="grid grid-cols-2 gap-2 pt-1 mt-auto">
+          <button id="btn-buy" class="py-2.5 rounded-lg bg-brand-buy hover:bg-brand-buyHover active:scale-95 text-white font-bold text-xs shadow-lg transition">
+            MUA / LONG
+          </button>
+          <button id="btn-sell" class="py-2.5 rounded-lg bg-brand-sell hover:bg-brand-sellHover active:scale-95 text-white font-bold text-xs shadow-lg transition">
+            BÁN / SHORT
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Settings Modal Popup with Passcode 2412 & Integrated Simulation Pause/Run -->
+  <div id="settings-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-brand-panel border border-brand-border w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-brand-border pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center">
+          <i class="fa-solid fa-sliders text-amber-400 mr-2"></i> Cài Đặt Hệ Thống & Giả Lập
+        </h3>
+        <button id="btn-close-settings" class="text-brand-textMuted hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Simulation State (Moved from Topbar to Popup as requested) -->
+      <div class="bg-brand-bg border border-brand-border rounded-xl p-3 flex items-center justify-between">
+        <div>
+          <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
+            <span id="modal-sim-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="modal-sim-status-text">Đang chạy mô phỏng</span>
+          </div>
+          <div class="text-[10px] text-brand-textMuted">Tạm dừng để phân tích hoặc giữ nguyên giá</div>
+        </div>
+        <button id="modal-btn-pause-toggle" class="px-3 py-1.5 rounded-lg font-mono text-xs font-bold transition flex items-center space-x-1.5 bg-brand-panelLight text-amber-400 hover:text-white border border-brand-border">
+          <i id="modal-pause-icon" class="fa-solid fa-pause"></i>
+          <span id="modal-pause-label">Dừng Chạy</span>
+        </button>
+      </div>
+
+      <!-- General Settings -->
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="text-brand-textMuted block mb-1">Số Vốn Ban Đầu (VNĐ)</label>
+          <div class="flex space-x-1.5">
+            <input type="number" id="setting-balance-input" step="1000000" min="100000" value="5000000" class="flex-1 bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 font-mono text-amber-400 font-bold text-sm focus:outline-none">
+            <button id="btn-reset-balance" class="px-2.5 py-1.5 bg-brand-panelLight text-[11px] rounded-lg text-slate-300 hover:text-white">+5 Tr</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-brand-textMuted block mb-1">Mẫu Hình Dữ Liệu Nguồn</label>
+          <select id="setting-source-asset" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
+            <option value="RANDOM">Ngẫu nhiên từ Binance</option>
+            <option value="BNBUSDT">Binance Coin</option>
+            <option value="BTCUSDT">Bitcoin - Thanh khoản dồi dào</option>
+            <option value="ETHUSDT">Ethereum- Sóng mượt</option>
+            <option value="SOLUSDT">Solana - Bứt phá mạnh</option>
+            <option value="DOGEUSDT">Dogecoin - Biến động nhanh</option>
+          </select>
+        </div>
+
+        <!-- Passcode Protected Market Parameters Section -->
+        <div class="pt-2 border-t border-brand-border">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center space-x-1.5">
+              <i class="fa-solid fa-lock text-amber-400 text-xs"></i>
+              <span class="text-xs font-bold text-white">Cài Đặt Nâng Cao</span>
+            </div>
+            <span id="passcode-status-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/30">
+              Đang Khóa
+            </span>
+          </div>
+
+          <!-- Passcode Input Gate -->
+          <div id="passcode-gate-box" class="bg-brand-bg/80 border border-dashed border-amber-500/40 rounded-xl p-3 text-center space-y-2 mb-2">
+            <p class="text-[11px] text-brand-textMuted">Nạp 50k để nhận Key quản trị nhá !</p>
+            <div class="flex space-x-2 max-w-xs mx-auto">
+              <input type="password" id="input-admin-passcode" maxlength="8" placeholder="Nhập Key" class="flex-1 bg-brand-panel border border-brand-border rounded-lg px-3 py-1.5 text-center font-mono tracking-widest text-amber-400 text-xs focus:outline-none focus:border-amber-400">
+              <button id="btn-unlock-settings" class="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded-lg transition">
+                Mở Khóa
+              </button>
+            </div>
+            <div id="passcode-error-msg" class="text-[10px] text-rose-400 hidden">Key không chính xác! Hãy nạp 50k bạn nhé</div>
+          </div>
+
+          <!-- Protected Inputs (Disabled until passcode is authenticated) -->
+          <div id="protected-fields-container" class="space-y-3 opacity-40 pointer-events-none transition-all duration-200">
+            <!-- Base Price -->
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="text-brand-textMuted text-[11px]">Giá Cơ Bản (VNĐ):</label>
+                <span id="label-base-price" class="text-amber-400 font-mono font-semibold text-[11px]">77.000 ₫</span>
+              </div>
+              <input type="number" id="setting-base-price" step="500" value="77000" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
+            </div>
+
+            <!-- Volatility / Amplitude -->
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="text-brand-textMuted text-[11px]">Biên Độ Biến Động Sóng (% / bước):</label>
+                <span id="label-volatility-val" class="text-amber-400 font-mono font-semibold text-[11px]">0.40%</span>
+              </div>
+              <input type="range" id="setting-volatility-range" min="0.05" max="2.5" step="0.05" value="0.40" class="w-full custom-range bg-brand-panelLight h-2 rounded-lg appearance-none cursor-pointer">
+              <div class="flex justify-between text-[9px] text-brand-textMuted font-mono">
+                <span>0.05% (Êm đềm)</span>
+                <span>0.40% (Chuẩn)</span>
+                <span>2.5% (Bão)</span>
+              </div>
+            </div>
+
+            <!-- Min Tick Size -->
+            <div>
+              <label class="text-brand-textMuted block mb-1 text-[11px]">Bước Giá Tối Thiểu:</label>
+              <select id="setting-tick-size" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
+                <option value="10">10 ₫ (Cực nhuyễn)</option>
+                <option value="50">50 ₫</option>
+                <option value="100" selected>100 ₫ (Tiêu chuẩn)</option>
+                <option value="200">200 ₫</option>
+                <option value="500">500 ₫ (Biên độ rộng)</option>
+                <option value="1000">1.000 ₫</option>
+              </select>
+            </div>
+
+            <!-- Position Close Delay Seconds -->
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="text-brand-textMuted text-[11px]">Độ Trễ Khi Đóng Vị Thế:</label>
+                <span id="label-close-delay" class="text-amber-400 font-mono font-semibold text-[11px]">Tức thì</span>
+              </div>
+              <input type="number" id="setting-close-delay" min="0" max="30" step="1" value="0" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none" placeholder="Nhập số giây trễ (ví dụ: 2)">
+              <p class="text-[9px] text-brand-textMuted mt-1">Khi bấm đóng vị thế, hệ thống sẽ đếm ngược trước khi thực hiện chốt giá.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 border-t border-brand-border flex space-x-2">
+        <button id="btn-close-settings-alt" class="w-1/3 py-2.5 rounded-xl bg-brand-panelLight text-brand-textMuted hover:text-white font-semibold text-xs transition">
+          Hủy
+        </button>
+        <button id="btn-save-settings" class="w-2/3 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition">
+          LƯU & ÁP DỤNG
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <script>
+    function formatVND(value) {
+      return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        maximumFractionDigits: 0
+      }).format(Math.round(value));
+    }
+
+    /* Core Token Spec (Configurable via Passcode 2412) */
+    const WIKY_SPEC = {
+      name: "WIKY Coin",
+      symbol: "WIKY",
+      basePrice: 77000,
+      volatility: 0.0040,   // 0.40%
+      tickSize: 100,
+      closeDelaySec: 0      // Default instant (0s)
+    };
+
+    /* Security authentication state */
+    let isSettingsUnlocked = false;
+
+    /* Simulation and Chart State */
+    let candles = [];
+    let currentCandle = null;
+    let timeframeMinutes = 5; // Default 5P
+    let timeScale = 1;
+    let isPaused = false;
+    let selectedRealAsset = 'RANDOM';
+    let currentRealSource = 'BTC';
+
+    /* Multi-Timeframe Unified Session State */
+    let marketSession = {
+      asset: 'BTCUSDT',
+      endTime: Date.now() - (15 * 24 * 60 * 60 * 1000),
+      scaleRatio: null,
+      lockedCurrentPrice: WIKY_SPEC.basePrice,
+      cache: {}
+    };
+
+    /* Portfolio State */
+    let initialBalance = 5000000;
+    let balance = 5000000;
+    let positions = [];
+    let pendingOrders = [];
+    let tradeHistory = [];
+    let nextId = 1;
+
+    let tradeMode = 'spot'; // 'spot' or 'margin'
+    let orderType = 'market'; // 'market' or 'limit'
+    let leverage = 1;
+
+    // Track active delayed close operations to prevent race conditions
+    let activeCloseTimers = {};
+    let isBatchClosing = false;
+
+    const canvas = document.getElementById('trade-chart');
+    const ctx = canvas.getContext('2d');
+    const viewport = document.getElementById('chart-viewport');
+
+    // Pan & Zoom Engine State
+    let candleWidth = 8;
+    let candleGap = 3;
+    let chartOffset = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let showMA = true;
+    let showBoll = true;
+
+    // Positions Drawer Collapse State
+    let isDrawerCollapsed = false;
+
+    // Price Scale (Y-Axis) Dragging State
+    let isDraggingPriceAxis = false;
+    let priceAxisStartY = 0;
+    let priceScaleFactor = 1.0;
+    let startPriceScaleFactor = 1.0;
+
+    // Time Scale (X-Axis) Dragging State
+    let isDraggingTimeAxis = false;
+    let timeAxisStartX = 0;
+    let startTimeCandleWidth = 8;
+
+    // Multi-touch pinch-to-zoom state
+    let lastTouchDistance = null;
+
+    // Drawing Tools State
+    let isToolboxCollapsed = false;
+    let activeTool = 'cursor';
+    let drawings = [];
+    let currentDrawing = null;
+
+    // Compact price axis width configuration (Snugly fits price values, maximizing candle zone)
+    const PRICE_AXIS_WIDTH = 74;
+    const RIGHT_PADDING = 38;
+
+    const REAL_CRYPTO_ASSETS = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'DOGEUSDT', 'AVAXUSDT', 'NEARUSDT'];
+
+    function initNewMarketScenario(forcedAsset = null, notify = false) {
+      const asset = forcedAsset || (selectedRealAsset === 'RANDOM'
+        ? REAL_CRYPTO_ASSETS[Math.floor(Math.random() * REAL_CRYPTO_ASSETS.length)]
+        : selectedRealAsset);
+
+      const now = Date.now();
+      const maxPastRangeMs = 120 * 24 * 60 * 60 * 1000;
+      const randomOffset = Math.floor(Math.random() * maxPastRangeMs);
+
+      marketSession.asset = asset;
+      marketSession.endTime = now - randomOffset;
+      marketSession.scaleRatio = null;
+      marketSession.lockedCurrentPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+      marketSession.cache = {};
+
+      currentRealSource = `${asset.replace('USDT', '')}`;
+      const badge = document.getElementById('market-source-name');
+      if (badge) badge.textContent = `Nguồn: ${currentRealSource}`;
+
+      syncTimeframeData(timeframeMinutes, notify);
+    }
+
+    async function syncTimeframeData(tfMinutes, notify = false) {
+      let binanceInterval = '5m';
+      if (tfMinutes === 5) binanceInterval = '5m';
+      else if (tfMinutes === 15) binanceInterval = '15m';
+      else if (tfMinutes === 60) binanceInterval = '1h';
+      else if (tfMinutes === 240) binanceInterval = '4h';
+      else if (tfMinutes === 1440) binanceInterval = '1d';
+      else if (tfMinutes === 10080) binanceInterval = '1w';
+
+      const totalCandles = 280;
+      const targetLivePrice = currentCandle ? currentCandle.close : marketSession.lockedCurrentPrice;
+
+      if (marketSession.cache[tfMinutes] && marketSession.cache[tfMinutes].length > 0) {
+        const cached = marketSession.cache[tfMinutes].map(c => ({ ...c }));
+        const last = cached.pop();
+        candles = cached;
+        currentCandle = {
+          ...last,
+          close: targetLivePrice,
+          high: Math.max(last.high, targetLivePrice),
+          low: Math.min(last.low, targetLivePrice),
+          ticks: 0
+        };
+
+        chartOffset = 0;
+        resetPriceScale();
+        renderChart();
+        updateTickerHeader(currentCandle.close);
+        updateMiniOrderBook(currentCandle.close);
+        updateEstimates();
+        if (notify) showToast(`Đã đồng bộ khung ${binanceInterval} (${currentRealSource})`, "info");
+        return;
+      }
+
+      let fetchedData = null;
+      try {
+        const url = `https://api.binance.com/api/v3/klines?symbol=${marketSession.asset}&interval=${binanceInterval}&endTime=${marketSession.endTime}&limit=${totalCandles}`;
+        const resp = await fetch(url);
+        if (resp.ok) {
+          fetchedData = await resp.json();
+        }
+      } catch (err) {
+        console.warn("Binance API fetch fallback:", err);
+      }
+
+      if (fetchedData && Array.isArray(fetchedData) && fetchedData.length > 30) {
+        if (!marketSession.scaleRatio) {
+          const rawLastClose = parseFloat(fetchedData[fetchedData.length - 1][4]);
+          marketSession.scaleRatio = targetLivePrice / rawLastClose;
+        }
+
+        const ratio = marketSession.scaleRatio;
+        const history = fetchedData.map(item => {
+          const time = parseInt(item[0]);
+          const open = Math.round((parseFloat(item[1]) * ratio) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+          const high = Math.round((parseFloat(item[2]) * ratio) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+          const low = Math.round((parseFloat(item[3]) * ratio) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+          const close = Math.round((parseFloat(item[4]) * ratio) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+          const volume = Math.round(parseFloat(item[5]) * (ratio / 10));
+          return { time, open, high, low, close, volume };
+        });
+
+        marketSession.cache[tfMinutes] = history.map(c => ({ ...c }));
+
+        const lastCandle = history.pop();
+        candles = history;
+        currentCandle = {
+          time: lastCandle.time,
+          open: lastCandle.open,
+          high: Math.max(lastCandle.high, targetLivePrice),
+          low: Math.min(lastCandle.low, targetLivePrice),
+          close: targetLivePrice,
+          volume: lastCandle.volume,
+          ticks: 0
+        };
+
+        if (notify) showToast(`Đã nạp ${fetchedData.length} nến thật từ ${currentRealSource}!`, "success");
+      } else {
+        generateHistoryForTimeframe(tfMinutes, totalCandles, targetLivePrice);
+        marketSession.cache[tfMinutes] = candles.map(c => ({ ...c }));
+        if (currentCandle) marketSession.cache[tfMinutes].push({ ...currentCandle });
+      }
+
+      chartOffset = 0;
+      resetPriceScale();
+      renderChart();
+      updateTickerHeader(currentCandle.close);
+      updateMiniOrderBook(currentCandle.close);
+      updateEstimates();
+    }
+
+    function generateHistoryForTimeframe(tfMinutes, count = 280, anchorClosePrice = null) {
+      let price = anchorClosePrice || WIKY_SPEC.basePrice;
+      const history = [];
+      const now = marketSession.endTime || Date.now();
+      const intervalMs = tfMinutes * 60 * 1000;
+
+      let wave = 0;
+      let trend = 0.0001;
+
+      let currentBackPrice = price;
+      for (let i = 1; i <= count; i++) {
+        const time = now - (i * intervalMs);
+        wave += 0.12;
+
+        const cyclical = Math.sin(wave) * 0.0028;
+        const noise = (Math.random() - 0.495) * WIKY_SPEC.volatility * 2.5;
+        const delta = cyclical + noise + trend;
+
+        let open = Math.max(1000, currentBackPrice - (currentBackPrice * delta));
+        open = Math.round(open / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+        const close = currentBackPrice;
+
+        const wick = Math.random() * Math.abs(close - open) * 1.2 + (close * 0.001);
+        const high = Math.round((Math.max(open, close) + wick) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+        const low = Math.round(Math.max(1000, Math.min(open, close) - wick) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+        const volume = Math.floor(Math.random() * 25000 + 4000);
+
+        history.unshift({ time, open, high, low, close, volume });
+        currentBackPrice = open;
+      }
+
+      candles = history;
+      const last = candles.pop();
+      currentCandle = {
+        time: now,
+        open: last ? last.open : price,
+        high: Math.max(last ? last.high : price, price),
+        low: Math.min(last ? last.low : price, price),
+        close: price,
+        volume: 0,
+        ticks: 0
+      };
+      chartOffset = 0;
+    }
+
+    function calculateSMA(data, period) {
+      const sma = [];
+      for (let i = 0; i < data.length; i++) {
+        if (i < period - 1) {
+          sma.push(null);
+          continue;
+        }
+        let sum = 0;
+        for (let j = 0; j < period; j++) {
+          sum += data[i - j].close;
+        }
+        sma.push(sum / period);
+      }
+      return sma;
+    }
+
+    function calculateBollingerBands(data, period = 20, multiplier = 2) {
+      const upper = [];
+      const lower = [];
+      const middle = [];
+
+      for (let i = 0; i < data.length; i++) {
+        if (i < period - 1) {
+          upper.push(null);
+          lower.push(null);
+          middle.push(null);
+          continue;
+        }
+
+        let sum = 0;
+        for (let j = 0; j < period; j++) {
+          sum += data[i - j].close;
+        }
+        const avg = sum / period;
+        middle.push(avg);
+
+        let varianceSum = 0;
+        for (let j = 0; j < period; j++) {
+          varianceSum += Math.pow(data[i - j].close - avg, 2);
+        }
+        const stdDev = Math.sqrt(varianceSum / period);
+        upper.push(avg + multiplier * stdDev);
+        lower.push(avg - multiplier * stdDev);
+      }
+
+      return { upper, lower, middle };
+    }
+
+    function resizeCanvas() {
+      if (!viewport) return;
+      const rect = viewport.getBoundingClientRect();
+      const w = Math.floor(rect.width);
+      const h = Math.floor(rect.height);
+      if (w <= 0 || h <= 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      renderChart();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    if (window.ResizeObserver && viewport) {
+      new ResizeObserver(resizeCanvas).observe(viewport);
+    }
+
+    function renderChart() {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      if (w === 0 || h === 0) return;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const allCandles = [...candles];
+      if (currentCandle) allCandles.push(currentCandle);
+      if (allCandles.length === 0) return;
+
+      const totalCandleSpan = candleWidth + candleGap;
+      const priceAxisWidth = PRICE_AXIS_WIDTH; // Compact price column (74px)
+      const rightPadding = RIGHT_PADDING;     // Clean spacing
+      const chartPlotWidth = w - priceAxisWidth;
+      const effectiveDrawWidth = chartPlotWidth - rightPadding;
+      const visibleCount = Math.ceil(effectiveDrawWidth / totalCandleSpan) + 4;
+
+      const maxOffset = Math.max(0, allCandles.length - 10);
+      chartOffset = Math.max(0, Math.min(chartOffset, maxOffset));
+
+      const endIndex = allCandles.length - chartOffset;
+      const startIndex = Math.max(0, endIndex - visibleCount);
+      const visibleData = allCandles.slice(startIndex, endIndex);
+      if (visibleData.length === 0) return;
+
+      let minP = Infinity;
+      let maxP = -Infinity;
+      let maxV = 0;
+
+      visibleData.forEach(c => {
+        if (c.low < minP) minP = c.low;
+        if (c.high > maxP) maxP = c.high;
+        if (c.volume > maxV) maxV = c.volume;
+      });
+
+      const pRange = maxP - minP || 1;
+      const baseMid = (minP + maxP) / 2;
+      const scaledHalfSpan = (pRange * 0.58) * priceScaleFactor;
+
+      const padMin = baseMid - scaledHalfSpan;
+      const padMax = baseMid + scaledHalfSpan;
+      const padRange = padMax - padMin || 1;
+
+      const chartAreaH = h - 35;
+      const getY = (p) => chartAreaH - ((p - padMin) / padRange) * chartAreaH;
+
+      const getX = (fullIndex) => {
+        const offsetFromEnd = (allCandles.length - chartOffset - 1) - fullIndex;
+        return (chartPlotWidth - rightPadding) - (offsetFromEnd * totalCandleSpan);
+      };
+
+      // Compact axis badge helper
+      const drawAxisBadge = (y, bgColor, textColor, label, borderColor = null) => {
+        const badgeH = 17;
+        const badgeW = priceAxisWidth - 4;
+        const badgeX = chartPlotWidth + 2;
+        const badgeY = Math.max(2, Math.min(chartAreaH - badgeH - 2, y - badgeH / 2));
+
+        ctx.fillStyle = bgColor;
+        if (ctx.roundRect) {
+          ctx.beginPath();
+          ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 3);
+          ctx.fill();
+        } else {
+          ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
+        }
+
+        if (borderColor) {
+          ctx.strokeStyle = borderColor;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = textColor;
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, badgeX + badgeW / 2, badgeY + badgeH / 2);
+        ctx.textBaseline = 'alphabetic';
+      };
+
+      const drawChartLineTag = (text, y, bgColor, textColor) => {
+        ctx.font = 'bold 8.5px JetBrains Mono';
+        const tagPadding = 5;
+        const textMetrics = ctx.measureText(text);
+        const tagW = textMetrics.width + tagPadding * 2;
+        const tagH = 15;
+        const tagX = Math.max(8, chartPlotWidth - rightPadding - tagW);
+        const tagY = y - tagH / 2;
+
+        ctx.fillStyle = bgColor;
+        if (ctx.roundRect) {
+          ctx.beginPath();
+          ctx.roundRect(tagX, tagY, tagW, tagH, 3);
+          ctx.fill();
+        } else {
+          ctx.fillRect(tagX, tagY, tagW, tagH);
+        }
+
+        ctx.fillStyle = textColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, tagX + tagW / 2, tagY + tagH / 2);
+        ctx.textBaseline = 'alphabetic';
+      };
+
+      // 1. Grid Lines & Compact Price Axis Background
+      ctx.fillStyle = '#12151a';
+      ctx.fillRect(chartPlotWidth, 0, priceAxisWidth, chartAreaH);
+
+      ctx.strokeStyle = '#1e2329';
+      ctx.lineWidth = 1;
+      const gridCount = 6;
+      for (let i = 0; i <= gridCount; i++) {
+        const y = (chartAreaH / gridCount) * i;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(chartPlotWidth, y);
+        ctx.stroke();
+
+        const pVal = padMax - (padRange / gridCount) * i;
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 9.5px JetBrains Mono';
+        ctx.textAlign = 'left';
+        ctx.fillText(formatVND(pVal), chartPlotWidth + 4, y + 3.5);
+      }
+
+      ctx.beginPath();
+      ctx.strokeStyle = '#282f3a';
+      ctx.lineWidth = 1.2;
+      ctx.moveTo(chartPlotWidth, 0);
+      ctx.lineTo(chartPlotWidth, chartAreaH);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = '#282f3a';
+      ctx.moveTo(0, chartAreaH);
+      ctx.lineTo(w, chartAreaH);
+      ctx.stroke();
+
+      // Time axis background & timestamps
+      ctx.fillStyle = '#12151a';
+      ctx.fillRect(0, chartAreaH, w, h - chartAreaH);
+
+      ctx.fillStyle = '#848e9c';
+      ctx.font = '9.5px JetBrains Mono';
+      ctx.textAlign = 'center';
+      const timeStep = Math.max(1, Math.floor(visibleData.length / 5));
+      for (let i = 0; i < visibleData.length; i += timeStep) {
+        const c = visibleData[i];
+        const rawIdx = startIndex + i;
+        const x = getX(rawIdx);
+        if (x > 10 && x < chartPlotWidth - 10) {
+          const d = new Date(c.time);
+          const timeStr = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+          ctx.fillText(timeStr, x, h - 8);
+        }
+      }
+
+      const autoBtn = document.getElementById('btn-reset-price-scale');
+      if (Math.abs(priceScaleFactor - 1.0) > 0.05) {
+        autoBtn.classList.remove('hidden');
+      } else {
+        autoBtn.classList.add('hidden');
+      }
+
+      // 2. Volume Bars
+      if (maxV > 0) {
+        const volMaxH = 38;
+        const volBaseY = chartAreaH;
+        visibleData.forEach((c, idx) => {
+          const rawIdx = startIndex + idx;
+          const x = getX(rawIdx);
+          const barH = (c.volume / maxV) * volMaxH;
+          ctx.fillStyle = c.close >= c.open ? 'rgba(14, 203, 129, 0.22)' : 'rgba(246, 70, 93, 0.22)';
+          ctx.fillRect(x - candleWidth / 2, volBaseY - barH, candleWidth, barH);
+        });
+      }
+
+      // 3. Bollinger Bands
+      if (showBoll) {
+        const boll = calculateBollingerBands(allCandles, 20, 2);
+
+        ctx.beginPath();
+        let upperStarted = false;
+        for (let idx = 0; idx < visibleData.length; idx++) {
+          const rawIdx = startIndex + idx;
+          const uVal = boll.upper[rawIdx];
+          if (uVal !== null && uVal !== undefined) {
+            const x = getX(rawIdx);
+            const y = getY(uVal);
+            if (!upperStarted) { ctx.moveTo(x, y); upperStarted = true; } else { ctx.lineTo(x, y); }
+          }
+        }
+        for (let idx = visibleData.length - 1; idx >= 0; idx--) {
+          const rawIdx = startIndex + idx;
+          const lVal = boll.lower[rawIdx];
+          if (lVal !== null && lVal !== undefined) {
+            const x = getX(rawIdx);
+            const y = getY(lVal);
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.06)';
+        ctx.fill();
+
+        const drawBollBorder = (arr, color, isDashed = false) => {
+          ctx.beginPath();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1;
+          if (isDashed) ctx.setLineDash([3, 3]); else ctx.setLineDash([]);
+          let started = false;
+          visibleData.forEach((_, idx) => {
+            const rawIdx = startIndex + idx;
+            const val = arr[rawIdx];
+            if (val !== null && val !== undefined) {
+              const x = getX(rawIdx);
+              const y = getY(val);
+              if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
+            }
+          });
+          ctx.stroke();
+          ctx.setLineDash([]);
+        };
+
+        drawBollBorder(boll.upper, '#c084fc');
+        drawBollBorder(boll.lower, '#c084fc');
+        drawBollBorder(boll.middle, '#a855f7', true);
+      }
+
+      // 4. Moving Averages (MA20 & MA50)
+      if (showMA) {
+        const sma20 = calculateSMA(allCandles, 20);
+        const sma50 = calculateSMA(allCandles, 50);
+
+        const drawLine = (arr, color) => {
+          ctx.beginPath();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1.2;
+          let started = false;
+          visibleData.forEach((_, idx) => {
+            const rawIdx = startIndex + idx;
+            const val = arr[rawIdx];
+            if (val !== null && val !== undefined) {
+              const x = getX(rawIdx);
+              const y = getY(val);
+              if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
+            }
+          });
+          ctx.stroke();
+        };
+
+        drawLine(sma20, '#38bdf8');
+        drawLine(sma50, '#f0b90b');
+      }
+
+      // 5. Candlesticks
+      visibleData.forEach((c, idx) => {
+        const rawIdx = startIndex + idx;
+        const x = getX(rawIdx);
+        const isUp = c.close >= c.open;
+        const color = isUp ? '#0ecb81' : '#f6465d';
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = Math.max(1, candleWidth > 6 ? 1.5 : 1);
+        ctx.beginPath();
+        ctx.moveTo(x, getY(c.high));
+        ctx.lineTo(x, getY(c.low));
+        ctx.stroke();
+
+        const openY = getY(c.open);
+        const closeY = getY(c.close);
+        const topY = Math.min(openY, closeY);
+        const bodyH = Math.max(Math.abs(closeY - openY), 1.5);
+
+        ctx.fillStyle = color;
+        ctx.fillRect(x - candleWidth / 2, topY, candleWidth, bodyH);
+      });
+
+      // 6. Positions & TP / SL Markers
+      const currentPrice = allCandles[allCandles.length - 1].close;
+      positions.forEach(pos => {
+        const isLong = pos.type === 'LONG';
+        const entryY = getY(pos.entryPrice);
+
+        ctx.setLineDash([4, 3]);
+        ctx.strokeStyle = isLong ? '#0ecb81' : '#f6465d';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(0, entryY);
+        ctx.lineTo(chartPlotWidth, entryY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        drawChartLineTag(`${pos.type} ${formatVND(pos.entryPrice)}`, entryY, isLong ? 'rgba(14, 203, 129, 0.9)' : 'rgba(246, 70, 93, 0.9)', '#ffffff');
+        drawAxisBadge(entryY, isLong ? '#0ecb81' : '#f6465d', '#ffffff', `${formatVND(pos.entryPrice)}`);
+
+        if (pos.tp) {
+          const tpY = getY(pos.tp);
+          const tpDiff = isLong ? (pos.tp - pos.entryPrice) : (pos.entryPrice - pos.tp);
+          const tpPct = ((tpDiff / pos.entryPrice) * 100).toFixed(1);
+
+          ctx.strokeStyle = '#0ecb81';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(0, tpY);
+          ctx.lineTo(chartPlotWidth, tpY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          drawChartLineTag(`TP: ${formatVND(pos.tp)} (+${tpPct}%)`, tpY, '#064e3b', '#34d399');
+          drawAxisBadge(tpY, '#065f46', '#34d399', `${formatVND(pos.tp)}`, '#059669');
+        }
+
+        if (pos.sl) {
+          const slY = getY(pos.sl);
+          const slDiff = isLong ? (pos.entryPrice - pos.sl) : (pos.sl - pos.entryPrice);
+          const slPct = ((slDiff / pos.entryPrice) * 100).toFixed(1);
+
+          ctx.strokeStyle = '#f6465d';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(0, slY);
+          ctx.lineTo(chartPlotWidth, slY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          drawChartLineTag(`SL: ${formatVND(pos.sl)} (-${slPct}%)`, slY, '#881337', '#f87171');
+          drawAxisBadge(slY, '#9f1239', '#fca5a5', `${formatVND(pos.sl)}`, '#e11d48');
+        }
+      });
+
+      // 7. Current Price Marker & Snug Gold Badge on Price Axis
+      const curY = getY(currentPrice);
+      ctx.setLineDash([2, 2]);
+      ctx.strokeStyle = '#f0b90b';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, curY);
+      ctx.lineTo(chartPlotWidth, curY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      drawAxisBadge(curY, '#f0b90b', '#000000', formatVND(currentPrice), '#fde047');
+
+      // 8. Drawings
+      const allDrawingsToRender = [...drawings];
+      if (currentDrawing) allDrawingsToRender.push(currentDrawing);
+
+      allDrawingsToRender.forEach(d => {
+        if (d.type === 'hline') {
+          const y = getY(d.price);
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([5, 3]);
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(chartPlotWidth, y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = '9.5px JetBrains Mono';
+          ctx.fillText('Ngang: ' + formatVND(d.price), 15, y - 4);
+        } else if (d.type === 'line' && d.p1) {
+          const x1 = getX(d.p1.idx);
+          const y1 = getY(d.p1.price);
+          const p2 = d.p2 || d.p1;
+          const x2 = getX(p2.idx);
+          const y2 = getY(p2.price);
+
+          ctx.strokeStyle = '#f0b90b';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath(); ctx.arc(x1, y1, 3, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(x2, y2, 3, 0, Math.PI * 2); ctx.fill();
+        }
+      });
+    }
+
+    function getChartCoords(x, y) {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      const totalCandleSpan = candleWidth + candleGap;
+      const allCandles = [...candles];
+      if (currentCandle) allCandles.push(currentCandle);
+
+      const priceAxisWidth = PRICE_AXIS_WIDTH;
+      const rightPadding = RIGHT_PADDING;
+      const chartPlotWidth = w - priceAxisWidth;
+
+      const offsetFromEnd = Math.round(((chartPlotWidth - rightPadding) - x) / totalCandleSpan);
+      const idx = (allCandles.length - chartOffset - 1) - offsetFromEnd;
+
+      const visibleCount = Math.ceil(chartPlotWidth / totalCandleSpan);
+      const endIndex = allCandles.length - chartOffset;
+      const startIndex = Math.max(0, endIndex - visibleCount);
+      const visibleData = allCandles.slice(startIndex, endIndex);
+
+      let minP = Infinity;
+      let maxP = -Infinity;
+      visibleData.forEach(c => {
+        if (c.low < minP) minP = c.low;
+        if (c.high > maxP) maxP = c.high;
+      });
+      const pRange = maxP - minP || 1;
+      const baseMid = (minP + maxP) / 2;
+      const scaledHalfSpan = (pRange * 0.58) * priceScaleFactor;
+      const padMin = baseMid - scaledHalfSpan;
+      const padMax = baseMid + scaledHalfSpan;
+
+      const chartAreaH = h - 35;
+      const price = padMax - (y / chartAreaH) * (padMax - padMin);
+
+      return { idx: Math.max(0, idx), price: Math.round(price / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize };
+    }
+
+    function zoomChart(delta) {
+      if (delta > 0) {
+        candleWidth = Math.min(30, candleWidth + 1.5);
+      } else {
+        candleWidth = Math.max(2.5, candleWidth - 1.5);
+      }
+      candleGap = Math.max(1, Math.round(candleWidth * 0.35));
+      renderChart();
+    }
+
+    function resetPriceScale() {
+      priceScaleFactor = 1.0;
+      renderChart();
+    }
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const chartPlotWidth = canvas.clientWidth - PRICE_AXIS_WIDTH;
+
+      if (x > chartPlotWidth) {
+        const delta = e.deltaY < 0 ? -0.08 : 0.08;
+        priceScaleFactor = Math.max(0.15, Math.min(6.0, priceScaleFactor + delta));
+        renderChart();
+      } else {
+        zoomChart(e.deltaY < 0 ? 1 : -1);
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const chartPlotWidth = canvas.clientWidth - PRICE_AXIS_WIDTH;
+      const chartAreaH = canvas.clientHeight - 35;
+
+      if (x >= chartPlotWidth && y <= chartAreaH) {
+        isDraggingPriceAxis = true;
+        priceAxisStartY = y;
+        startPriceScaleFactor = priceScaleFactor;
+        canvas.style.cursor = 'ns-resize';
+        return;
+      }
+
+      if (y > chartAreaH && x < chartPlotWidth) {
+        isDraggingTimeAxis = true;
+        timeAxisStartX = x;
+        startTimeCandleWidth = candleWidth;
+        canvas.style.cursor = 'ew-resize';
+        return;
+      }
+
+      if (activeTool === 'cursor') {
+        isDragging = true;
+        dragStartX = x;
+        dragStartOffset = chartOffset;
+      } else if (activeTool === 'hline') {
+        const coords = getChartCoords(x, y);
+        drawings.push({ type: 'hline', price: coords.price, completed: true });
+        setActiveTool('cursor');
+        renderChart();
+        showToast("Đã vẽ đường ngang hỗ trợ / kháng cự.", "info");
+      } else if (activeTool === 'line') {
+        const coords = getChartCoords(x, y);
+        if (!currentDrawing) {
+          currentDrawing = { type: activeTool, p1: coords, p2: coords, completed: false };
+          const hint = document.getElementById('draw-hint-banner');
+          hint.textContent = 'Chạm tiếp điểm thứ 2 để hoàn tất';
+          hint.classList.remove('hidden');
+        } else {
+          currentDrawing.p2 = coords;
+          currentDrawing.completed = true;
+          drawings.push(currentDrawing);
+          currentDrawing = null;
+          document.getElementById('draw-hint-banner').classList.add('hidden');
+          setActiveTool('cursor');
+          renderChart();
+          showToast("Đã vẽ đường xu hướng.", "info");
+        }
+      }
+    });
+
+    canvas.addEventListener('dblclick', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const chartPlotWidth = canvas.clientWidth - PRICE_AXIS_WIDTH;
+      if (x >= chartPlotWidth) {
+        resetPriceScale();
+        showToast("Đã khôi phục tỷ lệ thanh giá tự động (Auto).", "info");
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const chartPlotWidth = canvas.clientWidth - PRICE_AXIS_WIDTH;
+      const chartAreaH = canvas.clientHeight - 35;
+
+      if (!isDragging && !isDraggingPriceAxis && !isDraggingTimeAxis && activeTool === 'cursor') {
+        if (x >= chartPlotWidth && y <= chartAreaH) {
+          canvas.style.cursor = 'ns-resize';
+          document.getElementById('price-drag-hint').classList.remove('hidden');
+          document.getElementById('time-drag-hint').classList.add('hidden');
+        } else if (y > chartAreaH && x < chartPlotWidth) {
+          canvas.style.cursor = 'ew-resize';
+          document.getElementById('time-drag-hint').classList.remove('hidden');
+          document.getElementById('price-drag-hint').classList.add('hidden');
+        } else {
+          canvas.style.cursor = 'crosshair';
+          document.getElementById('price-drag-hint').classList.add('hidden');
+          document.getElementById('time-drag-hint').classList.add('hidden');
+        }
+      }
+
+      if (isDraggingPriceAxis) {
+        const dy = y - priceAxisStartY;
+        const scaleChange = dy * 0.006;
+        priceScaleFactor = Math.max(0.12, Math.min(8.0, startPriceScaleFactor + scaleChange));
+        renderChart();
+        return;
+      }
+
+      if (isDraggingTimeAxis) {
+        const dx = x - timeAxisStartX;
+        const newWidth = Math.max(2.5, Math.min(32, startTimeCandleWidth + dx * 0.15));
+        candleWidth = newWidth;
+        candleGap = Math.max(1, Math.round(candleWidth * 0.35));
+        renderChart();
+        return;
+      }
+
+      if (isDragging && activeTool === 'cursor') {
+        const totalSpan = candleWidth + candleGap;
+        const dx = x - dragStartX;
+        const candleShift = Math.round(dx / totalSpan);
+        chartOffset = Math.max(0, dragStartOffset + candleShift);
+        renderChart();
+      } else if (currentDrawing) {
+        currentDrawing.p2 = getChartCoords(x, y);
+        renderChart();
+      }
+
+      if (x >= 0 && x <= chartPlotWidth && y >= 0 && y <= chartAreaH) {
+        const coords = getChartCoords(x, y);
+        const allCandles = [...candles];
+        if (currentCandle) allCandles.push(currentCandle);
+        if (coords.idx >= 0 && coords.idx < allCandles.length) {
+          const c = allCandles[coords.idx];
+          const tip = document.getElementById('chart-tooltip');
+          tip.classList.remove('hidden');
+          document.getElementById('tip-open').textContent = formatVND(c.open);
+          document.getElementById('tip-high').textContent = formatVND(c.high);
+          document.getElementById('tip-low').textContent = formatVND(c.low);
+          document.getElementById('tip-close').textContent = formatVND(c.close);
+          document.getElementById('tip-vol').textContent = c.volume.toLocaleString();
+        }
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      isDraggingPriceAxis = false;
+      isDraggingTimeAxis = false;
+      canvas.style.cursor = 'crosshair';
+      document.getElementById('price-drag-hint').classList.add('hidden');
+      document.getElementById('time-drag-hint').classList.add('hidden');
+    });
+
+    // Touch event listeners
+    canvas.addEventListener('touchstart', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const chartPlotWidth = canvas.clientWidth - PRICE_AXIS_WIDTH;
+      const chartAreaH = canvas.clientHeight - 35;
+
+      if (e.touches.length === 1) {
+        const t = e.touches[0];
+        const x = t.clientX - rect.left;
+        const y = t.clientY - rect.top;
+
+        if (x >= chartPlotWidth && y <= chartAreaH) {
+          isDraggingPriceAxis = true;
+          priceAxisStartY = y;
+          startPriceScaleFactor = priceScaleFactor;
+          return;
+        }
+
+        if (y > chartAreaH && x < chartPlotWidth) {
+          isDraggingTimeAxis = true;
+          timeAxisStartX = x;
+          startTimeCandleWidth = candleWidth;
+          return;
+        }
+
+        if (activeTool === 'cursor') {
+          isDragging = true;
+          dragStartX = x;
+          dragStartOffset = chartOffset;
+        } else if (activeTool === 'hline') {
+          const coords = getChartCoords(x, y);
+          drawings.push({ type: 'hline', price: coords.price, completed: true });
+          setActiveTool('cursor');
+          renderChart();
+        } else if (activeTool === 'line') {
+          const coords = getChartCoords(x, y);
+          if (!currentDrawing) {
+            currentDrawing = { type: activeTool, p1: coords, p2: coords, completed: false };
+            const hint = document.getElementById('draw-hint-banner');
+            hint.textContent = 'Chạm tiếp điểm thứ 2 để hoàn tất';
+            hint.classList.remove('hidden');
+          } else {
+            currentDrawing.p2 = coords;
+            currentDrawing.completed = true;
+            drawings.push(currentDrawing);
+            currentDrawing = null;
+            document.getElementById('draw-hint-banner').classList.add('hidden');
+            setActiveTool('cursor');
+            renderChart();
+          }
+        }
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        isDraggingPriceAxis = false;
+        isDraggingTimeAxis = false;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        lastTouchDistance = Math.hypot(dx, dy);
+      }
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches.length === 1 && isDraggingPriceAxis) {
+        const y = e.touches[0].clientY - rect.top;
+        const dy = y - priceAxisStartY;
+        const scaleChange = dy * 0.007;
+        priceScaleFactor = Math.max(0.12, Math.min(8.0, startPriceScaleFactor + scaleChange));
+        renderChart();
+        return;
+      }
+
+      if (e.touches.length === 1 && isDraggingTimeAxis) {
+        const x = e.touches[0].clientX - rect.left;
+        const dx = x - timeAxisStartX;
+        const newWidth = Math.max(2.5, Math.min(32, startTimeCandleWidth + dx * 0.15));
+        candleWidth = newWidth;
+        candleGap = Math.max(1, Math.round(candleWidth * 0.35));
+        renderChart();
+        return;
+      }
+
+      if (e.touches.length === 1 && isDragging && activeTool === 'cursor') {
+        const x = e.touches[0].clientX - rect.left;
+        const totalSpan = candleWidth + candleGap;
+        const dx = x - dragStartX;
+        const shift = Math.round(dx / totalSpan);
+        chartOffset = Math.max(0, dragStartOffset + shift);
+        renderChart();
+      } else if (e.touches.length === 2 && lastTouchDistance !== null) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.hypot(dx, dy);
+        if (Math.abs(dist - lastTouchDistance) > 4) {
+          zoomChart(dist > lastTouchDistance ? 1 : -1);
+          lastTouchDistance = dist;
+        }
+      }
+    }, { passive: true });
+
+    canvas.addEventListener('touchend', () => {
+      isDragging = false;
+      isDraggingPriceAxis = false;
+      isDraggingTimeAxis = false;
+      lastTouchDistance = null;
+      document.getElementById('chart-tooltip').classList.add('hidden');
+    });
+
+    document.getElementById('btn-zoom-in').addEventListener('click', () => zoomChart(1));
+    document.getElementById('btn-zoom-out').addEventListener('click', () => zoomChart(-1));
+    document.getElementById('btn-reset-price-scale').addEventListener('click', () => {
+      resetPriceScale();
+      showToast("Đã khôi phục khung giá tự động (Auto Scale).", "info");
+    });
+
+    document.getElementById('btn-random-source').addEventListener('click', () => {
+      initNewMarketScenario(null, true);
+    });
+
+    document.getElementById('btn-chart-recenter').addEventListener('click', () => {
+      chartOffset = 0;
+      renderChart();
+      showToast("Đã căn về nến thời gian thực.", "info");
+    });
+
+    document.getElementById('btn-toggle-ma').addEventListener('click', function() {
+      showMA = !showMA;
+      this.className = showMA 
+        ? 'px-2 py-0.5 rounded bg-brand-panelLight text-blue-400 font-mono text-[11px] font-bold'
+        : 'px-2 py-0.5 rounded bg-brand-panelLight text-brand-textMuted font-mono text-[11px]';
+      renderChart();
+      showToast(showMA ? "Đã bật đường MA (20/50)" : "Đã ẩn đường MA", "info");
+    });
+
+    document.getElementById('btn-toggle-boll').addEventListener('click', function() {
+      showBoll = !showBoll;
+      this.className = showBoll 
+        ? 'px-2 py-0.5 rounded bg-brand-panelLight text-purple-400 font-mono text-[11px] font-bold'
+        : 'px-2 py-0.5 rounded bg-brand-panelLight text-brand-textMuted font-mono text-[11px]';
+      renderChart();
+      showToast(showBoll ? "Đã bật Dải Bollinger Bands" : "Đã ẩn Dải Bollinger Bands", "info");
+    });
+
+    const btnToggleToolbox = document.getElementById('btn-toggle-toolbox');
+    const toolboxItems = document.getElementById('toolbox-items');
+    const toolboxChevronIcon = document.getElementById('toolbox-chevron-icon');
+
+    btnToggleToolbox.addEventListener('click', () => {
+      isToolboxCollapsed = !isToolboxCollapsed;
+      if (isToolboxCollapsed) {
+        toolboxItems.classList.add('hidden');
+        toolboxChevronIcon.className = 'fa-solid fa-toolbox text-amber-400';
+        btnToggleToolbox.setAttribute('title', 'Mở rộng hộp công cụ vẽ');
+      } else {
+        toolboxItems.classList.remove('hidden');
+        toolboxChevronIcon.className = 'fa-solid fa-pen-nib text-amber-400';
+        btnToggleToolbox.setAttribute('title', 'Thu gọn hộp công cụ vẽ');
+      }
+    });
+
+    function setActiveTool(tool) {
+      activeTool = tool;
+      document.querySelectorAll('.draw-tool-btn').forEach(b => b.classList.remove('active-tool'));
+      if (tool === 'cursor') document.getElementById('tool-cursor').classList.add('active-tool');
+      if (tool === 'line') document.getElementById('tool-line').classList.add('active-tool');
+      if (tool === 'hline') document.getElementById('tool-hline').classList.add('active-tool');
+
+      const banner = document.getElementById('draw-hint-banner');
+      if (tool !== 'cursor') {
+        banner.textContent = tool === 'hline' ? 'Chạm/Click vào biểu đồ để đặt đường ngang' : 'Chạm/Click điểm đầu tiên';
+        banner.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('tool-cursor').addEventListener('click', () => setActiveTool('cursor'));
+    document.getElementById('tool-line').addEventListener('click', () => setActiveTool('line'));
+    document.getElementById('tool-hline').addEventListener('click', () => setActiveTool('hline'));
+
+    document.getElementById('tool-clear').addEventListener('click', () => {
+      drawings = [];
+      currentDrawing = null;
+      renderChart();
+      showToast("Đã xóa tất cả nét vẽ trên biểu đồ.", "info");
+    });
+
+    function simulatePriceStep() {
+      if (isPaused || !currentCandle) return;
+
+      const randomFactor = (Math.random() - 0.495);
+      const delta = currentCandle.close * randomFactor * WIKY_SPEC.volatility;
+      let newPrice = Math.max(1000, currentCandle.close + delta);
+      newPrice = Math.round(newPrice / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+
+      currentCandle.close = newPrice;
+      marketSession.lockedCurrentPrice = newPrice;
+
+      if (newPrice > currentCandle.high) currentCandle.high = newPrice;
+      if (newPrice < currentCandle.low) currentCandle.low = newPrice;
+
+      currentCandle.volume += Math.floor(Math.random() * 80 + 10);
+      currentCandle.ticks++;
+
+      const maxTicks = Math.max(12, timeframeMinutes * 4);
+      if (currentCandle.ticks >= maxTicks) {
+        candles.push({ ...currentCandle });
+        if (candles.length > 500) candles.shift();
+
+        currentCandle = {
+          time: Date.now(),
+          open: newPrice,
+          high: newPrice,
+          low: newPrice,
+          close: newPrice,
+          volume: 0,
+          ticks: 0
+        };
+      }
+
+      evaluateOrdersAndPositions(newPrice);
+      updateTickerHeader(newPrice);
+      updateMiniOrderBook(newPrice);
+      updatePositionsTable();
+      updateEstimates();
+      renderChart();
+    }
+
+    function evaluateOrdersAndPositions(currentPrice) {
+      for (let i = pendingOrders.length - 1; i >= 0; i--) {
+        const order = pendingOrders[i];
+        let fill = false;
+        if (order.type === 'LONG' && currentPrice <= order.price) fill = true;
+        if (order.type === 'SHORT' && currentPrice >= order.price) fill = true;
+
+        if (fill) {
+          pendingOrders.splice(i, 1);
+          openPosition({
+            type: order.type,
+            shares: order.shares,
+            entryPrice: order.price,
+            leverage: order.leverage,
+            tp: order.tp,
+            sl: order.sl
+          });
+          showToast(`Lệnh chờ khớp: ${order.type} ${order.shares} WIKY tại ${formatVND(order.price)}`, "success");
+        }
+      }
+
+      for (let i = positions.length - 1; i >= 0; i--) {
+        const pos = positions[i];
+        let reason = null;
+
+        if (pos.tp) {
+          if (pos.type === 'LONG' && currentPrice >= pos.tp) reason = "Chốt Lời (TP Hit)";
+          if (pos.type === 'SHORT' && currentPrice <= pos.tp) reason = "Chốt Lời (TP Hit)";
+        }
+        if (pos.sl && !reason) {
+          if (pos.type === 'LONG' && currentPrice <= pos.sl) reason = "Cắt Lỗ (SL Hit)";
+          if (pos.type === 'SHORT' && currentPrice >= pos.sl) reason = "Cắt Lỗ (SL Hit)";
+        }
+        if (pos.liqPrice && !reason) {
+          if (pos.type === 'LONG' && currentPrice <= pos.liqPrice) reason = "Thanh Lý (Cháy Margin)";
+          if (pos.type === 'SHORT' && currentPrice >= pos.liqPrice) reason = "Thanh Lý (Cháy Margin)";
+        }
+
+        if (reason) {
+          executePositionExit(pos.id, currentPrice, reason);
+        }
+      }
+    }
+
+    function openPosition(data) {
+      const value = data.shares * data.entryPrice;
+      const margin = value / data.leverage;
+
+      let liq = null;
+      if (data.leverage > 1) {
+        const maintenanceBuffer = Math.min(0.005, (1 / data.leverage) * 0.2);
+        if (data.type === 'LONG') {
+          liq = data.entryPrice * (1 - (1 / data.leverage) + maintenanceBuffer);
+        } else {
+          liq = data.entryPrice * (1 + (1 / data.leverage) - maintenanceBuffer);
+        }
+      }
+
+      positions.push({
+        id: nextId++,
+        type: data.type,
+        shares: data.shares,
+        entryPrice: data.entryPrice,
+        leverage: data.leverage,
+        margin: margin,
+        tp: data.tp,
+        sl: data.sl,
+        liqPrice: liq,
+        time: new Date().toLocaleTimeString('vi-VN')
+      });
+
+      balance -= margin;
+      updateHeaderBalances();
+      updatePositionsTable();
+    }
+
+    function requestClosePosition(posId) {
+      const index = positions.findIndex(p => p.id === posId);
+      if (index === -1) return;
+
+      if (activeCloseTimers[posId]) {
+        showToast("Vị thế đang trong tiến trình đóng...", "warning");
+        return;
+      }
+
+      const delaySec = Math.max(0, parseInt(WIKY_SPEC.closeDelaySec) || 0);
+
+      if (delaySec === 0) {
+        const curPrice = currentCandle ? currentCandle.close : positions[index].entryPrice;
+        executePositionExit(posId, curPrice, "Đóng thủ công");
+        return;
+      }
+
+      let remaining = delaySec;
+      showToast(`Đang đóng vị thế #${posId} (Độ trễ: ${delaySec}s)...`, "info");
+      updatePositionsTable();
+
+      activeCloseTimers[posId] = {
+        remaining: delaySec,
+        interval: setInterval(() => {
+          remaining--;
+          if (activeCloseTimers[posId]) {
+            activeCloseTimers[posId].remaining = remaining;
+          }
+          updatePositionsTable();
+
+          if (remaining <= 0) {
+            clearInterval(activeCloseTimers[posId].interval);
+            delete activeCloseTimers[posId];
+            const livePrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+            executePositionExit(posId, livePrice, `Đóng thủ công (trễ ${delaySec}s)`);
+          }
+        }, 1000)
+      };
+      updatePositionsTable();
+    }
+
+    function executePositionExit(posId, exitPrice, reason = "Đóng thủ công") {
+      const index = positions.findIndex(p => p.id === posId);
+      if (index === -1) return;
+
+      const pos = positions[index];
+      let pnl = pos.type === 'LONG' ? (exitPrice - pos.entryPrice) * pos.shares : (pos.entryPrice - exitPrice) * pos.shares;
+
+      balance += Math.max(0, pos.margin + pnl);
+
+      tradeHistory.unshift({
+        id: pos.id,
+        type: pos.type,
+        shares: pos.shares,
+        entryPrice: pos.entryPrice,
+        exitPrice: exitPrice,
+        pnl: pnl,
+        reason: reason,
+        time: new Date().toLocaleTimeString('vi-VN')
+      });
+
+      if (pnl >= 0) {
+        showToast(`+${formatVND(pnl)} - ${reason}`, "success");
+      } else {
+        showToast(`${formatVND(pnl)} - ${reason}`, "error");
+      }
+
+      positions.splice(index, 1);
+      updateHeaderBalances();
+      updatePositionsTable();
+      updateOrdersTable();
+      updateHistoryTable();
+    }
+
+    // Close all positions with configured delay
+    document.getElementById('btn-close-all-positions').addEventListener('click', () => {
+      if (positions.length === 0) {
+        showToast("Không có vị thế nào đang mở để đóng!", "info");
+        return;
+      }
+
+      if (isBatchClosing) {
+        showToast("Đang xử lý đóng toàn bộ vị thế...", "warning");
+        return;
+      }
+
+      const delaySec = Math.max(0, parseInt(WIKY_SPEC.closeDelaySec) || 0);
+      const closeBtn = document.getElementById('btn-close-all-positions');
+      const closeBtnText = document.getElementById('close-all-text');
+
+      if (delaySec === 0) {
+        const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+        const count = positions.length;
+        while (positions.length > 0) {
+          executePositionExit(positions[0].id, curPrice, "Đóng toàn bộ");
+        }
+        showToast(`Đã đóng toàn bộ ${count} vị thế tức thì!`, "success");
+        return;
+      }
+
+      isBatchClosing = true;
+      let remaining = delaySec;
+      closeBtn.disabled = true;
+      closeBtnText.textContent = `Đóng (${remaining}s)`;
+      showToast(`Đang đóng toàn bộ ${positions.length} vị thế sau ${delaySec}s...`, "info");
+
+      const timer = setInterval(() => {
+        remaining--;
+        closeBtnText.textContent = `Đóng (${remaining}s)`;
+
+        if (remaining <= 0) {
+          clearInterval(timer);
+          isBatchClosing = false;
+          closeBtn.disabled = false;
+          closeBtnText.textContent = 'Đóng Hết';
+
+          // Clear any individual timers
+          Object.keys(activeCloseTimers).forEach(id => {
+            clearInterval(activeCloseTimers[id].interval);
+            delete activeCloseTimers[id];
+          });
+
+          const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+          const count = positions.length;
+          while (positions.length > 0) {
+            executePositionExit(positions[0].id, curPrice, `Đóng toàn bộ (trễ ${delaySec}s)`);
+          }
+          showToast(`Đã đóng tất cả ${count} vị thế thành công!`, "success");
+        }
+      }, 1000);
+    });
+
+    function updateMiniOrderBook(currentPrice) {
+      const asksEl = document.getElementById('mini-asks');
+      const bidsEl = document.getElementById('mini-bids');
+      asksEl.innerHTML = '';
+      bidsEl.innerHTML = '';
+
+      for (let i = 4; i >= 1; i--) {
+        const p = currentPrice + (i * WIKY_SPEC.tickSize);
+        const qty = Math.floor(Math.random() * 45 + 10);
+        const div = document.createElement('div');
+        div.className = 'flex justify-between text-brand-sell cursor-pointer hover:bg-rose-950/20';
+        div.innerHTML = `<span>${formatVND(p)}</span><span>${qty}</span>`;
+        div.onclick = () => { document.getElementById('input-limit-price').value = p; };
+        asksEl.appendChild(div);
+      }
+
+      document.getElementById('ob-mid-price').textContent = formatVND(currentPrice);
+
+      for (let i = 1; i <= 4; i++) {
+        const p = currentPrice - (i * WIKY_SPEC.tickSize);
+        const qty = Math.floor(Math.random() * 45 + 10);
+        const div = document.createElement('div');
+        div.className = 'flex justify-between text-brand-buy cursor-pointer hover:bg-emerald-950/20';
+        div.innerHTML = `<span>${formatVND(p)}</span><span>${qty}</span>`;
+        div.onclick = () => { document.getElementById('input-limit-price').value = p; };
+        bidsEl.appendChild(div);
+      }
+    }
+
+    function updateTickerHeader(price) {
+      const first = candles[0] || currentCandle;
+      const changePct = ((price - first.open) / first.open) * 100;
+
+      const pEl = document.getElementById('nav-price');
+      const cEl = document.getElementById('nav-change');
+      pEl.textContent = formatVND(price);
+      cEl.textContent = `${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%`;
+
+      if (changePct >= 0) {
+        pEl.className = 'text-base sm:text-lg font-bold font-mono text-brand-buy leading-tight';
+        cEl.className = 'text-[11px] font-mono font-semibold text-brand-buy leading-none';
+      } else {
+        pEl.className = 'text-base sm:text-lg font-bold font-mono text-brand-sell leading-tight';
+        cEl.className = 'text-[11px] font-mono font-semibold text-brand-sell leading-none';
+      }
+
+      let h24 = price;
+      let l24 = price;
+      candles.slice(-40).forEach(c => {
+        if (c.high > h24) h24 = c.high;
+        if (c.low < l24) l24 = c.low;
+      });
+      const highEl = document.getElementById('stat-24h-high');
+      const lowEl = document.getElementById('stat-24h-low');
+      if (highEl) highEl.textContent = formatVND(h24);
+      if (lowEl) lowEl.textContent = formatVND(l24);
+
+      updateHeaderBalances();
+    }
+
+    function updateHeaderBalances() {
+      const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+      let totalUnrealized = 0;
+      let lockedMargin = 0;
+
+      positions.forEach(p => {
+        lockedMargin += p.margin;
+        const pnl = p.type === 'LONG' ? (curPrice - p.entryPrice) * p.shares : (p.entryPrice - curPrice) * p.shares;
+        totalUnrealized += pnl;
+      });
+
+      const totalEquity = balance + lockedMargin + totalUnrealized;
+      document.getElementById('nav-balance').textContent = formatVND(totalEquity);
+
+      const pnlEl = document.getElementById('total-unrealized-pnl');
+      pnlEl.textContent = (totalUnrealized >= 0 ? '+' : '') + formatVND(totalUnrealized);
+      pnlEl.className = totalUnrealized >= 0 ? 'font-bold text-brand-buy' : 'font-bold text-brand-sell';
+    }
+
+    function updatePositionsTable() {
+      const tbody = document.getElementById('positions-tbody');
+      const empty = document.getElementById('positions-empty');
+      const badge = document.getElementById('count-positions');
+      const mobBadge = document.getElementById('mob-pos-count');
+
+      badge.textContent = positions.length;
+      mobBadge.textContent = positions.length;
+      tbody.innerHTML = '';
+
+      if (positions.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      const curPrice = currentCandle ? currentCandle.close : 0;
+      positions.forEach((pos) => {
+        const pnl = pos.type === 'LONG' ? (curPrice - pos.entryPrice) * pos.shares : (pos.entryPrice - curPrice) * pos.shares;
+        const roe = (pnl / pos.margin) * 100;
+        const isUp = pnl >= 0;
+
+        const closingTimer = activeCloseTimers[pos.id];
+        const isClosing = Boolean(closingTimer);
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-brand-panelLight/40';
+        tr.innerHTML = `
+          <td class="py-2 px-3">
+            <span class="font-bold text-amber-400">WIKY</span>
+            <span class="ml-1 text-[9px] px-1 py-0.5 rounded font-bold ${pos.type === 'LONG' ? 'bg-emerald-950 text-brand-buy' : 'bg-rose-950 text-brand-sell'}">
+              ${pos.type} ${pos.leverage}x
+            </span>
+          </td>
+          <td class="py-2 px-2 text-white">${pos.shares}</td>
+          <td class="py-2 px-2 text-slate-300">${formatVND(pos.entryPrice)}</td>
+          <td class="py-2 px-2 text-white font-semibold">${formatVND(curPrice)}</td>
+          <td class="py-2 px-2 text-brand-textMuted">${pos.tp ? formatVND(pos.tp) : '--'} / ${pos.sl ? formatVND(pos.sl) : '--'}</td>
+          <td class="py-2 px-2 font-bold ${isUp ? 'text-brand-buy' : 'text-brand-sell'}">
+            ${isUp ? '+' : ''}${formatVND(pnl)} (${isUp ? '+' : ''}${roe.toFixed(1)}%)
+          </td>
+          <td class="py-2 px-3 text-right">
+            <button class="px-2.5 py-1 rounded ${isClosing ? 'bg-amber-600 animate-pulse cursor-wait' : 'bg-rose-600 hover:bg-rose-500'} font-bold text-white shadow transition text-[10px]" 
+              ${isClosing ? 'disabled' : ''} 
+              onclick="requestClosePosition(${pos.id})">
+              ${isClosing ? `Chờ ${closingTimer.remaining}s...` : 'Đóng'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateOrdersTable() {
+      const tbody = document.getElementById('orders-tbody');
+      const empty = document.getElementById('orders-empty');
+      document.getElementById('count-orders').textContent = pendingOrders.length;
+      tbody.innerHTML = '';
+
+      if (pendingOrders.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      pendingOrders.forEach((o, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-brand-panelLight/40';
+        tr.innerHTML = `
+          <td class="py-2 px-3 font-bold text-amber-400">WIKY</td>
+          <td class="py-2 px-2 font-bold ${o.type === 'LONG' ? 'text-brand-buy' : 'text-brand-sell'}">${o.type}</td>
+          <td class="py-2 px-2 text-white">${formatVND(o.price)}</td>
+          <td class="py-2 px-2 text-slate-300">${o.shares} WIKY</td>
+          <td class="py-2 px-3 text-right">
+            <button class="text-brand-sell hover:underline text-[10px]" onclick="pendingOrders.splice(${idx}, 1); updateOrdersTable();">Hủy</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateHistoryTable() {
+      const tbody = document.getElementById('history-tbody');
+      const empty = document.getElementById('history-empty');
+      tbody.innerHTML = '';
+
+      if (tradeHistory.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      tradeHistory.forEach(h => {
+        const isUp = h.pnl >= 0;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-1.5 px-3 text-brand-textMuted">${h.time}</td>
+          <td class="py-1.5 px-2 font-bold ${h.type === 'LONG' ? 'text-brand-buy' : 'text-brand-sell'}">${h.type}</td>
+          <td class="py-1.5 px-2 text-slate-300">${formatVND(h.entryPrice)} &rarr; ${formatVND(h.exitPrice)}</td>
+          <td class="py-1.5 px-2 text-brand-textMuted text-[10px]">${h.reason}</td>
+          <td class="py-1.5 px-3 text-right font-bold ${isUp ? 'text-brand-buy' : 'text-brand-sell'}">
+            ${isUp ? '+' : ''}${formatVND(h.pnl)}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateEstimates() {
+      const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+      const sharesInput = document.getElementById('input-shares');
+      const shares = sharesInput ? (parseFloat(sharesInput.value) || 0) : 0;
+      const limitInput = document.getElementById('input-limit-price');
+      const price = orderType === 'market' ? curPrice : (parseFloat(limitInput.value) || curPrice);
+      const activeLev = tradeMode === 'margin' ? leverage : 1;
+
+      const totalVal = shares * price;
+      const marginReq = totalVal / activeLev;
+
+      document.getElementById('order-cost').textContent = formatVND(totalVal);
+      document.getElementById('order-margin').textContent = formatVND(marginReq);
+
+      const maxS = Math.floor((balance * activeLev) / price);
+      const maxEl = document.getElementById('max-shares');
+      if (maxEl) maxEl.textContent = maxS > 0 ? maxS.toLocaleString() : '0';
+    }
+
+    // Trade Mode Switch
+    document.getElementById('mode-spot').addEventListener('click', function() {
+      tradeMode = 'spot';
+      this.className = 'trade-mode-btn py-1 font-semibold rounded bg-brand-panelLight text-white';
+      document.getElementById('mode-margin').className = 'trade-mode-btn py-1 font-semibold rounded text-brand-textMuted hover:text-white';
+      document.getElementById('leverage-box').classList.add('hidden');
+      updateEstimates();
+    });
+
+    document.getElementById('mode-margin').addEventListener('click', function() {
+      tradeMode = 'margin';
+      this.className = 'trade-mode-btn py-1 font-semibold rounded bg-amber-400 text-black';
+      document.getElementById('mode-spot').className = 'trade-mode-btn py-1 font-semibold rounded text-brand-textMuted hover:text-white';
+      document.getElementById('leverage-box').classList.remove('hidden');
+      updateEstimates();
+    });
+
+    document.getElementById('leverage-slider').addEventListener('input', (e) => {
+      leverage = parseInt(e.target.value);
+      document.getElementById('leverage-label').textContent = leverage + 'x';
+      updateEstimates();
+    });
+
+    document.getElementById('type-market').addEventListener('click', function() {
+      orderType = 'market';
+      this.className = 'order-type-btn font-bold text-brand-accent border-b-2 border-brand-accent pb-1';
+      document.getElementById('type-limit').className = 'order-type-btn text-brand-textMuted hover:text-white pb-1';
+      document.getElementById('limit-group').classList.add('hidden');
+      updateEstimates();
+    });
+
+    document.getElementById('type-limit').addEventListener('click', function() {
+      orderType = 'limit';
+      this.className = 'order-type-btn font-bold text-brand-accent border-b-2 border-brand-accent pb-1';
+      document.getElementById('type-market').className = 'order-type-btn text-brand-textMuted hover:text-white pb-1';
+      document.getElementById('limit-group').classList.remove('hidden');
+      if (!document.getElementById('input-limit-price').value && currentCandle) {
+        document.getElementById('input-limit-price').value = currentCandle.close;
+      }
+      updateEstimates();
+    });
+
+    document.querySelectorAll('.pct-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const pct = parseFloat(e.currentTarget.getAttribute('data-pct'));
+        const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+        const activeLev = tradeMode === 'margin' ? leverage : 1;
+        const maxS = Math.floor((balance * activeLev) / curPrice);
+        document.getElementById('input-shares').value = Math.max(1, Math.floor(maxS * pct));
+        updateEstimates();
+      });
+    });
+
+    document.getElementById('input-shares').addEventListener('input', updateEstimates);
+    document.getElementById('input-limit-price').addEventListener('input', updateEstimates);
+
+    // Quick TP & SL Presets
+    document.querySelectorAll('.tp-pct-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const pct = parseFloat(e.currentTarget.getAttribute('data-pct')) / 100;
+        const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+        const refPrice = orderType === 'market' ? curPrice : (parseFloat(document.getElementById('input-limit-price').value) || curPrice);
+        const tpPrice = Math.round(refPrice * (1 + pct) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize;
+        document.getElementById('input-tp').value = tpPrice;
+        showToast(`Đã đặt TP +${pct * 100}% (${formatVND(tpPrice)})`, "info");
+      });
+    });
+
+    document.querySelectorAll('.sl-pct-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const pct = parseFloat(e.currentTarget.getAttribute('data-pct')) / 100;
+        const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+        const refPrice = orderType === 'market' ? curPrice : (parseFloat(document.getElementById('input-limit-price').value) || curPrice);
+        const slPrice = Math.max(1000, Math.round(refPrice * (1 - pct) / WIKY_SPEC.tickSize) * WIKY_SPEC.tickSize);
+        document.getElementById('input-sl').value = slPrice;
+        showToast(`Đã đặt SL -${pct * 100}% (${formatVND(slPrice)})`, "info");
+      });
+    });
+
+    function submitOrder(side) {
+      const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
+      const shares = parseInt(document.getElementById('input-shares').value);
+
+      if (isNaN(shares) || shares <= 0) {
+        showToast("Vui lòng nhập số lượng WIKY hợp lệ!", "warning");
+        return;
+      }
+
+      const activeLev = tradeMode === 'margin' ? leverage : 1;
+      const targetPrice = orderType === 'market' ? curPrice : parseFloat(document.getElementById('input-limit-price').value);
+
+      if (orderType === 'limit' && (!targetPrice || targetPrice <= 0)) {
+        showToast("Vui lòng nhập giá Limit hợp lệ!", "warning");
+        return;
+      }
+
+      const reqMargin = (shares * targetPrice) / activeLev;
+      if (reqMargin > balance) {
+        showToast("Số dư khả dụng không đủ để mở lệnh này!", "error");
+        return;
+      }
+
+      const tp = parseFloat(document.getElementById('input-tp').value) || null;
+      const sl = parseFloat(document.getElementById('input-sl').value) || null;
+
+      if (orderType === 'market') {
+        openPosition({
+          type: side,
+          shares: shares,
+          entryPrice: curPrice,
+          leverage: activeLev,
+          tp: tp,
+          sl: sl
+        });
+        showToast(`Đã khớp thị trường: ${side} ${shares} WIKY tại ${formatVND(curPrice)}`, "success");
+      } else {
+        pendingOrders.push({
+          id: nextId++,
+          type: side,
+          shares: shares,
+          price: targetPrice,
+          leverage: activeLev,
+          tp: tp,
+          sl: sl
+        });
+        showToast(`Đã đặt lệnh chờ Limit: ${side} ${shares} WIKY`, "info");
+        updateOrdersTable();
+      }
+    }
+
+    document.getElementById('btn-buy').addEventListener('click', () => submitOrder('LONG'));
+    document.getElementById('btn-sell').addEventListener('click', () => submitOrder('SHORT'));
+
+    document.querySelectorAll('.tf-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.tf-btn').forEach(b => {
+          b.className = 'tf-btn px-2 py-0.5 rounded text-brand-textMuted hover:text-white';
+        });
+        e.currentTarget.className = 'tf-btn active px-2 py-0.5 rounded bg-brand-panelLight text-brand-accent font-bold';
+
+        const tf = e.currentTarget.getAttribute('data-tf');
+        if (tf === '5m') timeframeMinutes = 5;
+        if (tf === '15m') timeframeMinutes = 15;
+        if (tf === '1h') timeframeMinutes = 60;
+        if (tf === '4h') timeframeMinutes = 240;
+        if (tf === '1d') timeframeMinutes = 1440;
+        if (tf === '1w') timeframeMinutes = 10080;
+
+        syncTimeframeData(timeframeMinutes, true);
+      });
+    });
+
+    let simTimer = null;
+    function startSimulationLoop() {
+      if (simTimer) clearInterval(simTimer);
+      const interval = Math.max(15, Math.floor(250 / timeScale));
+      simTimer = setInterval(simulatePriceStep, interval);
+    }
+
+    // Speed Popover & Slider
+    const speedPopover = document.getElementById('speed-popover');
+    const speedDisplayBtn = document.getElementById('speed-display-btn');
+    const speedSlider = document.getElementById('speed-range-slider');
+    const speedSliderVal = document.getElementById('speed-slider-val');
+
+    document.getElementById('btn-toggle-speed-menu').addEventListener('click', (e) => {
+      e.stopPropagation();
+      speedPopover.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!speedPopover.contains(e.target) && e.target.id !== 'btn-toggle-speed-menu') {
+        speedPopover.classList.add('hidden');
+      }
+    });
+
+    function setSpeed(spd) {
+      timeScale = Math.max(1, Math.min(120, spd));
+      speedDisplayBtn.textContent = timeScale + 'x';
+      speedSliderVal.textContent = timeScale + 'x';
+      speedSlider.value = timeScale;
+      startSimulationLoop();
+    }
+
+    speedSlider.addEventListener('input', (e) => {
+      setSpeed(parseInt(e.target.value));
+    });
+
+    document.querySelectorAll('.quick-speed-btn').forEach(b => {
+      b.addEventListener('click', (e) => {
+        setSpeed(parseInt(e.currentTarget.getAttribute('data-sp')));
+      });
+    });
+
+    const modal = document.getElementById('settings-modal');
+    const modalBtnPauseToggle = document.getElementById('modal-btn-pause-toggle');
+    const modalPauseIcon = document.getElementById('modal-pause-icon');
+    const modalPauseLabel = document.getElementById('modal-pause-label');
+    const modalSimDot = document.getElementById('modal-sim-status-dot');
+    const modalSimText = document.getElementById('modal-sim-status-text');
+
+    function updateSimulationControlUI() {
+      if (isPaused) {
+        modalSimDot.className = 'w-2 h-2 rounded-full bg-rose-500';
+        modalSimText.textContent = 'Đang tạm dừng giả lập';
+        modalPauseIcon.className = 'fa-solid fa-play';
+        modalPauseLabel.textContent = 'Tiếp Tục';
+        modalBtnPauseToggle.className = 'px-3 py-1.5 rounded-lg font-mono text-xs font-bold transition flex items-center space-x-1.5 bg-brand-buy text-black border border-brand-buy';
+      } else {
+        modalSimDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        modalSimText.textContent = 'Đang chạy mô phỏng';
+        modalPauseIcon.className = 'fa-solid fa-pause';
+        modalPauseLabel.textContent = 'Tạm Dừng';
+        modalBtnPauseToggle.className = 'px-3 py-1.5 rounded-lg font-mono text-xs font-bold transition flex items-center space-x-1.5 bg-brand-panelLight text-amber-400 hover:text-white border border-brand-border';
+      }
+    }
+
+    modalBtnPauseToggle.addEventListener('click', () => {
+      isPaused = !isPaused;
+      updateSimulationControlUI();
+      showToast(isPaused ? "Đã tạm dừng mô phỏng thị trường." : "Đã tiếp tục chạy mô phỏng.", "info");
+    });
+
+    // Passcode 2412 Unlock Engine
+    const inputAdminPasscode = document.getElementById('input-admin-passcode');
+    const btnUnlockSettings = document.getElementById('btn-unlock-settings');
+    const passcodeErrorMsg = document.getElementById('passcode-error-msg');
+    const passcodeGateBox = document.getElementById('passcode-gate-box');
+    const protectedFieldsContainer = document.getElementById('protected-fields-container');
+    const passcodeStatusBadge = document.getElementById('passcode-status-badge');
+
+    btnUnlockSettings.addEventListener('click', () => {
+      const code = inputAdminPasscode.value.trim();
+      if (code === '7777') {
+        isSettingsUnlocked = true;
+        passcodeErrorMsg.classList.add('hidden');
+        passcodeGateBox.classList.add('hidden');
+        protectedFieldsContainer.classList.remove('opacity-40', 'pointer-events-none');
+        passcodeStatusBadge.textContent = 'Đã Mở Khóa';
+        passcodeStatusBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+        showToast("Mở khóa tham số nâng cao thành công!", "success");
+      } else {
+        passcodeErrorMsg.classList.remove('hidden');
+        inputAdminPasscode.classList.add('border-rose-500');
+        showToast("Mật mã không đúng! Vui lòng nhập 2412", "error");
+      }
+    });
+
+    // Volatility Range Slider listener inside Modal
+    const settingVolRange = document.getElementById('setting-volatility-range');
+    const labelVolVal = document.getElementById('label-volatility-val');
+    settingVolRange.addEventListener('input', (e) => {
+      labelVolVal.textContent = parseFloat(e.target.value).toFixed(2) + '%';
+    });
+
+    // Close Delay Input listener inside Modal
+    const settingCloseDelay = document.getElementById('setting-close-delay');
+    const labelCloseDelay = document.getElementById('label-close-delay');
+    settingCloseDelay.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value) || 0;
+      labelCloseDelay.textContent = val > 0 ? `${val}s (Trễ ${val} giây)` : '0s (Tức thì)';
+    });
+
+    // Open Settings Modal
+    document.getElementById('btn-open-settings').addEventListener('click', () => {
+      document.getElementById('setting-balance-input').value = initialBalance;
+      document.getElementById('setting-source-asset').value = selectedRealAsset;
+
+      // Populate protected values
+      document.getElementById('setting-base-price').value = WIKY_SPEC.basePrice;
+      document.getElementById('label-base-price').textContent = formatVND(WIKY_SPEC.basePrice);
+
+      const volPct = (WIKY_SPEC.volatility * 100).toFixed(2);
+      settingVolRange.value = volPct;
+      labelVolVal.textContent = volPct + '%';
+
+      document.getElementById('setting-tick-size').value = WIKY_SPEC.tickSize;
+      settingCloseDelay.value = WIKY_SPEC.closeDelaySec;
+      labelCloseDelay.textContent = WIKY_SPEC.closeDelaySec > 0 ? `${WIKY_SPEC.closeDelaySec}s (Trễ ${WIKY_SPEC.closeDelaySec} giây)` : '0s (Tức thì)';
+
+      updateSimulationControlUI();
+      modal.classList.remove('hidden');
+    });
+
+    function closeSettingsModal() {
+      modal.classList.add('hidden');
+      passcodeErrorMsg.classList.add('hidden');
+    }
+
+    document.getElementById('btn-close-settings').addEventListener('click', closeSettingsModal);
+    document.getElementById('btn-close-settings-alt').addEventListener('click', closeSettingsModal);
+
+    document.getElementById('btn-reset-balance').addEventListener('click', () => {
+      document.getElementById('setting-balance-input').value = 5000000;
+    });
+
+    // Save Settings
+    document.getElementById('btn-save-settings').addEventListener('click', () => {
+      const newBal = parseFloat(document.getElementById('setting-balance-input').value) || 5000000;
+      initialBalance = newBal;
+      balance = newBal;
+      positions = [];
+      pendingOrders = [];
+      tradeHistory = [];
+
+      selectedRealAsset = document.getElementById('setting-source-asset').value;
+
+      // Apply protected settings if unlocked
+      if (isSettingsUnlocked) {
+        const newBase = parseFloat(document.getElementById('setting-base-price').value) || 77000;
+        WIKY_SPEC.basePrice = newBase;
+
+        const newVol = parseFloat(settingVolRange.value) / 100;
+        WIKY_SPEC.volatility = newVol;
+
+        const newTick = parseInt(document.getElementById('setting-tick-size').value) || 100;
+        WIKY_SPEC.tickSize = newTick;
+
+        const newDelay = Math.max(0, parseInt(settingCloseDelay.value) || 0);
+        WIKY_SPEC.closeDelaySec = newDelay;
+      }
+
+      initNewMarketScenario(selectedRealAsset === 'RANDOM' ? null : selectedRealAsset, true);
+
+      updateHeaderBalances();
+      updatePositionsTable();
+      updateOrdersTable();
+      updateHistoryTable();
+      updateEstimates();
+
+      closeSettingsModal();
+      showToast("Đã lưu và áp dụng cài đặt thành công!", "success");
+    });
+
+    // Positions Drawer Collapse Toggle
+    const posDrawer = document.getElementById('section-positions');
+    const drawerIcon = document.getElementById('drawer-toggle-icon');
+
+    document.getElementById('btn-toggle-positions-drawer').addEventListener('click', () => {
+      isDrawerCollapsed = !isDrawerCollapsed;
+      if (isDrawerCollapsed) {
+        posDrawer.classList.remove('h-48', 'sm:h-52', 'lg:h-56');
+        posDrawer.classList.add('h-8');
+        drawerIcon.className = 'fa-solid fa-chevron-up text-[11px]';
+        showToast("Đã thu gọn bảng vị thế để mở rộng biểu đồ.", "info");
+      } else {
+        posDrawer.classList.remove('h-8');
+        posDrawer.classList.add('h-48', 'sm:h-52', 'lg:h-56');
+        drawerIcon.className = 'fa-solid fa-chevron-down text-[11px]';
+      }
+      setTimeout(resizeCanvas, 220);
+    });
+
+    // Bottom drawer tabs
+    document.querySelectorAll('.bot-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.bot-tab-btn').forEach(b => {
+          b.className = 'bot-tab-btn text-brand-textMuted hover:text-white pb-1';
+        });
+        e.currentTarget.className = 'bot-tab-btn font-semibold text-brand-accent border-b-2 border-brand-accent pb-1';
+
+        const t = e.currentTarget.getAttribute('data-tab');
+        document.querySelectorAll('.bot-tab-content').forEach(c => c.classList.add('hidden'));
+        document.getElementById(t).classList.remove('hidden');
+      });
+    });
+
+    const secChart = document.getElementById('section-chart');
+    const secTrade = document.getElementById('section-trade');
+    const secPos = document.getElementById('section-positions');
+    const timeframeBar = document.getElementById('timeframe-bar');
+    const mobBtns = document.querySelectorAll('.mobile-tab-btn');
+
+    function switchMobileView(view) {
+      mobBtns.forEach(btn => {
+        if (btn.getAttribute('data-view') === view) {
+          btn.className = 'mobile-tab-btn border-b-2 border-brand-accent text-brand-accent flex items-center justify-center space-x-1';
+        } else {
+          btn.className = 'mobile-tab-btn border-b-2 border-transparent text-brand-textMuted flex items-center justify-center space-x-1';
+        }
+      });
+
+      if (window.innerWidth >= 1024) {
+        secChart.classList.remove('hidden');
+        timeframeBar.classList.remove('hidden');
+        document.getElementById('chart-viewport').classList.remove('hidden');
+        secTrade.classList.remove('hidden');
+        secTrade.classList.add('flex');
+        secPos.classList.remove('hidden');
+        secPos.classList.remove('flex-1');
+        if (!isDrawerCollapsed) {
+          secPos.classList.add('h-48', 'sm:h-52', 'lg:h-56');
+        }
+        return;
+      }
+
+      if (view === 'chart') {
+        secChart.classList.remove('hidden');
+        timeframeBar.classList.remove('hidden');
+        document.getElementById('chart-viewport').classList.remove('hidden');
+        secPos.classList.add('hidden');
+        secTrade.classList.add('hidden');
+        secTrade.classList.remove('flex');
+        setTimeout(resizeCanvas, 50);
+      } else if (view === 'trade') {
+        secChart.classList.add('hidden');
+        secPos.classList.add('hidden');
+        secTrade.classList.remove('hidden');
+        secTrade.classList.add('flex');
+      } else if (view === 'positions') {
+        secChart.classList.remove('hidden');
+        timeframeBar.classList.add('hidden');
+        document.getElementById('chart-viewport').classList.add('hidden');
+        secTrade.classList.add('hidden');
+        secTrade.classList.remove('flex');
+        secPos.classList.remove('hidden');
+        secPos.classList.remove('h-48', 'sm:h-52', 'h-8');
+        secPos.classList.add('flex-1');
+      }
+
+      if (view !== 'positions' && !isDrawerCollapsed) {
+        secPos.classList.remove('flex-1');
+        secPos.classList.add('h-48', 'sm:h-52');
+      }
+    }
+
+    mobBtns.forEach(b => {
+      b.addEventListener('click', (e) => switchMobileView(e.currentTarget.getAttribute('data-view')));
+    });
+
+    function showToast(msg, type = 'info') {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      let icon = '<i class="fa-solid fa-circle-info text-blue-400"></i>';
+      let border = 'border-brand-border';
+      if (type === 'success') { icon = '<i class="fa-solid fa-circle-check text-brand-buy"></i>'; border = 'border-brand-buy/40'; }
+      if (type === 'error') { icon = '<i class="fa-solid fa-circle-xmark text-brand-sell"></i>'; border = 'border-brand-sell/40'; }
+      if (type === 'warning') { icon = '<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>'; border = 'border-amber-500/40'; }
+
+      t.className = `toast-anim bg-brand-panel border ${border} text-white px-3 py-2 rounded-lg shadow-xl text-xs flex items-center space-x-2`;
+      t.innerHTML = `${icon}<span>${msg}</span>`;
+      c.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transition = '0.3s';
+        setTimeout(() => t.remove(), 300);
+      }, 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      resizeCanvas();
+      initNewMarketScenario();
+      updateEstimates();
+      updateHeaderBalances();
+      startSimulationLoop();
+
+      if (window.innerWidth < 1024) {
+        switchMobileView('chart');
+      }
+    });
+
+    window.addEventListener('load', () => {
+      resizeCanvas();
+    });
+  </script>
+</body>
+</html>
