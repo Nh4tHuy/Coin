@@ -177,8 +177,8 @@
 
       <!-- Balance Display (Desktop view) -->
       <div class="bg-brand-bg border border-brand-border px-3 py-1 rounded-lg text-right">
-        <div class="text-[9px] text-brand-textMuted font-medium uppercase leading-none">Ví khả dụng</div>
-        <div id="nav-balance" class="text-xs font-mono font-bold text-amber-400">0 ₫</div>
+        <div class="text-[9px] text-brand-textMuted font-medium uppercase leading-none">Khả dụng</div>
+        <div id="nav-balance" class="text-xs font-mono font-bold text-amber-400 whitespace-nowrap">0 ₫</div>
       </div>
 
       <!-- User Auth State: Login / Register Button OR User Profile Pill -->
@@ -214,8 +214,8 @@
     <!-- Mobile Header Quick Row (Hamburger Button & Compact Balance) -->
     <div class="flex items-center space-x-2 md:hidden">
       <div class="bg-brand-bg border border-brand-border px-2 py-0.5 rounded-lg text-right">
-        <div class="text-[8px] text-brand-textMuted font-medium uppercase leading-none">Ví khả dụng</div>
-        <div id="nav-balance-mob" class="text-[11px] font-mono font-bold text-amber-400">0 ₫</div>
+        <div class="text-[8px] text-brand-textMuted font-medium uppercase leading-none">Khả dụng</div>
+        <div id="nav-balance-mob" class="text-[11px] font-mono font-bold text-amber-400 whitespace-nowrap">0 ₫</div>
       </div>
 
       <!-- Mobile 3-Bar Hamburger Menu Toggle Button -->
@@ -303,7 +303,6 @@
       <i class="fa-solid fa-bolt text-[11px]"></i>
       <span>Đặt Lệnh</span>
     </button>
-    
   </nav>
 
   <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
@@ -456,15 +455,15 @@
               Lệnh Chờ (<span id="count-orders">0</span>)
             </button>
             <button data-tab="tab-history" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1 flex items-center space-x-1">
-              <span>Lịch Sử</span>
-              <span id="history-sync-indicator" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span>Lịch Sử GD</span>
             </button>
           </div>
-          <div class="flex items-center space-x-1.5 sm:space-x-2">
-            <div class="font-mono text-[10px] sm:text-[11px]">
-              PnL: <span id="total-unrealized-pnl" class="font-bold text-white">0 ₫</span>
+          <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+            <div class="font-mono text-[10px] sm:text-[11px] whitespace-nowrap flex items-center space-x-1">
+              <span class="text-brand-textMuted">PnL:</span>
+              <span id="total-unrealized-pnl" class="font-bold text-white whitespace-nowrap">0 ₫</span>
             </div>
-            <button id="btn-close-all-positions" title="Đóng tất cả các vị thế đang mở" class="px-2 py-0.5 rounded bg-brand-sell/20 border border-brand-sell/40 text-brand-sell hover:bg-brand-sell hover:text-white text-[10px] font-bold font-mono transition flex items-center space-x-1">
+            <button id="btn-close-all-positions" title="Đóng tất cả các vị thế đang mở" class="px-2 py-0.5 rounded bg-brand-sell/20 border border-brand-sell/40 text-brand-sell hover:bg-brand-sell hover:text-white text-[10px] font-bold font-mono transition flex items-center space-x-1 whitespace-nowrap flex-shrink-0">
               <i class="fa-solid fa-fire text-[10px]"></i>
               <span id="close-all-text">Đóng Hết</span>
             </button>
@@ -473,17 +472,17 @@
 
         <!-- Tab 1: Positions Table with Quick BE & Reverse -->
         <div id="tab-pos" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto">
-          <table class="w-full text-left text-[11px] font-mono min-w-[660px]">
-            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border">
+          <table class="w-full text-left text-[11px] font-mono min-w-[700px]">
+            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border select-none">
               <tr>
-                <th class="py-1.5 px-3">VỊ THẾ</th>
-                <th class="py-1.5 px-2">KL</th>
-                <th class="py-1.5 px-2">GIÁ VÀO</th>
-                <th class="py-1.5 px-2">THỊ TRƯỜNG</th>
-                <th class="py-1.5 px-2">TP / SL</th>
-                <th class="py-1.5 px-2">LÃI / LỖ (%)</th>
-                <th class="py-1.5 px-2 text-center">TIỆN ÍCH</th>
-                <th class="py-1.5 px-3 text-right">ĐÓNG</th>
+                <th class="py-1.5 px-3 whitespace-nowrap">VỊ THẾ</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">KL</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">GIÁ VÀO</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">THỊ TRƯỜNG</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">TP / SL</th>
+                <th class="py-1.5 px-2 whitespace-nowrap min-w-[145px]">LÃI / LỖ (%)</th>
+                <th class="py-1.5 px-2 text-center whitespace-nowrap">TIỆN ÍCH</th>
+                <th class="py-1.5 px-3 text-right whitespace-nowrap">ĐÓNG</th>
               </tr>
             </thead>
             <tbody id="positions-tbody" class="divide-y divide-brand-border/40"></tbody>
@@ -496,13 +495,13 @@
         <!-- Tab 2: Orders Table -->
         <div id="tab-orders" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto hidden">
           <table class="w-full text-left text-[11px] font-mono min-w-[500px]">
-            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border">
+            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border select-none">
               <tr>
-                <th class="py-1.5 px-3">LỆNH</th>
-                <th class="py-1.5 px-2">LOẠI</th>
-                <th class="py-1.5 px-2">GIÁ ĐẶT</th>
-                <th class="py-1.5 px-2">SỐ LƯỢNG</th>
-                <th class="py-1.5 px-3 text-right">HỦY</th>
+                <th class="py-1.5 px-3 whitespace-nowrap">LỆNH</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">LOẠI</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">GIÁ ĐẶT</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">SỐ LƯỢNG</th>
+                <th class="py-1.5 px-3 text-right whitespace-nowrap">HỦY</th>
               </tr>
             </thead>
             <tbody id="orders-tbody" class="divide-y divide-brand-border/40"></tbody>
@@ -518,30 +517,30 @@
           <div id="history-stats-bar" class="p-2 bg-brand-bg/80 border-b border-brand-border flex items-center justify-between gap-2 text-center text-[10px] font-mono flex-shrink-0 flex-wrap">
             <div class="flex-1 min-w-[95px] bg-brand-panel p-1.5 rounded border border-brand-border">
               <span class="text-brand-textMuted block text-[9px]">Tổng Lãi/Lỗ:</span>
-              <b id="stat-total-closed-pnl" class="text-brand-buy text-xs">0 ₫</b>
+              <b id="stat-total-closed-pnl" class="text-brand-buy text-xs whitespace-nowrap">0 ₫</b>
             </div>
             <div class="flex-1 min-w-[95px] bg-brand-panel p-1.5 rounded border border-brand-border">
               <span class="text-brand-textMuted block text-[9px]">Tỷ Lệ Thắng:</span>
-              <b id="stat-win-rate" class="text-amber-400 text-xs">0.0%</b>
+              <b id="stat-win-rate" class="text-amber-400 text-xs whitespace-nowrap">0.0%</b>
             </div>
             <div class="flex-1 min-w-[110px] bg-brand-panel p-1.5 rounded border border-brand-border">
               <span class="text-brand-textMuted block text-[9px]">Tổng Lệnh Đóng:</span>
-              <b id="stat-total-trades-count" class="text-slate-200 text-xs">0 (0W - 0L)</b>
+              <b id="stat-total-trades-count" class="text-slate-200 text-xs whitespace-nowrap">0 (0W - 0L)</b>
             </div>
-            <button id="btn-sync-history-sheet" title="Đồng bộ lại lịch sử từ Google Sheet" class="px-2.5 py-1.5 bg-brand-panelLight hover:bg-slate-700 text-amber-400 rounded-lg text-[10px] font-bold border border-brand-border transition flex items-center space-x-1 flex-shrink-0">
+            <button id="btn-sync-history-sheet" title="Đồng bộ lại lịch sử từ Google Sheet" class="px-2.5 py-1.5 bg-brand-panelLight hover:bg-slate-700 text-amber-400 rounded-lg text-[10px] font-bold border border-brand-border transition flex items-center space-x-1 flex-shrink-0 whitespace-nowrap">
               <i class="fa-solid fa-rotate"></i>
               <span class="hidden sm:inline">Cập nhật</span>
             </button>
           </div>
 
           <table class="w-full text-left text-[11px] font-mono min-w-[500px]">
-            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border">
+            <thead class="text-brand-textMuted bg-brand-bg/80 sticky top-0 border-b border-brand-border select-none">
               <tr>
-                <th class="py-1.5 px-3">THỜI GIAN</th>
-                <th class="py-1.5 px-2">CHIỀU</th>
-                <th class="py-1.5 px-2">GIÁ MỞ/ĐÓNG</th>
-                <th class="py-1.5 px-2">LÝ DO</th>
-                <th class="py-1.5 px-3 text-right">LÃI/LỖ</th>
+                <th class="py-1.5 px-3 whitespace-nowrap">THỜI GIAN</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">CHIỀU</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">GIÁ MỞ/ĐÓNG</th>
+                <th class="py-1.5 px-2 whitespace-nowrap">LÝ DO</th>
+                <th class="py-1.5 px-3 text-right whitespace-nowrap">LÃI/LỖ</th>
               </tr>
             </thead>
             <tbody id="history-tbody" class="divide-y divide-brand-border/40"></tbody>
@@ -666,11 +665,11 @@
           <div id="rr-preview-box" class="hidden p-1.5 rounded bg-brand-panel border border-brand-border/60 text-[9px] font-mono space-y-0.5 text-brand-textMuted">
             <div class="flex justify-between">
               <span>Lời dự kiến:</span>
-              <span id="preview-tp-val" class="text-emerald-400 font-bold">+0 ₫</span>
+              <span id="preview-tp-val" class="text-emerald-400 font-bold whitespace-nowrap">+0 ₫</span>
             </div>
             <div class="flex justify-between">
               <span>Lỗ dự kiến:</span>
-              <span id="preview-sl-val" class="text-rose-400 font-bold">-0 ₫</span>
+              <span id="preview-sl-val" class="text-rose-400 font-bold whitespace-nowrap">-0 ₫</span>
             </div>
             <div class="flex justify-between border-t border-brand-border/40 pt-0.5 text-amber-400 font-bold">
               <span>Tỷ lệ Risk:Reward:</span>
@@ -683,11 +682,11 @@
         <div class="space-y-1 text-[10px] font-mono text-brand-textMuted border-t border-brand-border pt-1.5">
           <div class="flex justify-between">
             <span>Giá trị:</span>
-            <span id="order-cost" class="text-white font-bold">0 ₫</span>
+            <span id="order-cost" class="text-white font-bold whitespace-nowrap">0 ₫</span>
           </div>
           <div class="flex justify-between">
             <span>Ký quỹ:</span>
-            <span id="order-margin" class="text-amber-400">0 ₫</span>
+            <span id="order-margin" class="text-amber-400 whitespace-nowrap">0 ₫</span>
           </div>
         </div>
 
@@ -737,7 +736,7 @@
           <span class="text-xs text-brand-textMuted">Giftcode:</span>
           <span class="text-lg font-black text-amber-400 tracking-wider">VIP777</span>
         </div>
-        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold">+7.777.000 ₫</span>
+        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold whitespace-nowrap">+7.777.000 ₫</span>
       </div>
 
       <!-- Action Buttons -->
@@ -909,7 +908,7 @@
               <span class="font-bold text-[11px] text-amber-400 flex items-center">
                 <i class="fa-solid fa-coins mr-1.5"></i> Ví Của Admin
               </span>
-              <span id="live-unlocked-balance" class="font-mono font-bold text-emerald-400 text-xs">10.000.000 ₫</span>
+              <span id="live-unlocked-balance" class="font-mono font-bold text-emerald-400 text-xs whitespace-nowrap">10.000.000 ₫</span>
             </div>
 
             <div class="grid grid-cols-4 gap-1.5 text-[10px] font-mono">
@@ -933,7 +932,7 @@
           <div>
             <div class="flex justify-between items-center mb-1">
               <label class="text-brand-textMuted text-[11px]">Giá Cơ Bản (VNĐ):</label>
-              <span id="label-base-price" class="text-amber-400 font-mono font-semibold text-[11px]">77.000 ₫</span>
+              <span id="label-base-price" class="text-amber-400 font-mono font-semibold text-[11px] whitespace-nowrap">77.000 ₫</span>
             </div>
             <input type="number" id="setting-base-price" step="500" value="77000" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
           </div>
@@ -1035,7 +1034,7 @@
           </div>
           <div class="flex items-center justify-between text-[11px] font-mono">
             <span class="text-brand-textMuted">Số dư hiện tại:</span>
-            <span id="editing-current-bal" class="font-bold text-emerald-400">0 ₫</span>
+            <span id="editing-current-bal" class="font-bold text-emerald-400 whitespace-nowrap">0 ₫</span>
           </div>
 
           <div class="grid grid-cols-4 gap-1 text-[10px] font-mono">
@@ -1408,8 +1407,8 @@
         btnOpenSettings.classList.add('hidden');
         btnOpenSettings.classList.remove('flex');
 
-        if (mobUsername) mobUsername.textContent = "Khách (Chưa đăng nhập)";
-        if (mobUserRole) mobUserRole.textContent = "Đăng nhập để lưu giao dịch";
+        if (mobUsername) mobUsername.textContent = "Chưa đăng nhập";
+        if (mobUserRole) mobUserRole.textContent = "Đăng nhập để giao dịch";
         if (btnMobOpenAuth) btnMobOpenAuth.classList.remove('hidden');
         if (btnMobLogout) btnMobLogout.classList.add('hidden');
         if (btnMobOpenSettings) {
@@ -2973,7 +2972,7 @@
         div.title = `Click để điền giá ${formatVND(p)} vào lệnh chờ`;
         div.innerHTML = `
           <div class="absolute right-0 top-0 bottom-0 bg-rose-500/15 pointer-events-none group-hover:bg-rose-500/25 transition-all" style="width: ${depthPct}%"></div>
-          <span class="relative z-10 font-bold">${formatVND(p)}</span>
+          <span class="relative z-10 font-bold whitespace-nowrap">${formatVND(p)}</span>
           <span class="relative z-10 text-slate-300 font-mono text-[9px]">${qty}</span>
         `;
         div.onclick = () => {
@@ -2998,7 +2997,7 @@
         div.title = `Click để điền giá ${formatVND(p)} vào lệnh chờ`;
         div.innerHTML = `
           <div class="absolute right-0 top-0 bottom-0 bg-emerald-500/15 pointer-events-none group-hover:bg-emerald-500/25 transition-all" style="width: ${depthPct}%"></div>
-          <span class="relative z-10 font-bold">${formatVND(p)}</span>
+          <span class="relative z-10 font-bold whitespace-nowrap">${formatVND(p)}</span>
           <span class="relative z-10 text-slate-300 font-mono text-[9px]">${qty}</span>
         `;
         div.onclick = () => {
@@ -3021,11 +3020,11 @@
       cEl.textContent = `${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%`;
 
       if (changePct >= 0) {
-        pEl.className = 'text-sm sm:text-lg font-bold font-mono text-brand-buy leading-tight';
-        cEl.className = 'text-[10px] sm:text-[11px] font-mono font-semibold text-brand-buy leading-none';
+        pEl.className = 'text-sm sm:text-lg font-bold font-mono text-brand-buy leading-tight whitespace-nowrap';
+        cEl.className = 'text-[10px] sm:text-[11px] font-mono font-semibold text-brand-buy leading-none whitespace-nowrap';
       } else {
-        pEl.className = 'text-sm sm:text-lg font-bold font-mono text-brand-sell leading-tight';
-        cEl.className = 'text-[10px] sm:text-[11px] font-mono font-semibold text-brand-sell leading-none';
+        pEl.className = 'text-sm sm:text-lg font-bold font-mono text-brand-sell leading-tight whitespace-nowrap';
+        cEl.className = 'text-[10px] sm:text-[11px] font-mono font-semibold text-brand-sell leading-none whitespace-nowrap';
       }
 
       const windowMs = 10 * 60 * 1000;
@@ -3073,8 +3072,10 @@
       if (liveCapBadge) liveCapBadge.textContent = formatVND(balance);
 
       const pnlEl = document.getElementById('total-unrealized-pnl');
-      pnlEl.textContent = (totalUnrealized >= 0 ? '+' : '') + formatVND(totalUnrealized);
-      pnlEl.className = totalUnrealized >= 0 ? 'font-bold text-brand-buy' : 'font-bold text-brand-sell';
+      if (pnlEl) {
+        pnlEl.textContent = (totalUnrealized >= 0 ? '+' : '') + formatVND(totalUnrealized);
+        pnlEl.className = (totalUnrealized >= 0 ? 'font-bold text-brand-buy' : 'font-bold text-brand-sell') + ' whitespace-nowrap';
+      }
     }
 
     function updatePositionsTable() {
@@ -3083,42 +3084,45 @@
       const badge = document.getElementById('count-positions');
       const mobBadge = document.getElementById('mob-pos-count');
 
-      badge.textContent = positions.length;
-      mobBadge.textContent = positions.length;
+      if (badge) badge.textContent = positions.length;
+      if (mobBadge) mobBadge.textContent = positions.length;
+      if (!tbody) return;
+
       tbody.innerHTML = '';
 
       if (positions.length === 0) {
-        empty.classList.remove('hidden');
+        if (empty) empty.classList.remove('hidden');
         return;
       }
-      empty.classList.add('hidden');
+      if (empty) empty.classList.add('hidden');
 
       const curPrice = currentCandle ? currentCandle.close : 0;
       positions.forEach((pos) => {
         const pnl = pos.type === 'LONG' ? (curPrice - pos.entryPrice) * pos.shares : (pos.entryPrice - curPrice) * pos.shares;
-        const roe = (pnl / pos.margin) * 100;
+        const roe = pos.margin > 0 ? (pnl / pos.margin) * 100 : 0;
         const isUp = pnl >= 0;
 
         const closingTimer = activeCloseTimers[pos.id];
         const isClosing = Boolean(closingTimer);
 
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-brand-panelLight/40';
+        tr.className = 'hover:bg-brand-panelLight/40 transition-colors';
         tr.innerHTML = `
-          <td class="py-2 px-3">
+          <td class="py-2 px-3 whitespace-nowrap">
             <span class="font-bold text-amber-400">WIKY</span>
             <span class="ml-1 text-[9px] px-1 py-0.5 rounded font-bold ${pos.type === 'LONG' ? 'bg-emerald-950 text-brand-buy' : 'bg-rose-950 text-brand-sell'}">
               ${pos.type} ${pos.leverage}x
             </span>
           </td>
-          <td class="py-2 px-2 text-white">${pos.shares}</td>
-          <td class="py-2 px-2 text-slate-300">${formatVND(pos.entryPrice)}</td>
-          <td class="py-2 px-2 text-white font-semibold">${formatVND(curPrice)}</td>
-          <td class="py-2 px-2 text-brand-textMuted">${pos.tp ? formatVND(pos.tp) : '--'} / ${pos.sl ? formatVND(pos.sl) : '--'}</td>
-          <td class="py-2 px-2 font-bold ${isUp ? 'text-brand-buy' : 'text-brand-sell'}">
-            ${isUp ? '+' : ''}${formatVND(pnl)} (${isUp ? '+' : ''}${roe.toFixed(1)}%)
+          <td class="py-2 px-2 text-white whitespace-nowrap">${pos.shares}</td>
+          <td class="py-2 px-2 text-slate-300 whitespace-nowrap">${formatVND(pos.entryPrice)}</td>
+          <td class="py-2 px-2 text-white font-semibold whitespace-nowrap">${formatVND(curPrice)}</td>
+          <td class="py-2 px-2 text-brand-textMuted whitespace-nowrap">${pos.tp ? formatVND(pos.tp) : '--'} / ${pos.sl ? formatVND(pos.sl) : '--'}</td>
+          <td class="py-2 px-2 font-bold whitespace-nowrap ${isUp ? 'text-brand-buy' : 'text-brand-sell'}">
+            <span>${isUp ? '+' : ''}${formatVND(pnl)}</span>
+            <span class="text-[10px] font-normal opacity-90 ml-0.5">(${isUp ? '+' : ''}${roe.toFixed(1)}%)</span>
           </td>
-          <td class="py-2 px-2 text-center">
+          <td class="py-2 px-2 text-center whitespace-nowrap">
             <div class="inline-flex space-x-1">
               <button title="Dời SL về giá vào lệnh (Hòa vốn)" onclick="setBreakeven(${pos.id})" class="px-1.5 py-0.5 rounded bg-brand-panelLight hover:bg-slate-700 text-sky-400 border border-brand-border text-[9px] font-bold">
                 BE
@@ -3128,8 +3132,8 @@
               </button>
             </div>
           </td>
-          <td class="py-2 px-3 text-right">
-            <button class="px-2.5 py-1 rounded ${isClosing ? 'bg-amber-600 animate-pulse cursor-wait' : 'bg-rose-600 hover:bg-rose-500'} font-bold text-white shadow transition text-[10px]" 
+          <td class="py-2 px-3 text-right whitespace-nowrap">
+            <button class="px-2.5 py-1 rounded ${isClosing ? 'bg-amber-600 animate-pulse cursor-wait' : 'bg-rose-600 hover:bg-rose-500'} font-bold text-white shadow transition text-[10px] whitespace-nowrap" 
               ${isClosing ? 'disabled' : ''} 
               onclick="requestClosePosition(${pos.id})">
               ${isClosing ? `Chờ ${closingTimer.remaining}s...` : 'Đóng'}
@@ -3143,24 +3147,26 @@
     function updateOrdersTable() {
       const tbody = document.getElementById('orders-tbody');
       const empty = document.getElementById('orders-empty');
-      document.getElementById('count-orders').textContent = pendingOrders.length;
+      const badge = document.getElementById('count-orders');
+      if (badge) badge.textContent = pendingOrders.length;
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       if (pendingOrders.length === 0) {
-        empty.classList.remove('hidden');
+        if (empty) empty.classList.remove('hidden');
         return;
       }
-      empty.classList.add('hidden');
+      if (empty) empty.classList.add('hidden');
 
       pendingOrders.forEach((o, idx) => {
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-brand-panelLight/40';
+        tr.className = 'hover:bg-brand-panelLight/40 transition-colors';
         tr.innerHTML = `
-          <td class="py-2 px-3 font-bold text-amber-400">WIKY</td>
-          <td class="py-2 px-2 font-bold ${o.type === 'LONG' ? 'text-brand-buy' : 'text-brand-sell'}">${o.type}</td>
-          <td class="py-2 px-2 text-white">${formatVND(o.price)}</td>
-          <td class="py-2 px-2 text-slate-300">${o.shares} WIKY</td>
-          <td class="py-2 px-3 text-right">
+          <td class="py-2 px-3 font-bold text-amber-400 whitespace-nowrap">WIKY</td>
+          <td class="py-2 px-2 font-bold whitespace-nowrap ${o.type === 'LONG' ? 'text-brand-buy' : 'text-brand-sell'}">${o.type}</td>
+          <td class="py-2 px-2 text-white whitespace-nowrap">${formatVND(o.price)}</td>
+          <td class="py-2 px-2 text-slate-300 whitespace-nowrap">${o.shares} WIKY</td>
+          <td class="py-2 px-3 text-right whitespace-nowrap">
             <button class="text-brand-sell hover:underline text-[10px]" onclick="pendingOrders.splice(${idx}, 1); updateOrdersTable();">Hủy</button>
           </td>
         `;
@@ -3171,6 +3177,7 @@
     function updateHistoryTable() {
       const tbody = document.getElementById('history-tbody');
       const empty = document.getElementById('history-empty');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       let totalPnl = 0;
@@ -3193,27 +3200,28 @@
 
       if (statPnl) {
         statPnl.textContent = (totalPnl >= 0 ? '+' : '') + formatVND(totalPnl);
-        statPnl.className = totalPnl >= 0 ? 'text-brand-buy text-xs' : 'text-brand-sell text-xs';
+        statPnl.className = (totalPnl >= 0 ? 'text-brand-buy text-xs' : 'text-brand-sell text-xs') + ' whitespace-nowrap';
       }
       if (statWinRate) statWinRate.textContent = `${winRate}%`;
       if (statCount) statCount.textContent = `${totalClosed} (${wins}W - ${losses}L)`;
 
       if (tradeHistory.length === 0) {
-        empty.classList.remove('hidden');
+        if (empty) empty.classList.remove('hidden');
         return;
       }
-      empty.classList.add('hidden');
+      if (empty) empty.classList.add('hidden');
 
       tradeHistory.forEach(h => {
         const p = Number(h.pnl) || 0;
         const isUp = p >= 0;
         const tr = document.createElement('tr');
+        tr.className = 'hover:bg-brand-panelLight/40 transition-colors';
         tr.innerHTML = `
-          <td class="py-1.5 px-3 text-brand-textMuted">${h.time ? String(h.time).slice(11, 19) || h.time : '--'}</td>
-          <td class="py-1.5 px-2 font-bold ${h.type === 'LONG' ? 'text-brand-buy' : 'text-brand-sell'}">${h.type}</td>
-          <td class="py-1.5 px-2 text-slate-300">${formatVND(h.entryPrice)} &rarr; ${formatVND(h.exitPrice)}</td>
-          <td class="py-1.5 px-2 text-brand-textMuted text-[10px]">${h.reason || 'Đóng lệnh'}</td>
-          <td class="py-1.5 px-3 text-right font-bold ${isUp ? 'text-brand-buy' : 'text-brand-sell'}">
+          <td class="py-1.5 px-3 text-brand-textMuted whitespace-nowrap">${h.time ? String(h.time).slice(11, 19) || h.time : '--'}</td>
+          <td class="py-1.5 px-2 font-bold whitespace-nowrap ${h.type === 'LONG' ? 'text-brand-buy' : 'text-brand-sell'}">${h.type}</td>
+          <td class="py-1.5 px-2 text-slate-300 whitespace-nowrap">${formatVND(h.entryPrice)} &rarr; ${formatVND(h.exitPrice)}</td>
+          <td class="py-1.5 px-2 text-brand-textMuted text-[10px] whitespace-nowrap">${h.reason || 'Đóng lệnh'}</td>
+          <td class="py-1.5 px-3 text-right font-bold whitespace-nowrap ${isUp ? 'text-brand-buy' : 'text-brand-sell'}">
             ${isUp ? '+' : ''}${formatVND(p)}
           </td>
         `;
@@ -3634,7 +3642,7 @@
           <td class="py-2 px-2">
             <span class="text-[9px] px-1 py-0.5 rounded font-bold ${isAdmin ? 'bg-amber-400 text-black' : 'bg-emerald-500/20 text-emerald-400'}">${u.role.toUpperCase()}</span>
           </td>
-          <td class="py-2 px-2 text-right font-bold font-mono ${u.balance >= 0 ? 'text-amber-400' : 'text-rose-400'}">
+          <td class="py-2 px-2 text-right font-bold font-mono whitespace-nowrap ${u.balance >= 0 ? 'text-amber-400' : 'text-rose-400'}">
             ${formatVND(u.balance)}
           </td>
           <td class="py-2 px-2.5 text-center">
