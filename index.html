@@ -235,8 +235,8 @@
               <i class="fa-solid fa-user"></i>
             </div>
             <div class="flex flex-col">
-              <span id="mob-username" class="text-xs font-bold text-white">Khách (Chưa đăng nhập)</span>
-              <span id="mob-user-role" class="text-[9px] font-mono text-brand-textMuted">Đăng nhập để lưu giao dịch</span>
+              <span id="mob-username" class="text-xs font-bold text-white">Chưa đăng nhập</span>
+              <span id="mob-user-role" class="text-[9px] font-mono text-brand-textMuted">Đăng nhập để giao dịch</span>
             </div>
           </div>
 
@@ -288,13 +288,13 @@
         <!-- Admin Only Settings in Mobile Menu -->
         <button id="btn-mob-open-settings" class="w-full py-2 px-3 rounded-xl bg-amber-500/10 border border-amber-500/40 text-amber-400 font-bold text-xs hidden items-center justify-center space-x-2 active:scale-95 transition">
           <i class="fa-solid fa-crown"></i>
-          <span>Bảng Điều Khiển Quản Trị Viên (Admin)</span>
+          <span>Bảng Điều Khiển Quản Trị Viên</span>
         </button>
       </div>
     </div>
   </header>
 
-  <nav class="lg:hidden h-9 bg-brand-panel border-b border-brand-border grid grid-cols-3 text-xs font-semibold z-20 flex-shrink-0">
+  <nav class="lg:hidden h-9 bg-brand-panel border-b border-brand-border grid grid-cols-2 text-xs font-semibold z-20 flex-shrink-0">
     <button id="tab-nav-chart" class="mobile-tab-btn border-b-2 border-brand-accent text-brand-accent flex items-center justify-center space-x-1" data-view="chart">
       <i class="fa-solid fa-chart-line text-[11px]"></i>
       <span>Biểu Đồ</span>
@@ -303,10 +303,7 @@
       <i class="fa-solid fa-bolt text-[11px]"></i>
       <span>Đặt Lệnh</span>
     </button>
-    <button id="tab-nav-positions" class="mobile-tab-btn border-b-2 border-transparent text-brand-textMuted flex items-center justify-center space-x-1" data-view="positions">
-      <i class="fa-solid fa-wallet text-[11px]"></i>
-      <span>Vị Thế (<span id="mob-pos-count">0</span>)</span>
-    </button>
+    
   </nav>
 
   <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
@@ -450,7 +447,7 @@
             <!-- Collapse / Expand Button -->
             <button id="btn-toggle-positions-drawer" title="Thu gọn / Mở rộng bảng" class="p-1 sm:p-1.5 rounded bg-brand-panelLight/60 text-amber-400 hover:text-white transition flex items-center space-x-1">
               <i id="drawer-toggle-icon" class="fa-solid fa-chevron-down text-[11px]"></i>
-              <span class="text-[9px] font-mono sm:hidden font-bold" id="drawer-toggle-text">Thu gọn</span>
+              <span class="text-[9px] font-mono sm:hidden font-bold" id="drawer-toggle-text"></span>
             </button>
             <button data-tab="tab-pos" class="bot-tab-btn font-semibold text-brand-accent border-b-2 border-brand-accent pb-1">
               Vị Thế (<span id="count-positions">0</span>)
@@ -3906,13 +3903,13 @@
         posDrawer.classList.remove('h-44', 'sm:h-52', 'lg:h-56');
         posDrawer.classList.add('h-8.5');
         drawerIcon.className = 'fa-solid fa-chevron-up text-[11px]';
-        if (drawerToggleText) drawerToggleText.textContent = "Mở rộng";
+        if (drawerToggleText) drawerToggleText.textContent = "";
         showToast("Đã thu gọn bảng vị thế để mở rộng không gian biểu đồ.", "info");
       } else {
         posDrawer.classList.remove('h-8.5');
         posDrawer.classList.add('h-44', 'sm:h-52', 'lg:h-56');
         drawerIcon.className = 'fa-solid fa-chevron-down text-[11px]';
-        if (drawerToggleText) drawerToggleText.textContent = "Thu gọn";
+        if (drawerToggleText) drawerToggleText.textContent = "";
       }
       setTimeout(resizeCanvas, 220);
     }
