@@ -90,29 +90,28 @@
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col">
 
-  <!-- Top Navigation Header -->
-  <header class="h-14 bg-brand-panel border-b border-brand-border flex items-center justify-between px-3 sm:px-4 flex-shrink-0 z-30 shadow-md">
-    <div class="flex items-center space-x-3 sm:space-x-5">
+  <header class="h-14 bg-brand-panel border-b border-brand-border flex items-center justify-between px-2.5 sm:px-4 flex-shrink-0 z-30 shadow-md">
+    <div class="flex items-center space-x-2 sm:space-x-4">
       <div class="flex items-center space-x-2">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black font-black text-sm shadow-md">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black font-black text-sm shadow-md flex-shrink-0">
           W
         </div>
         <div class="flex flex-col">
-          <div class="flex items-center space-x-1.5">
+          <div class="flex items-center space-x-1">
             <span class="font-bold text-sm sm:text-base tracking-wide">WIKY</span>
-            <span class="text-[10px] bg-amber-400/10 text-amber-400 px-1.5 py-0.2 rounded font-mono font-semibold">/VNĐ</span>
+            <span class="text-[9px] sm:text-[10px] bg-amber-400/10 text-amber-400 px-1 py-0.2 rounded font-mono font-semibold">/VNĐ</span>
           </div>
-          <span class="text-[9px] text-brand-textMuted uppercase tracking-wider font-semibold">Version: 2.0 Pro</span>
+          <span class="text-[8px] sm:text-[9px] text-brand-textMuted uppercase tracking-wider font-semibold">v2.2 Pro</span>
         </div>
       </div>
 
-      <div class="h-6 w-px bg-brand-border hidden sm:block"></div>
+      <div class="h-6 w-px bg-brand-border hidden xs:block"></div>
 
       <!-- Live Price & 24h Quick Stats -->
-      <div class="flex items-center space-x-3">
+      <div class="flex items-center space-x-2 sm:space-x-3">
         <div class="flex flex-col">
-          <span id="nav-price" class="text-base sm:text-lg font-bold font-mono text-brand-buy leading-tight">77.000₫</span>
-          <span id="nav-change" class="text-[11px] font-mono font-semibold text-brand-buy leading-none">+0.00%</span>
+          <span id="nav-price" class="text-sm sm:text-lg font-bold font-mono text-brand-buy leading-tight">77.000₫</span>
+          <span id="nav-change" class="text-[10px] sm:text-[11px] font-mono font-semibold text-brand-buy leading-none">+0.00%</span>
         </div>
         <div class="hidden md:flex items-center space-x-3 text-[10px] font-mono text-brand-textMuted border-l border-brand-border pl-3">
           <div>24h Cao: <b id="stat-24h-high" class="text-slate-200">77.500 ₫</b></div>
@@ -121,11 +120,11 @@
       </div>
     </div>
 
-    <!-- Quick Controls: Speed, Real Data, Balance & Settings -->
-    <div class="flex items-center space-x-2 sm:space-x-3">
+    <!-- Quick Controls: Speed, Real Data, Sheets Status, Balance & User Auth / Admin Settings -->
+    <div class="flex items-center space-x-1.5 sm:space-x-2.5">
       <!-- Fast-Forward Multiplier with Popover Slider -->
       <div class="relative">
-        <button id="btn-toggle-speed-menu" class="px-2.5 py-1 rounded-lg bg-brand-bg border border-brand-border text-amber-400 font-mono font-bold flex items-center space-x-1.5 hover:text-white transition text-xs">
+        <button id="btn-toggle-speed-menu" title="Tốc độ mô phỏng" class="h-8 px-2 sm:px-2.5 rounded-lg bg-brand-bg border border-brand-border text-amber-400 font-mono font-bold flex items-center justify-center space-x-1 hover:text-white transition text-xs">
           <span id="speed-display-btn">1x</span>
           <i class="fa-solid fa-gauge-high text-[11px]"></i>
         </button>
@@ -134,38 +133,67 @@
         <div id="speed-popover" class="absolute right-0 top-full mt-1.5 w-60 bg-brand-panel/95 backdrop-blur border border-brand-border rounded-xl p-3 shadow-2xl z-40 hidden">
           <div class="flex items-center justify-between text-[11px] mb-2">
             <span class="text-brand-textMuted flex items-center">
-              <i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Tốc độ
+              <i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Tốc độ mô phỏng
             </span>
-            <span id="speed-slider-val" class="font-mono font-bold text-amber-400 text-xs">x1</span>
+            <span id="speed-slider-val" class="font-mono font-bold text-amber-400 text-xs">1x</span>
           </div>
           <input type="range" id="speed-range-slider" min="1" max="100" step="1" value="1" class="w-full custom-range bg-brand-panelLight h-2 rounded-lg appearance-none cursor-pointer mb-2.5">
           
           <div class="grid grid-cols-5 gap-1 text-[10px] font-mono">
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="1">x1</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="5">x5</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="20">x20</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="50">x50</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="100">x100</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="1">1x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="5">5x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="20">20x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="50">50x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="100">100x</button>
           </div>
         </div>
       </div>
 
-      <!-- Real Data Source Button -->
-      <button id="btn-random-source" title="Đổi kịch bản nến từ nguồn Binance thật" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-xs font-mono flex items-center space-x-1.5 transition">
-        <i class="fa-solid fa-shuffle text-[10px]"></i>
+      <!-- Real Data Source Button (Icon-only on mobile) -->
+      <button id="btn-random-source" title="Đổi kịch bản nến từ nguồn Binance thật" class="h-8 w-8 sm:w-auto px-0 sm:px-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-xs font-mono flex items-center justify-center space-x-1.5 transition">
+        <i class="fa-solid fa-shuffle text-[11px]"></i>
         <span class="hidden sm:inline">Đổi Data</span>
       </button>
 
-      <!-- Balance Display -->
-      <div class="bg-brand-bg border border-brand-border px-3 py-1 rounded-lg text-right hidden sm:block">
-        <div class="text-[9px] text-brand-textMuted font-medium uppercase leading-none">Ví khả dụng</div>
-        <div id="nav-balance" class="text-xs font-mono font-bold text-amber-400">5.000.000 ₫</div>
+      <!-- Compact Google Sheets Status Indicator (Chỉ hiển thị icon và chấm trạng thái) -->
+      <div id="gas-status-badge" title="Google Sheet: Đang kết nối..." class="h-8 w-8 px-0 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center relative cursor-help">
+        <i class="fa-solid fa-cloud text-xs text-brand-textMuted"></i>
+        <span id="gas-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse absolute top-1.5 right-1.5"></span>
       </div>
 
-      <!-- Settings Button -->
-      <button id="btn-open-settings" class="px-3 py-1.5 rounded-lg bg-brand-panelLight hover:bg-slate-700 text-xs font-semibold flex items-center space-x-1.5 transition text-slate-200 border border-brand-border">
-        <i class="fa-solid fa-sliders text-amber-400"></i>
-        <span>Cài Đặt</span>
+      <!-- Balance Display (Desktop view) -->
+      <div class="bg-brand-bg border border-brand-border px-3 py-1 rounded-lg text-right hidden sm:block">
+        <div class="text-[9px] text-brand-textMuted font-medium uppercase leading-none">Ví khả dụng</div>
+        <div id="nav-balance" class="text-xs font-mono font-bold text-amber-400">0 ₫</div>
+      </div>
+
+      <!-- User Auth State: Login / Register Button OR User Profile Pill -->
+      <div id="auth-header-container">
+        <!-- Guest View -->
+        <button id="btn-open-auth" class="h-8 px-2.5 sm:px-3 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-bold text-xs flex items-center space-x-1.5 shadow-md transition">
+          <i class="fa-solid fa-user-lock text-[11px]"></i>
+          <span class="hidden sm:inline">Đăng Nhập</span>
+        </button>
+
+        <!-- Logged In View -->
+        <div id="user-profile-pill" class="hidden items-center space-x-1.5">
+          <div class="h-8 px-2 sm:px-2.5 rounded-lg bg-brand-bg border border-brand-border flex items-center space-x-1.5 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span id="header-username" class="font-bold text-white max-w-[80px] sm:max-w-[110px] truncate">User</span>
+            <span id="header-user-role" class="text-[9px] px-1 py-0.2 rounded font-bold bg-amber-400/20 text-amber-400">USER</span>
+          </div>
+
+          <!-- Logout Button -->
+          <button id="btn-logout" title="Đăng xuất tài khoản" class="h-8 w-8 rounded-lg bg-brand-panelLight hover:bg-rose-950/60 hover:text-rose-400 text-brand-textMuted flex items-center justify-center text-xs transition border border-brand-border">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin-Only Settings Button (Icon-only on mobile) -->
+      <button id="btn-open-settings" title="Cài đặt hệ thống (Dành cho Quản trị viên Admin)" class="h-8 w-8 sm:w-auto px-0 sm:px-3 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-400 hover:bg-amber-500/20 text-xs font-semibold hidden items-center justify-center space-x-1.5 transition">
+        <i class="fa-solid fa-crown text-[11px]"></i>
+        <span class="hidden sm:inline">Quản Trị</span>
       </button>
     </div>
   </header>
@@ -186,7 +214,6 @@
     </button>
   </nav>
 
-  <!-- Main Workspace -->
   <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
 
     <!-- Left & Center: Chart Zone & History Drawer -->
@@ -220,7 +247,7 @@
           </button>
 
           <!-- Toggle MA & BOLL -->
-          <button id="btn-toggle-ma" title="Bật/Tắt đường MA (20/50)" class="px-2 py-0.5 rounded bg-brand-panelLight text-blue-400 font-mono text-[11px] transition">
+          <button id="btn-toggle-ma" title="Bật/Tắt đường MA (20/50)" class="px-2 py-0.5 rounded bg-brand-panelLight text-blue-400 font-mono text-[11px] font-bold transition">
             MA
           </button>
           <button id="btn-toggle-boll" title="Bật/Tắt Dải Bollinger Bands (20, 2)" class="px-2 py-0.5 rounded bg-brand-panelLight text-purple-400 font-mono text-[11px] font-bold transition">
@@ -229,18 +256,16 @@
         </div>
       </div>
 
-      <!-- Chart Canvas Viewport with Collapsible Floating Drawing Toolbox -->
+      <!-- Chart Canvas Viewport with Default-Collapsed Floating Drawing Toolbox -->
       <div id="chart-viewport" class="relative flex-1 bg-brand-bg overflow-hidden cursor-crosshair">
         
-        <!-- Upgraded Collapsible Floating Drawing Toolbox (TradingView Style) -->
+        <!-- Collapsible Floating Drawing Toolbox (Collapsed by default) -->
         <div id="drawing-toolbox" class="absolute left-2.5 top-2.5 z-20 flex flex-col bg-brand-panel/95 backdrop-blur border border-brand-border rounded-xl p-1 shadow-2xl transition-all duration-200">
-          <!-- Toggle Collapse / Expand Button -->
-          <button id="btn-toggle-toolbox" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs text-amber-400 hover:bg-brand-panelLight transition" title="Mở/Thu gọn thanh công cụ vẽ">
-            <i id="toolbox-chevron-icon" class="fa-solid fa-pen-nib"></i>
+          <button id="btn-toggle-toolbox" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs text-amber-400 hover:bg-brand-panelLight transition" title="Mở rộng công cụ vẽ">
+            <i id="toolbox-chevron-icon" class="fa-solid fa-toolbox text-amber-400"></i>
           </button>
 
-          <!-- Expandable Tools Group -->
-          <div id="toolbox-items" class="flex flex-col space-y-1 pt-1 mt-1 border-t border-brand-border">
+          <div id="toolbox-items" class="hidden flex flex-col space-y-1 pt-1 mt-1 border-t border-brand-border">
             <button id="tool-cursor" class="draw-tool-btn active-tool w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs text-brand-textMuted hover:text-white transition" title="Con trỏ điều hướng (Kéo thả xem quá khứ)">
               <i class="fa-solid fa-arrow-pointer"></i>
             </button>
@@ -258,7 +283,7 @@
         </div>
 
         <!-- Zoom In/Out & Auto Scale Helper Buttons -->
-        <div class="absolute right-20 bottom-3 z-20 flex items-center space-x-1.5">
+        <div class="absolute right-16 bottom-3 z-20 flex items-center space-x-1.5">
           <button id="btn-reset-price-scale" title="Đặt lại tỷ lệ thanh giá (Auto Scale)" class="px-2 h-7 rounded-lg bg-brand-panel/90 border border-brand-border text-amber-400 hover:text-white flex items-center justify-center text-[10px] font-mono shadow-lg hidden">
             AUTO
           </button>
@@ -279,12 +304,31 @@
         </div>
 
         <!-- Active Tool Status Hint Banner -->
-        <div id="draw-hint-banner" class="absolute top-2.5 right-20 z-10 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-lg text-[10px] font-mono text-amber-300 hidden pointer-events-none">
+        <div id="draw-hint-banner" class="absolute top-2.5 right-16 z-10 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-lg text-[10px] font-mono text-amber-300 hidden pointer-events-none">
           Chạm/Click 2 điểm để vẽ
         </div>
 
         <!-- Main Chart Canvas -->
-        <canvas id="trade-chart" class="w-full h-full block"></canvas>
+        <canvas id="trade-chart" class="w-full h-full block transition-all duration-300"></canvas>
+
+        <!-- Chart Blur & Login Required Overlay -->
+        <div id="chart-login-overlay" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300 p-4 text-center">
+          <div class="p-6 rounded-2xl bg-brand-panel/90 border border-brand-border/80 shadow-2xl flex flex-col items-center space-y-3 max-w-xs animate-bounce-short">
+            <div class="w-12 h-12 rounded-full bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 text-xl shadow-lg">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="space-y-1">
+              <h3 class="text-sm sm:text-base font-bold text-white tracking-wide">Vui Lòng Đăng Nhập</h3>
+              <p class="text-[11px] text-brand-textMuted leading-relaxed">
+                Đăng nhập hoặc đăng ký tài khoản để mở khóa biểu đồ và giao dịch.
+              </p>
+            </div>
+            <button id="btn-overlay-login" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-bold text-xs shadow-lg transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              <span>ĐĂNG NHẬP NGAY</span>
+            </button>
+          </div>
+        </div>
 
         <!-- Live OHLC Crosshair Tooltip -->
         <div id="chart-tooltip" class="absolute top-2 left-12 sm:left-14 bg-brand-panel/90 border border-brand-border px-2 py-1 rounded font-mono text-[10px] sm:text-[11px] text-brand-textMuted pointer-events-none hidden shadow-xl z-10 flex flex-wrap gap-x-2">
@@ -301,9 +345,7 @@
         </div>
       </div>
 
-      <!-- Bottom Positions & History Tab Panel -->
       <div id="section-positions" class="h-48 sm:h-52 lg:h-56 flex-shrink-0 bg-brand-panel border-t border-brand-border flex flex-col transition-all duration-200">
-        <!-- Sub Header Tabs with Collapse Toggle -->
         <div class="h-8 border-b border-brand-border flex items-center justify-between px-3 text-xs bg-brand-bg/60 select-none">
           <div class="flex items-center space-x-3 sm:space-x-4">
             <button id="btn-toggle-positions-drawer" title="Thu gọn / Mở rộng bảng" class="p-1 rounded text-brand-textMuted hover:text-white hover:bg-brand-panelLight transition">
@@ -419,7 +461,7 @@
         <div id="mini-bids" class="space-y-0.5 font-mono text-[10px]"></div>
       </div>
 
-      <!-- Streamlined Execution Form -->
+      <!-- Execution Form -->
       <div class="p-2.5 flex-1 flex flex-col space-y-2.5 text-xs">
         
         <!-- Spot vs Margin Mode Switch -->
@@ -428,7 +470,7 @@
           <button id="mode-margin" class="trade-mode-btn py-1 font-semibold rounded text-brand-textMuted hover:text-white">Margin</button>
         </div>
 
-        <!-- Leverage Slider (Shown in Margin Mode) -->
+        <!-- Leverage Slider -->
         <div id="leverage-box" class="hidden bg-brand-bg p-2 rounded-lg border border-brand-border space-y-1">
           <div class="flex justify-between text-[11px]">
             <span class="text-brand-textMuted">Đòn bẩy:</span>
@@ -443,7 +485,7 @@
           <button id="type-limit" class="order-type-btn text-brand-textMuted hover:text-white pb-1">Lệnh Chờ</button>
         </div>
 
-        <!-- Limit Price Input (Hidden if Market) -->
+        <!-- Limit Price Input -->
         <div id="limit-group" class="hidden space-y-1">
           <label class="text-[10px] text-brand-textMuted">Giá đặt (VNĐ)</label>
           <input type="number" id="input-limit-price" step="100" class="w-full bg-brand-bg border border-brand-border rounded p-1.5 text-xs font-mono text-white focus:outline-none focus:border-amber-400" placeholder="Nhập giá">
@@ -457,7 +499,6 @@
           </div>
           <input type="number" id="input-shares" min="1" step="1" value="10" class="w-full bg-brand-bg border border-brand-border rounded p-1.5 text-xs font-mono text-white focus:outline-none focus:border-amber-400" placeholder="Số lượng WIKY">
           
-          <!-- Percentage chips -->
           <div class="grid grid-cols-4 gap-1 pt-0.5 font-mono text-[10px]">
             <button type="button" class="pct-btn py-1 rounded bg-brand-bg border border-brand-border hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-pct="0.25">25%</button>
             <button type="button" class="pct-btn py-1 rounded bg-brand-bg border border-brand-border hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-pct="0.50">50%</button>
@@ -526,141 +567,273 @@
     </div>
   </main>
 
-  <!-- Settings Modal Popup with Passcode 2412 & Integrated Simulation Pause/Run -->
+  <!-- Auth Modal: Login / Register -->
+  <div id="auth-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-brand-panel border border-brand-border w-full max-w-sm rounded-2xl p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-brand-border pb-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-amber-400 flex items-center justify-center text-black font-black text-xs">
+            W
+          </div>
+          <h3 class="text-sm font-bold text-white">Wiky Trade</h3>
+        </div>
+        <button id="btn-close-auth" class="text-brand-textMuted hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 bg-brand-bg p-1 rounded-xl border border-brand-border text-xs font-semibold">
+        <button id="tab-auth-login" class="py-1.5 rounded-lg bg-brand-panelLight text-amber-400 font-bold transition">Đăng Nhập</button>
+        <button id="tab-auth-register" class="py-1.5 rounded-lg text-brand-textMuted hover:text-white transition">Đăng Ký</button>
+      </div>
+
+      <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-2.5 text-[11px] text-emerald-400 flex items-center space-x-2">
+        <i class="fa-solid fa-gift text-sm flex-shrink-0"></i>
+        <span>Đăng ký mới nhận ngay <b>1.000.000 ₫</b> vốn ban đầu!</span>
+      </div>
+
+      <form id="auth-form" class="space-y-3 text-xs" onsubmit="return false;">
+        <div>
+          <label class="text-brand-textMuted block mb-1">Username</label>
+          <input type="text" id="auth-username" required placeholder="Nhập tên tài khoản" class="w-full bg-brand-bg border border-brand-border rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div>
+          <label class="text-brand-textMuted block mb-1">Password</label>
+          <input type="password" id="auth-password" required placeholder="Nhập mật khẩu" class="w-full bg-brand-bg border border-brand-border rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div id="auth-admin-hint" class="text-[10px] text-brand-textMuted font-mono">
+          * Nạp <b>50.000 đ</b> để có toàn quyền quản trị hệ thống.
+        </div>
+
+        <button type="submit" id="btn-submit-auth" class="w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs shadow-lg transition flex items-center justify-center space-x-2">
+          <span id="btn-submit-auth-label">ĐĂNG NHẬP</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Settings Modal: Only accessible for accounts with role 'admin' -->
   <div id="settings-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
-    <div class="bg-brand-panel border border-brand-border w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
-      
-      <!-- Modal Header -->
+    <div class="bg-brand-panel border border-brand-border w-full max-w-md rounded-2xl p-4 sm:p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-brand-border pb-3">
         <h3 class="text-sm font-bold text-white flex items-center">
-          <i class="fa-solid fa-sliders text-amber-400 mr-2"></i> Cài Đặt Hệ Thống & Giả Lập
+          <i class="fa-solid fa-crown text-amber-400 mr-2"></i> Bảng Điều Khiển Quản Trị Viên
         </h3>
         <button id="btn-close-settings" class="text-brand-textMuted hover:text-white p-1">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
 
-      <!-- Simulation State (Moved from Topbar to Popup as requested) -->
-      <div class="bg-brand-bg border border-brand-border rounded-xl p-3 flex items-center justify-between">
-        <div>
-          <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
-            <span id="modal-sim-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span id="modal-sim-status-text">Đang chạy mô phỏng</span>
-          </div>
-          <div class="text-[10px] text-brand-textMuted">Tạm dừng để phân tích hoặc giữ nguyên giá</div>
-        </div>
-        <button id="modal-btn-pause-toggle" class="px-3 py-1.5 rounded-lg font-mono text-xs font-bold transition flex items-center space-x-1.5 bg-brand-panelLight text-amber-400 hover:text-white border border-brand-border">
-          <i id="modal-pause-icon" class="fa-solid fa-pause"></i>
-          <span id="modal-pause-label">Dừng Chạy</span>
+      <!-- Admin Modal Navigation Tabs -->
+      <div class="grid grid-cols-2 gap-1 bg-brand-bg p-1 rounded-xl border border-brand-border text-xs font-semibold">
+        <button id="tab-btn-admin-config" class="py-1.5 rounded-lg bg-brand-panelLight text-amber-400 font-bold transition">Cài Đặt Sàn</button>
+        <button id="tab-btn-admin-users" class="py-1.5 rounded-lg text-brand-textMuted hover:text-white transition flex items-center justify-center space-x-1.5">
+          <i class="fa-solid fa-users-gear text-[11px]"></i>
+          <span>Quản Lý Vốn User</span>
         </button>
       </div>
 
-      <!-- General Settings -->
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="text-brand-textMuted block mb-1">Số Vốn Ban Đầu (VNĐ)</label>
-          <div class="flex space-x-1.5">
-            <input type="number" id="setting-balance-input" step="1000000" min="100000" value="5000000" class="flex-1 bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 font-mono text-amber-400 font-bold text-sm focus:outline-none">
-            <button id="btn-reset-balance" class="px-2.5 py-1.5 bg-brand-panelLight text-[11px] rounded-lg text-slate-300 hover:text-white">+5 Tr</button>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-brand-textMuted block mb-1">Mẫu Hình Dữ Liệu Nguồn</label>
-          <select id="setting-source-asset" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
-            <option value="RANDOM">Ngẫu nhiên từ Binance</option>
-            <option value="BNBUSDT">Binance Coin</option>
-            <option value="BTCUSDT">Bitcoin - Thanh khoản dồi dào</option>
-            <option value="ETHUSDT">Ethereum- Sóng mượt</option>
-            <option value="SOLUSDT">Solana - Bứt phá mạnh</option>
-            <option value="DOGEUSDT">Dogecoin - Biến động nhanh</option>
-          </select>
-        </div>
-
-        <!-- Passcode Protected Market Parameters Section -->
-        <div class="pt-2 border-t border-brand-border">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center space-x-1.5">
-              <i class="fa-solid fa-lock text-amber-400 text-xs"></i>
-              <span class="text-xs font-bold text-white">Cài Đặt Nâng Cao</span>
+      <!-- Tab Content 1: System Settings & Simulation -->
+      <div id="admin-view-config" class="space-y-3">
+        <!-- Simulation State -->
+        <div class="bg-brand-bg border border-brand-border rounded-xl p-3 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-semibold text-white flex items-center space-x-1.5">
+              <span id="modal-sim-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="modal-sim-status-text">Đang chạy mô phỏng</span>
             </div>
-            <span id="passcode-status-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/30">
-              Đang Khóa
-            </span>
+            <div class="text-[10px] text-brand-textMuted">Tạm dừng để phân tích hoặc giữ nguyên giá</div>
+          </div>
+          <button id="modal-btn-pause-toggle" class="px-3 py-1.5 rounded-lg font-mono text-xs font-bold transition flex items-center space-x-1.5 bg-brand-panelLight text-amber-400 hover:text-white border border-brand-border">
+            <i id="modal-pause-icon" class="fa-solid fa-pause"></i>
+            <span id="modal-pause-label">Dừng Chạy</span>
+          </button>
+        </div>
+
+        <!-- Advanced Settings Form -->
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="text-brand-textMuted block mb-1">Mẫu Hình Dữ Liệu Nguồn</label>
+            <select id="setting-source-asset" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
+              <option value="RANDOM">Ngẫu nhiên từ Binance</option>
+              <option value="BNBUSDT">Binance Coin </option>
+              <option value="BTCUSDT">Bitcoin - Thanh khoản dồi dào</option>
+              <option value="ETHUSDT">Ethereum - Sóng mượt</option>
+              <option value="SOLUSDT">Solana - Bứt phá mạnh</option>
+              <option value="DOGEUSDT">Dogecoin - Biến động nhanh</option>
+            </select>
           </div>
 
-          <!-- Passcode Input Gate -->
-          <div id="passcode-gate-box" class="bg-brand-bg/80 border border-dashed border-amber-500/40 rounded-xl p-3 text-center space-y-2 mb-2">
-            <p class="text-[11px] text-brand-textMuted">Nạp 50k để nhận Key quản trị nhá !</p>
-            <div class="flex space-x-2 max-w-xs mx-auto">
-              <input type="password" id="input-admin-passcode" maxlength="8" placeholder="Nhập Key" class="flex-1 bg-brand-panel border border-brand-border rounded-lg px-3 py-1.5 text-center font-mono tracking-widest text-amber-400 text-xs focus:outline-none focus:border-amber-400">
-              <button id="btn-unlock-settings" class="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded-lg transition">
-                Mở Khóa
+          <!-- Dynamic Capital Adjustment Panel For Current Admin Account -->
+           <div class="bg-brand-panelLight/40 border border-brand-border rounded-xl p-3 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-[11px] text-amber-400 flex items-center">
+                <i class="fa-solid fa-coins mr-1.5"></i> Vốn Ví Của Admin Hiện Tại
+              </span>
+              <span id="live-unlocked-balance" class="font-mono font-bold text-emerald-400 text-xs">10.000.000 ₫</span>
+            </div>
+
+            <div class="grid grid-cols-4 gap-1.5 text-[10px] font-mono">
+              <button type="button" class="btn-quick-adjust-cap py-1.5 rounded bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/30 font-semibold" data-amount="100000">+100k</button>
+              <button type="button" class="btn-quick-adjust-cap py-1.5 rounded bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/30 font-semibold" data-amount="500000">+500k</button>
+              <button type="button" class="btn-quick-adjust-cap py-1.5 rounded bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/30 font-semibold" data-amount="1000000">+1 Triệu</button>
+              <button type="button" class="btn-quick-adjust-cap py-1.5 rounded bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/30 font-semibold" data-amount="-500000">-500k</button>
+            </div>
+
+            <div class="flex space-x-1.5 pt-1">
+              <input type="number" id="input-custom-capital-amount" step="50000" min="10000" placeholder="Số tiền (VNĐ)" class="flex-1 bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1 text-xs font-mono text-white focus:outline-none">
+              <button type="button" id="btn-deposit-capital" class="px-2.5 py-1 bg-brand-buy text-white font-bold text-[11px] rounded-lg hover:bg-brand-buyHover transition">
+                <i class="fa-solid fa-plus text-[10px] mr-1"></i> Nạp
+              </button>
+              <button type="button" id="btn-withdraw-capital" class="px-2.5 py-1 bg-brand-sell text-white font-bold text-[11px] rounded-lg hover:bg-brand-sellHover transition">
+                <i class="fa-solid fa-minus text-[10px] mr-1"></i> Rút
               </button>
             </div>
-            <div id="passcode-error-msg" class="text-[10px] text-rose-400 hidden">Key không chính xác! Hãy nạp 50k bạn nhé</div>
           </div>
 
-          <!-- Protected Inputs (Disabled until passcode is authenticated) -->
-          <div id="protected-fields-container" class="space-y-3 opacity-40 pointer-events-none transition-all duration-200">
-            <!-- Base Price -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-brand-textMuted text-[11px]">Giá Cơ Bản (VNĐ):</label>
-                <span id="label-base-price" class="text-amber-400 font-mono font-semibold text-[11px]">77.000 ₫</span>
-              </div>
-              <input type="number" id="setting-base-price" step="500" value="77000" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-brand-textMuted text-[11px]">Giá Cơ Bản (VNĐ):</label>
+              <span id="label-base-price" class="text-amber-400 font-mono font-semibold text-[11px]">77.000 ₫</span>
             </div>
+            <input type="number" id="setting-base-price" step="500" value="77000" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
+          </div>
 
-            <!-- Volatility / Amplitude -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-brand-textMuted text-[11px]">Biên Độ Biến Động Sóng (% / bước):</label>
-                <span id="label-volatility-val" class="text-amber-400 font-mono font-semibold text-[11px]">0.40%</span>
-              </div>
-              <input type="range" id="setting-volatility-range" min="0.05" max="2.5" step="0.05" value="0.40" class="w-full custom-range bg-brand-panelLight h-2 rounded-lg appearance-none cursor-pointer">
-              <div class="flex justify-between text-[9px] text-brand-textMuted font-mono">
-                <span>0.05% (Êm đềm)</span>
-                <span>0.40% (Chuẩn)</span>
-                <span>2.5% (Bão)</span>
-              </div>
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-brand-textMuted text-[11px]">Biên Độ Biến Động Sóng (% / bước):</label>
+              <span id="label-volatility-val" class="text-amber-400 font-mono font-semibold text-[11px]">0.40%</span>
             </div>
-
-            <!-- Min Tick Size -->
-            <div>
-              <label class="text-brand-textMuted block mb-1 text-[11px]">Bước Giá Tối Thiểu:</label>
-              <select id="setting-tick-size" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
-                <option value="10">10 ₫ (Cực nhuyễn)</option>
-                <option value="50">50 ₫</option>
-                <option value="100" selected>100 ₫ (Tiêu chuẩn)</option>
-                <option value="200">200 ₫</option>
-                <option value="500">500 ₫ (Biên độ rộng)</option>
-                <option value="1000">1.000 ₫</option>
-              </select>
-            </div>
-
-            <!-- Position Close Delay Seconds -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-brand-textMuted text-[11px]">Độ Trễ Khi Đóng Vị Thế:</label>
-                <span id="label-close-delay" class="text-amber-400 font-mono font-semibold text-[11px]">Tức thì</span>
-              </div>
-              <input type="number" id="setting-close-delay" min="0" max="30" step="1" value="0" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none" placeholder="Nhập số giây trễ (ví dụ: 2)">
-              <p class="text-[9px] text-brand-textMuted mt-1">Khi bấm đóng vị thế, hệ thống sẽ đếm ngược trước khi thực hiện chốt giá.</p>
+            <input type="range" id="setting-volatility-range" min="0.05" max="2.5" step="0.05" value="0.40" class="w-full custom-range bg-brand-panelLight h-2 rounded-lg appearance-none cursor-pointer">
+            <div class="flex justify-between text-[9px] text-brand-textMuted font-mono">
+              <span>0.05% (Êm đềm)</span>
+              <span>0.40% (Chuẩn)</span>
+              <span>2.5% (Bão)</span>
             </div>
           </div>
+
+          <div>
+            <label class="text-brand-textMuted block mb-1 text-[11px]">Bước Giá Tối Thiểu:</label>
+            <select id="setting-tick-size" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none">
+              <option value="10">10 ₫ (Cực nhuyễn)</option>
+              <option value="50">50 ₫</option>
+              <option value="100" selected>100 ₫ (Tiêu chuẩn)</option>
+              <option value="200">200 ₫</option>
+              <option value="500">500 ₫ (Biên độ rộng)</option>
+              <option value="1000">1.000 ₫</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-brand-textMuted text-[11px]">Độ Trễ Khi Đóng Vị Thế:</label>
+              <span id="label-close-delay" class="text-amber-400 font-mono font-semibold text-[11px]">Tức thì</span>
+            </div>
+            <input type="number" id="setting-close-delay" min="0" max="30" step="1" value="0" class="w-full bg-brand-bg border border-brand-border rounded-lg p-2 font-mono text-white focus:outline-none" placeholder="Nhập số giây trễ (ví dụ: 2)">
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-brand-border flex space-x-2">
+          <button id="btn-close-settings-alt" class="w-1/3 py-2.5 rounded-xl bg-brand-panelLight text-brand-textMuted hover:text-white font-semibold text-xs transition">
+            Hủy
+          </button>
+          <button id="btn-save-settings" class="w-2/3 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition">
+            LƯU & ÁP DỤNG
+          </button>
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="pt-2 border-t border-brand-border flex space-x-2">
-        <button id="btn-close-settings-alt" class="w-1/3 py-2.5 rounded-xl bg-brand-panelLight text-brand-textMuted hover:text-white font-semibold text-xs transition">
-          Hủy
-        </button>
-        <button id="btn-save-settings" class="w-2/3 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition">
-          LƯU & ÁP DỤNG
-        </button>
+      <!-- Tab Content 2: All Users Capital Management (Google Sheet Sync) -->
+      <div id="admin-view-users" class="space-y-3 hidden">
+        <div class="flex items-center justify-between">
+          <div class="text-xs font-bold text-white flex items-center space-x-1.5">
+            <i class="fa-solid fa-users text-amber-400"></i>
+            <span>Danh Sách Thành Viên</span>
+          </div>
+          <button id="btn-refresh-users-list" class="px-2 py-1 bg-brand-panelLight hover:bg-slate-700 text-amber-400 rounded-lg text-[10px] font-mono flex items-center space-x-1 transition">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>Làm Mới</span>
+          </button>
+        </div>
+
+        <!-- Quick Search User -->
+        <div class="relative">
+          <input type="text" id="input-search-user" placeholder="Tìm theo tên tài khoản..." class="w-full bg-brand-bg border border-brand-border rounded-lg pl-8 pr-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-amber-400">
+          <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-brand-textMuted text-[11px]"></i>
+        </div>
+
+        <!-- Users Table Container -->
+        <div class="bg-brand-bg border border-brand-border rounded-xl overflow-hidden max-h-72 overflow-y-auto">
+          <table class="w-full text-left text-[11px] font-mono">
+            <thead class="text-brand-textMuted bg-brand-panel sticky top-0 border-b border-brand-border">
+              <tr>
+                <th class="py-2 px-2.5">User</th>
+                <th class="py-2 px-2">Quyền</th>
+                <th class="py-2 px-2 text-right">Số Dư</th>
+                <th class="py-2 px-2.5 text-center">Chỉnh Sửa</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-tbody" class="divide-y divide-brand-border/40">
+              <tr>
+                <td colspan="4" class="p-4 text-center text-brand-textMuted text-xs">
+                  <i class="fa-solid fa-spinner animate-spin mr-1.5"></i> Đang tải dữ liệu tài khoản...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Capital Adjust Modal / Form for Selected User -->
+        <div id="admin-user-editor-box" class="hidden bg-brand-panelLight/40 border border-amber-500/40 rounded-xl p-3 space-y-2">
+          <div class="flex items-center justify-between text-xs font-bold">
+            <span class="text-white flex items-center">
+              <i class="fa-solid fa-pen-to-square text-amber-400 mr-1.5"></i>
+              <span>Cập nhật vốn cho: <b id="editing-username" class="text-amber-400 font-mono">user</b></span>
+            </span>
+            <button id="btn-cancel-edit-user" class="text-brand-textMuted hover:text-white p-1 text-xs">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="flex items-center justify-between text-[11px] font-mono">
+            <span class="text-brand-textMuted">Số dư hiện tại:</span>
+            <span id="editing-current-bal" class="font-bold text-emerald-400">0 ₫</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-1 text-[10px] font-mono">
+            <button type="button" class="btn-user-quick-adj py-1 rounded bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 font-semibold" data-adj="100000">+100k</button>
+            <button type="button" class="btn-user-quick-adj py-1 rounded bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 font-semibold" data-adj="500000">+500k</button>
+            <button type="button" class="btn-user-quick-adj py-1 rounded bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 font-semibold" data-adj="1000000">+1 Tr</button>
+            <button type="button" class="btn-user-quick-adj py-1 rounded bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 font-semibold" data-adj="-500000">-500k</button>
+          </div>
+
+          <div class="space-y-1 pt-1">
+            <div class="flex space-x-1.5">
+              <input type="number" id="input-user-new-balance" step="50000" min="0" placeholder="Nhập số dư trực tiếp (VNĐ)" class="flex-1 bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 text-xs font-mono text-white focus:outline-none focus:border-amber-400">
+              <button type="button" id="btn-save-user-balance" class="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded-lg transition flex items-center space-x-1">
+                <i class="fa-solid fa-check text-[11px]"></i>
+                <span>LƯU</span>
+              </button>
+            </div>
+           
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Global Loading Overlay for Asynchronous Operations -->
+  <div id="global-loading-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-[2px] z-[60] flex flex-col items-center justify-center p-4 transition-opacity duration-200 hidden">
+    <div class="bg-brand-panel border border-brand-border/80 px-6 py-4 rounded-2xl shadow-2xl flex flex-col items-center space-y-3">
+      <div class="relative w-10 h-10 flex items-center justify-center">
+        <div class="w-10 h-10 rounded-full border-2 border-brand-border border-t-amber-400 animate-spin"></div>
+        <div class="absolute w-5 h-5 rounded-full bg-amber-400/20 flex items-center justify-center text-[10px] text-amber-400 font-bold">
+          W
+        </div>
+      </div>
+      <span id="global-loading-text" class="text-xs font-semibold text-slate-200 font-mono">Đang đồng bộ Google Sheet...</span>
     </div>
   </div>
 
@@ -676,18 +849,29 @@
       }).format(Math.round(value));
     }
 
-    /* Core Token Spec (Configurable via Passcode 2412) */
+    /* Core Token Spec */
     const WIKY_SPEC = {
       name: "WIKY Coin",
       symbol: "WIKY",
       basePrice: 77000,
       volatility: 0.0040,   // 0.40%
       tickSize: 100,
-      closeDelaySec: 0      // Default instant (0s)
+      closeDelaySec: 0      // Instant (0s)
     };
 
-    /* Security authentication state */
-    let isSettingsUnlocked = false;
+    /* Hardcoded Google Apps Script Web App Endpoint - Tự động đồng bộ */
+    const GAS_APP_URL = "https://script.google.com/macros/s/AKfycbzTc5Elw9Y9o6t81dZSETOrlUbRvaPmVVUSzwC8uRPeeVEePlpeOlCzzTflBTQi-Twh/exec";
+    let isGasConnected = false;
+
+    /* User Authentication & Session State */
+    let currentUser = null; // null if guest; { username, role: 'admin'|'user', balance: 1000000 }
+    let authMode = 'login'; // 'login' or 'register'
+
+    /* Built-in accounts database (Fallback memory synced with GAS) */
+    const localUsersDb = {
+      'admin': { password: 'admin777', role: 'admin', balance: 1000000 },
+      'trader': { password: '123', role: 'user', balance: 100000 }
+    };
 
     /* Simulation and Chart State */
     let candles = [];
@@ -707,9 +891,9 @@
       cache: {}
     };
 
-    /* Portfolio State */
-    let initialBalance = 5000000;
-    let balance = 5000000;
+    /* Portfolio State: Initial Balance 1,000,000 VND */
+    let initialBalance = 1000000;
+    let balance = 1000000;
     let positions = [];
     let pendingOrders = [];
     let tradeHistory = [];
@@ -719,7 +903,7 @@
     let orderType = 'market'; // 'market' or 'limit'
     let leverage = 1;
 
-    // Track active delayed close operations to prevent race conditions
+    // Track active delayed close operations
     let activeCloseTimers = {};
     let isBatchClosing = false;
 
@@ -754,17 +938,258 @@
     // Multi-touch pinch-to-zoom state
     let lastTouchDistance = null;
 
-    // Drawing Tools State
-    let isToolboxCollapsed = false;
+    // Drawing Tools State (Collapsed by default)
+    let isToolboxCollapsed = true;
     let activeTool = 'cursor';
     let drawings = [];
     let currentDrawing = null;
 
-    // Compact price axis width configuration (Snugly fits price values, maximizing candle zone)
-    const PRICE_AXIS_WIDTH = 74;
-    const RIGHT_PADDING = 38;
+    // Snug price axis width (58px) and compact right padding (24px)
+    const PRICE_AXIS_WIDTH = 58;
+    const RIGHT_PADDING = 24;
 
     const REAL_CRYPTO_ASSETS = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'DOGEUSDT', 'AVAXUSDT', 'NEARUSDT'];
+
+    const GAS_TEMPLATE_CODE = `/* WIKY PRO TRADE - GOOGLE APPS SCRIPT WEB APP BACKEND */
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var action = data.action;
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    // Khởi tạo các Sheet chuẩn
+    var usersSheet = ss.getSheetByName('Users') || ss.insertSheet('Users');
+    var tradesSheet = ss.getSheetByName('Trades') || ss.insertSheet('Trades');
+    var settingsSheet = ss.getSheetByName('Settings') || ss.insertSheet('Settings');
+    
+    if (usersSheet.getLastRow() === 0) {
+      usersSheet.appendRow(['Username', 'Password', 'Role', 'Balance', 'Created_At']);
+      usersSheet.appendRow(['admin', 'admin', 'admin', 1000000, new Date().toISOString()]);
+      usersSheet.appendRow(['trader', '123', 'user', 1000000, new Date().toISOString()]);
+    }
+    if (tradesSheet.getLastRow() === 0) {
+      tradesSheet.appendRow(['Timestamp', 'Username', 'Type', 'Shares', 'EntryPrice', 'ExitPrice', 'PnL', 'Reason']);
+    }
+    
+    if (action === 'getUsers') {
+      var rows = usersSheet.getDataRange().getValues();
+      var users = [];
+      for (var i = 1; i < rows.length; i++) {
+        users.push({
+          username: String(rows[i][0]),
+          role: String(rows[i][2]),
+          balance: Number(rows[i][3])
+        });
+      }
+      return createJsonResponse({ status: 'ok', users: users });
+    }
+
+    if (action === 'login') {
+      var rows = usersSheet.getDataRange().getValues();
+      for (var i = 1; i < rows.length; i++) {
+        if (rows[i][0] == data.username && String(rows[i][1]) == String(data.password)) {
+          return createJsonResponse({ status: 'ok', username: rows[i][0], role: rows[i][2], balance: Number(rows[i][3]) });
+        }
+      }
+      return createJsonResponse({ status: 'error', message: 'Sai tài khoản hoặc mật khẩu' });
+    }
+    
+    if (action === 'register') {
+      var rows = usersSheet.getDataRange().getValues();
+      for (var i = 1; i < rows.length; i++) {
+        if (rows[i][0] == data.username) {
+          return createJsonResponse({ status: 'error', message: 'Tên tài khoản đã tồn tại' });
+        }
+      }
+      var role = data.username.toLowerCase() === 'admin' ? 'admin' : 'user';
+      var initBal = 1000000;
+      usersSheet.appendRow([data.username, data.password, role, initBal, new Date().toISOString()]);
+      return createJsonResponse({ status: 'ok', username: data.username, role: role, balance: initBal });
+    }
+    
+    if (action === 'updateBalance') {
+      var rows = usersSheet.getDataRange().getValues();
+      for (var i = 1; i < rows.length; i++) {
+        if (rows[i][0] == data.username) {
+          usersSheet.getRange(i + 1, 4).setValue(data.balance);
+          return createJsonResponse({ status: 'ok', balance: data.balance });
+        }
+      }
+    }
+    
+    if (action === 'logTrade') {
+      tradesSheet.appendRow([new Date().toISOString(), data.username, data.type, data.shares, data.entryPrice, data.exitPrice, data.pnl, data.reason]);
+      return createJsonResponse({ status: 'ok' });
+    }
+    
+    if (action === 'saveSettings') {
+      settingsSheet.clear();
+      settingsSheet.appendRow(['Key', 'Value']);
+      settingsSheet.appendRow(['basePrice', data.settings.basePrice]);
+      settingsSheet.appendRow(['volatility', data.settings.volatility]);
+      settingsSheet.appendRow(['tickSize', data.settings.tickSize]);
+      settingsSheet.appendRow(['closeDelaySec', data.settings.closeDelaySec]);
+      settingsSheet.appendRow(['sourceAsset', data.settings.sourceAsset]);
+      return createJsonResponse({ status: 'ok' });
+    }
+    
+    return createJsonResponse({ status: 'unknown_action' });
+  } catch(err) {
+    return createJsonResponse({ status: 'error', message: err.toString() });
+  }
+}
+
+function doGet(e) {
+  return createJsonResponse({ status: 'ok', message: 'WIKY Pro Trade GAS API is Running!' });
+}
+
+function createJsonResponse(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}`;
+
+    /* Global Loading Overlay Helpers */
+    function showLoading(text = "Đang xử lý...") {
+      const el = document.getElementById('global-loading-overlay');
+      const txt = document.getElementById('global-loading-text');
+      if (txt) txt.textContent = text;
+      if (el) el.classList.remove('hidden');
+    }
+
+    function hideLoading() {
+      const el = document.getElementById('global-loading-overlay');
+      if (el) el.classList.add('hidden');
+    }
+
+    async function callGasApi(action, payload = {}) {
+      try {
+        const resp = await fetch(GAS_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action, ...payload })
+        });
+        const json = await resp.json();
+        updateGasStatus(true);
+        return json;
+      } catch (err) {
+        console.warn("GAS API sync fallback to local memory:", err);
+        updateGasStatus(false);
+        return mockGasApi(action, payload);
+      }
+    }
+
+    function mockGasApi(action, payload) {
+      if (action === 'getUsers') {
+        const usersList = Object.keys(localUsersDb).map(uname => ({
+          username: uname,
+          role: localUsersDb[uname].role,
+          balance: localUsersDb[uname].balance
+        }));
+        return { status: 'ok', users: usersList };
+      }
+      if (action === 'login') {
+        const u = localUsersDb[payload.username];
+        if (u && String(u.password) === String(payload.password)) {
+          return { status: 'ok', username: payload.username, role: u.role, balance: u.balance };
+        }
+        return { status: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' };
+      }
+      if (action === 'register') {
+        if (localUsersDb[payload.username]) {
+          return { status: 'error', message: 'Tên tài khoản này đã có người sử dụng' };
+        }
+        const role = payload.username.toLowerCase() === 'admin' ? 'admin' : 'user';
+        localUsersDb[payload.username] = {
+          password: payload.password,
+          role: role,
+          balance: 1000000
+        };
+        return { status: 'ok', username: payload.username, role: role, balance: 1000000 };
+      }
+      if (action === 'updateBalance') {
+        if (localUsersDb[payload.username]) {
+          localUsersDb[payload.username].balance = payload.balance;
+        }
+        return { status: 'ok', balance: payload.balance };
+      }
+      return { status: 'ok' };
+    }
+
+    function updateGasStatus(connected) {
+      isGasConnected = connected;
+      const dot = document.getElementById('gas-status-dot');
+      const badge = document.getElementById('gas-status-badge');
+      if (dot && badge) {
+        if (connected) {
+          dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse absolute top-1.5 right-1.5';
+          badge.setAttribute('title', 'Google Sheet: Đã kết nối & Đồng bộ tốt');
+        } else {
+          dot.className = 'w-2 h-2 rounded-full bg-amber-400 absolute top-1.5 right-1.5';
+          badge.setAttribute('title', 'Google Sheet: Chạy bộ nhớ cục bộ (Offline)');
+        }
+      }
+    }
+
+    function setAuthenticatedUser(user) {
+      currentUser = user;
+      const overlay = document.getElementById('chart-login-overlay');
+      const canvasEl = document.getElementById('trade-chart');
+
+      if (user) {
+        balance = user.balance;
+        initialBalance = user.balance;
+        if (overlay) overlay.classList.add('hidden');
+        if (canvasEl) canvasEl.classList.remove('blur-sm', 'opacity-30');
+      } else {
+        balance = 0;
+        initialBalance = 1000000;
+        if (overlay) overlay.classList.remove('hidden');
+        if (canvasEl) canvasEl.classList.add('blur-sm', 'opacity-30');
+      }
+
+      const btnOpenAuth = document.getElementById('btn-open-auth');
+      const userProfilePill = document.getElementById('user-profile-pill');
+      const headerUsername = document.getElementById('header-username');
+      const headerUserRole = document.getElementById('header-user-role');
+      const btnOpenSettings = document.getElementById('btn-open-settings');
+
+      if (user) {
+        btnOpenAuth.classList.add('hidden');
+        userProfilePill.classList.remove('hidden');
+        userProfilePill.classList.add('flex');
+        headerUsername.textContent = user.username;
+        headerUserRole.textContent = user.role.toUpperCase();
+
+        if (user.role === 'admin') {
+          headerUserRole.className = 'text-[9px] px-1 py-0.2 rounded font-bold bg-amber-400 text-black';
+          btnOpenSettings.classList.remove('hidden');
+          btnOpenSettings.classList.add('flex');
+        } else {
+          headerUserRole.className = 'text-[9px] px-1 py-0.2 rounded font-bold bg-emerald-400/20 text-emerald-400';
+          btnOpenSettings.classList.add('hidden');
+          btnOpenSettings.classList.remove('flex');
+        }
+
+        showToast(`Đăng nhập thành công: ${user.username} (${user.role.toUpperCase()})! Vốn: ${formatVND(balance)}`, "success");
+      } else {
+        btnOpenAuth.classList.remove('hidden');
+        userProfilePill.classList.add('hidden');
+        userProfilePill.classList.remove('flex');
+        btnOpenSettings.classList.add('hidden');
+        btnOpenSettings.classList.remove('flex');
+      }
+
+      updateHeaderBalances();
+      updateEstimates();
+    }
+
+    function requireAuth() {
+      if (!currentUser) {
+        document.getElementById('auth-modal').classList.remove('hidden');
+        showToast("Vui lòng đăng nhập hoặc đăng ký tài khoản để giao dịch!", "warning");
+        return false;
+      }
+      return true;
+    }
 
     function initNewMarketScenario(forcedAsset = null, notify = false) {
       const asset = forcedAsset || (selectedRealAsset === 'RANDOM'
@@ -1007,8 +1432,8 @@
       if (allCandles.length === 0) return;
 
       const totalCandleSpan = candleWidth + candleGap;
-      const priceAxisWidth = PRICE_AXIS_WIDTH; // Compact price column (74px)
-      const rightPadding = RIGHT_PADDING;     // Clean spacing
+      const priceAxisWidth = PRICE_AXIS_WIDTH; // 58px snug width
+      const rightPadding = RIGHT_PADDING;     // 24px padding
       const chartPlotWidth = w - priceAxisWidth;
       const effectiveDrawWidth = chartPlotWidth - rightPadding;
       const visibleCount = Math.ceil(effectiveDrawWidth / totalCandleSpan) + 4;
@@ -1047,17 +1472,17 @@
         return (chartPlotWidth - rightPadding) - (offsetFromEnd * totalCandleSpan);
       };
 
-      // Compact axis badge helper
+      // Compact axis badge drawing helper
       const drawAxisBadge = (y, bgColor, textColor, label, borderColor = null) => {
-        const badgeH = 17;
-        const badgeW = priceAxisWidth - 4;
-        const badgeX = chartPlotWidth + 2;
+        const badgeH = 15;
+        const badgeW = priceAxisWidth - 3;
+        const badgeX = chartPlotWidth + 1.5;
         const badgeY = Math.max(2, Math.min(chartAreaH - badgeH - 2, y - badgeH / 2));
 
         ctx.fillStyle = bgColor;
         if (ctx.roundRect) {
           ctx.beginPath();
-          ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 3);
+          ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 2);
           ctx.fill();
         } else {
           ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
@@ -1070,7 +1495,7 @@
         }
 
         ctx.fillStyle = textColor;
-        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.font = 'bold 8.5px JetBrains Mono';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(label, badgeX + badgeW / 2, badgeY + badgeH / 2);
@@ -1078,18 +1503,18 @@
       };
 
       const drawChartLineTag = (text, y, bgColor, textColor) => {
-        ctx.font = 'bold 8.5px JetBrains Mono';
-        const tagPadding = 5;
+        ctx.font = 'bold 8px JetBrains Mono';
+        const tagPadding = 4;
         const textMetrics = ctx.measureText(text);
         const tagW = textMetrics.width + tagPadding * 2;
-        const tagH = 15;
-        const tagX = Math.max(8, chartPlotWidth - rightPadding - tagW);
+        const tagH = 14;
+        const tagX = Math.max(6, chartPlotWidth - rightPadding - tagW);
         const tagY = y - tagH / 2;
 
         ctx.fillStyle = bgColor;
         if (ctx.roundRect) {
           ctx.beginPath();
-          ctx.roundRect(tagX, tagY, tagW, tagH, 3);
+          ctx.roundRect(tagX, tagY, tagW, tagH, 2);
           ctx.fill();
         } else {
           ctx.fillRect(tagX, tagY, tagW, tagH);
@@ -1102,7 +1527,7 @@
         ctx.textBaseline = 'alphabetic';
       };
 
-      // 1. Grid Lines & Compact Price Axis Background
+      // 1. Grid Lines & Price Axis Background
       ctx.fillStyle = '#12151a';
       ctx.fillRect(chartPlotWidth, 0, priceAxisWidth, chartAreaH);
 
@@ -1118,9 +1543,9 @@
 
         const pVal = padMax - (padRange / gridCount) * i;
         ctx.fillStyle = '#94a3b8';
-        ctx.font = '600 9.5px JetBrains Mono';
+        ctx.font = '600 8.5px JetBrains Mono';
         ctx.textAlign = 'left';
-        ctx.fillText(formatVND(pVal), chartPlotWidth + 4, y + 3.5);
+        ctx.fillText(formatVND(pVal), chartPlotWidth + 3, y + 3);
       }
 
       ctx.beginPath();
@@ -1141,7 +1566,7 @@
       ctx.fillRect(0, chartAreaH, w, h - chartAreaH);
 
       ctx.fillStyle = '#848e9c';
-      ctx.font = '9.5px JetBrains Mono';
+      ctx.font = '9px JetBrains Mono';
       ctx.textAlign = 'center';
       const timeStep = Math.max(1, Math.floor(visibleData.length / 5));
       for (let i = 0; i < visibleData.length; i += timeStep) {
@@ -1331,7 +1756,7 @@
         }
       });
 
-      // 7. Current Price Marker & Snug Gold Badge on Price Axis
+      // 7. Current Price Marker & Gold Badge
       const curY = getY(currentPrice);
       ctx.setLineDash([2, 2]);
       ctx.strokeStyle = '#f0b90b';
@@ -1361,7 +1786,7 @@
           ctx.setLineDash([]);
 
           ctx.fillStyle = '#38bdf8';
-          ctx.font = '9.5px JetBrains Mono';
+          ctx.font = '8.5px JetBrains Mono';
           ctx.fillText('Ngang: ' + formatVND(d.price), 15, y - 4);
         } else if (d.type === 'line' && d.p1) {
           const x1 = getX(d.p1.idx);
@@ -1591,7 +2016,7 @@
       document.getElementById('time-drag-hint').classList.add('hidden');
     });
 
-    // Touch event listeners
+    // Touch event handling for mobile devices
     canvas.addEventListener('touchstart', (e) => {
       const rect = canvas.getBoundingClientRect();
       const chartPlotWidth = canvas.clientWidth - PRICE_AXIS_WIDTH;
@@ -1734,6 +2159,7 @@
       showToast(showBoll ? "Đã bật Dải Bollinger Bands" : "Đã ẩn Dải Bollinger Bands", "info");
     });
 
+    // Drawing Toolbox Toggle (Collapsed by default)
     const btnToggleToolbox = document.getElementById('btn-toggle-toolbox');
     const toolboxItems = document.getElementById('toolbox-items');
     const toolboxChevronIcon = document.getElementById('toolbox-chevron-icon');
@@ -1891,6 +2317,9 @@
       });
 
       balance -= margin;
+      if (currentUser) {
+        callGasApi('updateBalance', { username: currentUser.username, balance: balance });
+      }
       updateHeaderBalances();
       updatePositionsTable();
     }
@@ -1956,6 +2385,20 @@
         time: new Date().toLocaleTimeString('vi-VN')
       });
 
+      // Synchronize trade and balance to Google Sheets
+      if (currentUser) {
+        callGasApi('updateBalance', { username: currentUser.username, balance: balance });
+        callGasApi('logTrade', {
+          username: currentUser.username,
+          type: pos.type,
+          shares: pos.shares,
+          entryPrice: pos.entryPrice,
+          exitPrice: exitPrice,
+          pnl: pnl,
+          reason: reason
+        });
+      }
+
       if (pnl >= 0) {
         showToast(`+${formatVND(pnl)} - ${reason}`, "success");
       } else {
@@ -2011,7 +2454,6 @@
           closeBtn.disabled = false;
           closeBtnText.textContent = 'Đóng Hết';
 
-          // Clear any individual timers
           Object.keys(activeCloseTimers).forEach(id => {
             clearInterval(activeCloseTimers[id].interval);
             delete activeCloseTimers[id];
@@ -2066,11 +2508,11 @@
       cEl.textContent = `${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%`;
 
       if (changePct >= 0) {
-        pEl.className = 'text-base sm:text-lg font-bold font-mono text-brand-buy leading-tight';
-        cEl.className = 'text-[11px] font-mono font-semibold text-brand-buy leading-none';
+        pEl.className = 'text-sm sm:text-lg font-bold font-mono text-brand-buy leading-tight';
+        cEl.className = 'text-[10px] sm:text-[11px] font-mono font-semibold text-brand-buy leading-none';
       } else {
-        pEl.className = 'text-base sm:text-lg font-bold font-mono text-brand-sell leading-tight';
-        cEl.className = 'text-[11px] font-mono font-semibold text-brand-sell leading-none';
+        pEl.className = 'text-sm sm:text-lg font-bold font-mono text-brand-sell leading-tight';
+        cEl.className = 'text-[10px] sm:text-[11px] font-mono font-semibold text-brand-sell leading-none';
       }
 
       let h24 = price;
@@ -2099,7 +2541,11 @@
       });
 
       const totalEquity = balance + lockedMargin + totalUnrealized;
-      document.getElementById('nav-balance').textContent = formatVND(totalEquity);
+      const navBal = document.getElementById('nav-balance');
+      if (navBal) navBal.textContent = formatVND(totalEquity);
+
+      const liveCapBadge = document.getElementById('live-unlocked-balance');
+      if (liveCapBadge) liveCapBadge.textContent = formatVND(balance);
 
       const pnlEl = document.getElementById('total-unrealized-pnl');
       pnlEl.textContent = (totalUnrealized >= 0 ? '+' : '') + formatVND(totalUnrealized);
@@ -2233,7 +2679,6 @@
       if (maxEl) maxEl.textContent = maxS > 0 ? maxS.toLocaleString() : '0';
     }
 
-    // Trade Mode Switch
     document.getElementById('mode-spot').addEventListener('click', function() {
       tradeMode = 'spot';
       this.className = 'trade-mode-btn py-1 font-semibold rounded bg-brand-panelLight text-white';
@@ -2313,6 +2758,8 @@
     });
 
     function submitOrder(side) {
+      if (!requireAuth()) return;
+
       const curPrice = currentCandle ? currentCandle.close : WIKY_SPEC.basePrice;
       const shares = parseInt(document.getElementById('input-shares').value);
 
@@ -2366,6 +2813,7 @@
     document.getElementById('btn-buy').addEventListener('click', () => submitOrder('LONG'));
     document.getElementById('btn-sell').addEventListener('click', () => submitOrder('SHORT'));
 
+    // Timeframe selector buttons
     document.querySelectorAll('.tf-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         document.querySelectorAll('.tf-btn').forEach(b => {
@@ -2392,7 +2840,7 @@
       simTimer = setInterval(simulatePriceStep, interval);
     }
 
-    // Speed Popover & Slider
+    // Fast-Forward Speed Popover
     const speedPopover = document.getElementById('speed-popover');
     const speedDisplayBtn = document.getElementById('speed-display-btn');
     const speedSlider = document.getElementById('speed-range-slider');
@@ -2427,12 +2875,253 @@
       });
     });
 
-    const modal = document.getElementById('settings-modal');
+    const tabAuthLogin = document.getElementById('tab-auth-login');
+    const tabAuthRegister = document.getElementById('tab-auth-register');
+    const btnSubmitAuthLabel = document.getElementById('btn-submit-auth-label');
+
+    tabAuthLogin.addEventListener('click', () => {
+      authMode = 'login';
+      tabAuthLogin.className = 'py-1.5 rounded-lg bg-brand-panelLight text-amber-400 font-bold transition';
+      tabAuthRegister.className = 'py-1.5 rounded-lg text-brand-textMuted hover:text-white transition';
+      btnSubmitAuthLabel.textContent = 'ĐĂNG NHẬP';
+    });
+
+    tabAuthRegister.addEventListener('click', () => {
+      authMode = 'register';
+      tabAuthRegister.className = 'py-1.5 rounded-lg bg-brand-panelLight text-emerald-400 font-bold transition';
+      tabAuthLogin.className = 'py-1.5 rounded-lg text-brand-textMuted hover:text-white transition';
+      btnSubmitAuthLabel.textContent = 'ĐĂNG KÝ VÀ NHẬN 1 TRIỆU';
+    });
+
+    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('auth-username').value.trim();
+      const password = document.getElementById('auth-password').value.trim();
+
+      if (!username || !password) {
+        showToast("Vui lòng nhập đầy đủ tên tài khoản và mật khẩu!", "warning");
+        return;
+      }
+
+      const submitBtn = document.getElementById('btn-submit-auth');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50');
+
+      showLoading(authMode === 'login' ? 'Đang đăng nhập...' : 'Đang đăng ký...');
+
+      const res = await callGasApi(authMode, { username, password });
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('opacity-50');
+      hideLoading();
+
+      if (res && res.status === 'ok') {
+        setAuthenticatedUser({
+          username: res.username,
+          role: res.role,
+          balance: res.balance
+        });
+        document.getElementById('auth-modal').classList.add('hidden');
+        document.getElementById('auth-username').value = '';
+        document.getElementById('auth-password').value = '';
+      } else {
+        showToast(res.message || "Xác thực không thành công!", "error");
+      }
+    });
+
+    document.getElementById('btn-open-auth').addEventListener('click', () => {
+      document.getElementById('auth-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-close-auth').addEventListener('click', () => {
+      document.getElementById('auth-modal').classList.add('hidden');
+    });
+
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      currentUser = null;
+      setAuthenticatedUser(null);
+      showToast("Đã đăng xuất tài khoản an toàn!", "info");
+    });
+
+    const btnOverlayLogin = document.getElementById('btn-overlay-login');
+    if (btnOverlayLogin) {
+      btnOverlayLogin.addEventListener('click', () => {
+        document.getElementById('auth-modal').classList.remove('hidden');
+      });
+    }
+
+    // Admin Settings Modal Logic
+    const adminModal = document.getElementById('settings-modal');
     const modalBtnPauseToggle = document.getElementById('modal-btn-pause-toggle');
     const modalPauseIcon = document.getElementById('modal-pause-icon');
     const modalPauseLabel = document.getElementById('modal-pause-label');
     const modalSimDot = document.getElementById('modal-sim-status-dot');
     const modalSimText = document.getElementById('modal-sim-status-text');
+
+    /* Admin Sub-Tabs Navigation */
+    const tabBtnAdminConfig = document.getElementById('tab-btn-admin-config');
+    const tabBtnAdminUsers = document.getElementById('tab-btn-admin-users');
+    const adminViewConfig = document.getElementById('admin-view-config');
+    const adminViewUsers = document.getElementById('admin-view-users');
+
+    tabBtnAdminConfig.addEventListener('click', () => {
+      tabBtnAdminConfig.className = 'py-1.5 rounded-lg bg-brand-panelLight text-amber-400 font-bold transition';
+      tabBtnAdminUsers.className = 'py-1.5 rounded-lg text-brand-textMuted hover:text-white transition flex items-center justify-center space-x-1.5';
+      adminViewConfig.classList.remove('hidden');
+      adminViewUsers.classList.add('hidden');
+    });
+
+    tabBtnAdminUsers.addEventListener('click', () => {
+      tabBtnAdminUsers.className = 'py-1.5 rounded-lg bg-brand-panelLight text-amber-400 font-bold transition flex items-center justify-center space-x-1.5';
+      tabBtnAdminConfig.className = 'py-1.5 rounded-lg text-brand-textMuted hover:text-white transition';
+      adminViewUsers.classList.remove('hidden');
+      adminViewConfig.classList.add('hidden');
+      loadAllUsersList();
+    });
+
+    /* Admin All-Users Capital Management */
+    let cachedUsersList = [];
+    let currentEditingUser = null;
+
+    async function loadAllUsersList() {
+      const tbody = document.getElementById('admin-users-tbody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="p-4 text-center text-brand-textMuted text-xs">
+            <i class="fa-solid fa-spinner animate-spin mr-1.5 text-amber-400"></i> Đang đọc dữ liệu từ Google Sheet...
+          </td>
+        </tr>
+      `;
+      const res = await callGasApi('getUsers');
+      if (res && res.status === 'ok' && Array.isArray(res.users)) {
+        cachedUsersList = res.users;
+        renderAdminUsersTable(cachedUsersList);
+      } else {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="p-4 text-center text-rose-400 text-xs">
+              Không thể tải danh sách tài khoản từ Sheet.
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function renderAdminUsersTable(list) {
+      const tbody = document.getElementById('admin-users-tbody');
+      tbody.innerHTML = '';
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="p-4 text-center text-brand-textMuted text-xs">Không tìm thấy tài khoản nào.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      list.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-brand-panelLight/40 transition';
+        const isAdmin = u.role === 'admin';
+        tr.innerHTML = `
+          <td class="py-2 px-2.5 font-bold text-white max-w-[100px] truncate">${u.username}</td>
+          <td class="py-2 px-2">
+            <span class="text-[9px] px-1 py-0.5 rounded font-bold ${isAdmin ? 'bg-amber-400 text-black' : 'bg-emerald-500/20 text-emerald-400'}">${u.role.toUpperCase()}</span>
+          </td>
+          <td class="py-2 px-2 text-right font-bold font-mono ${u.balance >= 0 ? 'text-amber-400' : 'text-rose-400'}">
+            ${formatVND(u.balance)}
+          </td>
+          <td class="py-2 px-2.5 text-center">
+            <button class="px-2 py-0.5 rounded bg-brand-panelLight hover:bg-amber-400 hover:text-black text-amber-400 border border-brand-border text-[10px] font-bold transition btn-select-edit-user" data-username="${u.username}">
+              Sửa Vốn
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.btn-select-edit-user').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const uname = e.currentTarget.getAttribute('data-username');
+          const target = cachedUsersList.find(x => x.username === uname);
+          if (target) {
+            openUserEditor(target);
+          }
+        });
+      });
+    }
+
+    document.getElementById('input-search-user').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = cachedUsersList.filter(u => u.username.toLowerCase().includes(q));
+      renderAdminUsersTable(filtered);
+    });
+
+    document.getElementById('btn-refresh-users-list').addEventListener('click', () => {
+      loadAllUsersList();
+      showToast("Đã làm mới danh sách thành viên từ Google Sheet!", "info");
+    });
+
+    function openUserEditor(user) {
+      currentEditingUser = user;
+      const box = document.getElementById('admin-user-editor-box');
+      box.classList.remove('hidden');
+      document.getElementById('editing-username').textContent = user.username;
+      document.getElementById('editing-current-bal').textContent = formatVND(user.balance);
+      document.getElementById('input-user-new-balance').value = user.balance;
+      box.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.getElementById('btn-cancel-edit-user').addEventListener('click', () => {
+      document.getElementById('admin-user-editor-box').classList.add('hidden');
+      currentEditingUser = null;
+    });
+
+    document.querySelectorAll('.btn-user-quick-adj').forEach(b => {
+      b.addEventListener('click', (e) => {
+        if (!currentEditingUser) return;
+        const delta = parseFloat(e.currentTarget.getAttribute('data-adj')) || 0;
+        const cur = parseFloat(document.getElementById('input-user-new-balance').value) || currentEditingUser.balance;
+        const nextVal = Math.max(0, cur + delta);
+        document.getElementById('input-user-new-balance').value = nextVal;
+      });
+    });
+
+    document.getElementById('btn-save-user-balance').addEventListener('click', async () => {
+      if (!currentEditingUser) return;
+      const newBal = parseFloat(document.getElementById('input-user-new-balance').value);
+      if (isNaN(newBal) || newBal < 0) {
+        showToast("Vui lòng nhập số dư hợp lệ (>= 0 VNĐ)!", "warning");
+        return;
+      }
+
+      showLoading(`Đang cập nhật vốn cho tài khoản "${currentEditingUser.username}" lên Google Sheet...`);
+      const res = await callGasApi('updateBalance', {
+        username: currentEditingUser.username,
+        balance: newBal
+      });
+      hideLoading();
+
+      if (res && res.status === 'ok') {
+        currentEditingUser.balance = newBal;
+        if (localUsersDb[currentEditingUser.username]) {
+          localUsersDb[currentEditingUser.username].balance = newBal;
+        }
+
+        // If the edited user is currently the active logged-in admin user, update active session state as well
+        if (currentUser && currentUser.username === currentEditingUser.username) {
+          balance = newBal;
+          updateHeaderBalances();
+          updateEstimates();
+        }
+
+        document.getElementById('editing-current-bal').textContent = formatVND(newBal);
+        renderAdminUsersTable(cachedUsersList);
+        showToast(`Đã đồng bộ vốn của "${currentEditingUser.username}" thành ${formatVND(newBal)} lên Google Sheet!`, "success");
+      } else {
+        showToast("Lỗi khi cập nhật vốn lên Google Sheet!", "error");
+      }
+    });
 
     function updateSimulationControlUI() {
       if (isPaused) {
@@ -2456,39 +3145,65 @@
       showToast(isPaused ? "Đã tạm dừng mô phỏng thị trường." : "Đã tiếp tục chạy mô phỏng.", "info");
     });
 
-    // Passcode 2412 Unlock Engine
-    const inputAdminPasscode = document.getElementById('input-admin-passcode');
-    const btnUnlockSettings = document.getElementById('btn-unlock-settings');
-    const passcodeErrorMsg = document.getElementById('passcode-error-msg');
-    const passcodeGateBox = document.getElementById('passcode-gate-box');
-    const protectedFieldsContainer = document.getElementById('protected-fields-container');
-    const passcodeStatusBadge = document.getElementById('passcode-status-badge');
-
-    btnUnlockSettings.addEventListener('click', () => {
-      const code = inputAdminPasscode.value.trim();
-      if (code === '7777') {
-        isSettingsUnlocked = true;
-        passcodeErrorMsg.classList.add('hidden');
-        passcodeGateBox.classList.add('hidden');
-        protectedFieldsContainer.classList.remove('opacity-40', 'pointer-events-none');
-        passcodeStatusBadge.textContent = 'Đã Mở Khóa';
-        passcodeStatusBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
-        showToast("Mở khóa tham số nâng cao thành công!", "success");
-      } else {
-        passcodeErrorMsg.classList.remove('hidden');
-        inputAdminPasscode.classList.add('border-rose-500');
-        showToast("Mật mã không đúng! Vui lòng nhập 2412", "error");
-      }
+    // Admin Capital Modifiers
+    document.querySelectorAll('.btn-quick-adjust-cap').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (!currentUser || currentUser.role !== 'admin') return;
+        const delta = parseFloat(e.currentTarget.getAttribute('data-amount')) || 0;
+        if (balance + delta < 0) {
+          showToast("Số vốn không thể giảm xuống dưới 0 ₫!", "warning");
+          return;
+        }
+        balance += delta;
+        callGasApi('updateBalance', { username: currentUser.username, balance: balance });
+        updateHeaderBalances();
+        updateEstimates();
+        showToast(`Admin đã ${delta >= 0 ? 'cộng' : 'trừ'} ${formatVND(Math.abs(delta))} vào ví!`, "success");
+      });
     });
 
-    // Volatility Range Slider listener inside Modal
+    document.getElementById('btn-deposit-capital').addEventListener('click', () => {
+      if (!currentUser || currentUser.role !== 'admin') return;
+      const amtInput = document.getElementById('input-custom-capital-amount');
+      const amt = parseFloat(amtInput.value);
+      if (isNaN(amt) || amt <= 0) {
+        showToast("Vui lòng nhập số tiền hợp lệ để nạp!", "warning");
+        return;
+      }
+      balance += amt;
+      amtInput.value = '';
+      callGasApi('updateBalance', { username: currentUser.username, balance: balance });
+      updateHeaderBalances();
+      updateEstimates();
+      showToast(`Đã nạp thêm ${formatVND(amt)} vào vốn ví!`, "success");
+    });
+
+    document.getElementById('btn-withdraw-capital').addEventListener('click', () => {
+      if (!currentUser || currentUser.role !== 'admin') return;
+      const amtInput = document.getElementById('input-custom-capital-amount');
+      const amt = parseFloat(amtInput.value);
+      if (isNaN(amt) || amt <= 0) {
+        showToast("Vui lòng nhập số tiền hợp lệ để rút!", "warning");
+        return;
+      }
+      if (amt > balance) {
+        showToast("Số tiền rút vượt quá số dư ví hiện có!", "error");
+        return;
+      }
+      balance -= amt;
+      amtInput.value = '';
+      callGasApi('updateBalance', { username: currentUser.username, balance: balance });
+      updateHeaderBalances();
+      updateEstimates();
+      showToast(`Đã rút ${formatVND(amt)} khỏi vốn ví!`, "success");
+    });
+
     const settingVolRange = document.getElementById('setting-volatility-range');
     const labelVolVal = document.getElementById('label-volatility-val');
     settingVolRange.addEventListener('input', (e) => {
       labelVolVal.textContent = parseFloat(e.target.value).toFixed(2) + '%';
     });
 
-    // Close Delay Input listener inside Modal
     const settingCloseDelay = document.getElementById('setting-close-delay');
     const labelCloseDelay = document.getElementById('label-close-delay');
     settingCloseDelay.addEventListener('input', (e) => {
@@ -2496,12 +3211,13 @@
       labelCloseDelay.textContent = val > 0 ? `${val}s (Trễ ${val} giây)` : '0s (Tức thì)';
     });
 
-    // Open Settings Modal
     document.getElementById('btn-open-settings').addEventListener('click', () => {
-      document.getElementById('setting-balance-input').value = initialBalance;
-      document.getElementById('setting-source-asset').value = selectedRealAsset;
+      if (!currentUser || currentUser.role !== 'admin') {
+        showToast("Chỉ tài khoản Admin mới có quyền truy cập cài đặt!", "error");
+        return;
+      }
 
-      // Populate protected values
+      document.getElementById('setting-source-asset').value = selectedRealAsset;
       document.getElementById('setting-base-price').value = WIKY_SPEC.basePrice;
       document.getElementById('label-base-price').textContent = formatVND(WIKY_SPEC.basePrice);
 
@@ -2514,46 +3230,48 @@
       labelCloseDelay.textContent = WIKY_SPEC.closeDelaySec > 0 ? `${WIKY_SPEC.closeDelaySec}s (Trễ ${WIKY_SPEC.closeDelaySec} giây)` : '0s (Tức thì)';
 
       updateSimulationControlUI();
-      modal.classList.remove('hidden');
+      updateHeaderBalances();
+      adminModal.classList.remove('hidden');
     });
 
     function closeSettingsModal() {
-      modal.classList.add('hidden');
-      passcodeErrorMsg.classList.add('hidden');
+      adminModal.classList.add('hidden');
     }
 
     document.getElementById('btn-close-settings').addEventListener('click', closeSettingsModal);
     document.getElementById('btn-close-settings-alt').addEventListener('click', closeSettingsModal);
 
-    document.getElementById('btn-reset-balance').addEventListener('click', () => {
-      document.getElementById('setting-balance-input').value = 5000000;
-    });
-
-    // Save Settings
-    document.getElementById('btn-save-settings').addEventListener('click', () => {
-      const newBal = parseFloat(document.getElementById('setting-balance-input').value) || 5000000;
-      initialBalance = newBal;
-      balance = newBal;
-      positions = [];
-      pendingOrders = [];
-      tradeHistory = [];
+    document.getElementById('btn-save-settings').addEventListener('click', async () => {
+      if (!currentUser || currentUser.role !== 'admin') return;
 
       selectedRealAsset = document.getElementById('setting-source-asset').value;
 
-      // Apply protected settings if unlocked
-      if (isSettingsUnlocked) {
-        const newBase = parseFloat(document.getElementById('setting-base-price').value) || 77000;
-        WIKY_SPEC.basePrice = newBase;
+      const newBase = parseFloat(document.getElementById('setting-base-price').value) || 77000;
+      WIKY_SPEC.basePrice = newBase;
 
-        const newVol = parseFloat(settingVolRange.value) / 100;
-        WIKY_SPEC.volatility = newVol;
+      const newVol = parseFloat(settingVolRange.value) / 100;
+      WIKY_SPEC.volatility = newVol;
 
-        const newTick = parseInt(document.getElementById('setting-tick-size').value) || 100;
-        WIKY_SPEC.tickSize = newTick;
+      const newTick = parseInt(document.getElementById('setting-tick-size').value) || 100;
+      WIKY_SPEC.tickSize = newTick;
 
-        const newDelay = Math.max(0, parseInt(settingCloseDelay.value) || 0);
-        WIKY_SPEC.closeDelaySec = newDelay;
-      }
+      const newDelay = Math.max(0, parseInt(settingCloseDelay.value) || 0);
+      WIKY_SPEC.closeDelaySec = newDelay;
+
+      showLoading("Đang lưu các tham số cài đặt lên Google Sheet...");
+
+      // Đồng bộ thông số lên Google Sheet
+      await callGasApi('saveSettings', {
+        settings: {
+          basePrice: WIKY_SPEC.basePrice,
+          volatility: WIKY_SPEC.volatility,
+          tickSize: WIKY_SPEC.tickSize,
+          closeDelaySec: WIKY_SPEC.closeDelaySec,
+          sourceAsset: selectedRealAsset
+        }
+      });
+
+      hideLoading();
 
       initNewMarketScenario(selectedRealAsset === 'RANDOM' ? null : selectedRealAsset, true);
 
@@ -2564,7 +3282,7 @@
       updateEstimates();
 
       closeSettingsModal();
-      showToast("Đã lưu và áp dụng cài đặt thành công!", "success");
+      showToast("Admin đã lưu và đồng bộ toàn bộ cài đặt lên Google Sheet!", "success");
     });
 
     // Positions Drawer Collapse Toggle
@@ -2688,6 +3406,16 @@
       updateEstimates();
       updateHeaderBalances();
       startSimulationLoop();
+
+      // Mặc định ban đầu chưa đăng nhập: làm mờ biểu đồ và hiện thông báo
+      setAuthenticatedUser(null);
+
+      // Tự động kiểm tra và đồng bộ kết nối Google Apps Script ngay lập tức
+      callGasApi('doGet').then((res) => {
+        if (res && res.status === 'ok') {
+          updateGasStatus(true);
+        }
+      });
 
       if (window.innerWidth < 1024) {
         switchMobileView('chart');
