@@ -144,7 +144,7 @@
             <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="10">10x</button>
             <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="50">50x</button>
             <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="100">100x</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="200">200x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="150">150x</button>
           </div>
         </div>
       </div>
@@ -782,7 +782,7 @@
             Hủy
           </button>
           <button id="btn-save-settings" class="w-2/3 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition">
-            LƯU & ÁP DỤNG LÊN SHEET
+            LƯU & ÁP DỤNG
           </button>
         </div>
       </div>
@@ -3042,7 +3042,7 @@
     });
 
     function setSpeed(spd) {
-      timeScale = Math.max(1, Math.min(200, spd));
+      timeScale = Math.max(1, Math.min(150, spd));
       speedDisplayBtn.textContent = timeScale + 'x';
       speedSliderVal.textContent = timeScale + 'x';
       speedSlider.value = timeScale;
