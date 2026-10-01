@@ -86,6 +86,13 @@
     .toast-anim {
       animation: toastFade 0.2s ease-out forwards;
     }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 10px rgba(240, 185, 11, 0.4); }
+      50% { box-shadow: 0 0 22px rgba(240, 185, 11, 0.8); }
+    }
+    .glow-gift {
+      animation: pulseGlow 2s infinite;
+    }
   </style>
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col">
@@ -101,7 +108,7 @@
             <span class="font-bold text-sm sm:text-base tracking-wide">WIKY</span>
             <span class="text-[9px] sm:text-[10px] bg-amber-400/10 text-amber-400 px-1 py-0.2 rounded font-mono font-semibold">/VNĐ</span>
           </div>
-          <span class="text-[8px] sm:text-[9px] text-brand-textMuted uppercase tracking-wider font-semibold">v2.3 Pro</span>
+          <span class="text-[8px] sm:text-[9px] text-brand-textMuted uppercase tracking-wider font-semibold">v2.4 Pro</span>
         </div>
       </div>
 
@@ -120,12 +127,18 @@
       </div>
     </div>
 
-    <!-- Quick Controls: Speed, Real Data, Sheets Status, Balance & User Auth / Admin Settings -->
+    <!-- Quick Controls: Giftcode Button, Speed, Real Data, Sheets Status, Balance & User Auth / Admin Settings -->
     <div class="flex items-center space-x-1.5 sm:space-x-2.5">
+      <!-- Giftcode Redeem Button (Always visible on mobile & laptop) -->
+      <button id="btn-open-giftcode" title="Nhập Giftcode nhận tiền vào ví" class="h-8 px-2 sm:px-2.5 rounded-lg bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-400/50 text-amber-300 font-bold text-xs flex items-center space-x-1.5 transition glow-gift">
+        <i class="fa-solid fa-gift text-amber-400 text-xs sm:text-sm"></i>
+        <span class="font-mono hidden xs:inline">Giftcode</span>
+      </button>
+
       <!-- Fast-Forward Multiplier with Popover Slider -->
       <div class="relative">
         <button id="btn-toggle-speed-menu" title="Tốc độ mô phỏng" class="h-8 px-2 sm:px-2.5 rounded-lg bg-brand-bg border border-brand-border text-amber-400 font-mono font-bold flex items-center justify-center space-x-1 hover:text-white transition text-xs">
-          <span id="speed-display-btn">1x</span>
+          <span id="speed-display-btn">x1</span>
           <i class="fa-solid fa-gauge-high text-[11px]"></i>
         </button>
 
@@ -135,16 +148,16 @@
             <span class="text-brand-textMuted flex items-center">
               <i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Tốc độ mô phỏng
             </span>
-            <span id="speed-slider-val" class="font-mono font-bold text-amber-400 text-xs">1x</span>
+            <span id="speed-slider-val" class="font-mono font-bold text-amber-400 text-xs">x1</span>
           </div>
           <input type="range" id="speed-range-slider" min="1" max="100" step="1" value="1" class="w-full custom-range bg-brand-panelLight h-2 rounded-lg appearance-none cursor-pointer mb-2.5">
           
           <div class="grid grid-cols-5 gap-1 text-[10px] font-mono">
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="1">1x</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="10">10x</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="50">50x</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="100">100x</button>
-            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="150">150x</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="1">x1</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="10">x10</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="50">x50</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-brand-textMuted hover:text-white" data-sp="100">x100</button>
+            <button class="quick-speed-btn py-1 rounded bg-brand-bg hover:bg-brand-panelLight text-amber-400 font-bold hover:text-white" data-sp="150">x150</button>
           </div>
         </div>
       </div>
@@ -156,10 +169,9 @@
       </button>
 
       <!-- Compact Google Sheets Status Indicator -->
-      <div id="gas-status-badge" title="Google Sheet: Đang kết nối..." class="h-8 w-8 px-0 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center relative cursor-help">
-        <i class="fa-solid fa-cloud text-xs text-brand-textMuted"></i>
-        <span id="gas-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse absolute top-1.5 right-1.5"></span>
-      </div>
+      <!--<div id="gas-status-badge" title="Google Sheet: Đang kết nối..." class="h-8 w-8 px-0 rounded-lg bg-brand-bg border border-brand-border flex items-center justify-center relative cursor-help">
+
+      </div>-->
 
       <!-- Balance Display (Desktop view) -->
       <div class="bg-brand-bg border border-brand-border px-3 py-1 rounded-lg text-right hidden sm:block">
@@ -198,7 +210,6 @@
     </div>
   </header>
 
-  <!-- Mobile Navigation Switcher (Chart / Trade / Positions) -->
   <nav class="lg:hidden h-9 bg-brand-panel border-b border-brand-border grid grid-cols-3 text-xs font-semibold z-20 flex-shrink-0">
     <button id="tab-nav-chart" class="mobile-tab-btn border-b-2 border-brand-accent text-brand-accent flex items-center justify-center space-x-1" data-view="chart">
       <i class="fa-solid fa-chart-line text-[11px]"></i>
@@ -362,8 +373,9 @@
             <button data-tab="tab-orders" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1">
               Lệnh Chờ (<span id="count-orders">0</span>)
             </button>
-            <button data-tab="tab-history" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1">
-              Lịch Sử
+            <button data-tab="tab-history" class="bot-tab-btn text-brand-textMuted hover:text-white pb-1 flex items-center space-x-1.5">
+              <span>Lịch Sử</span>
+              <span id="history-sync-indicator" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             </button>
           </div>
           <div class="flex items-center space-x-2">
@@ -418,22 +430,26 @@
           </div>
         </div>
 
-        <!-- Tab 3: History Table with Stats Summary -->
+        <!-- Tab 3: History Table with Stats Summary & Sync Button -->
         <div id="tab-history" class="bot-tab-content flex-1 overflow-x-auto overflow-y-auto hidden flex flex-col">
-          <!-- Trading Performance Summary Card -->
-          <div id="history-stats-bar" class="p-2 bg-brand-bg/80 border-b border-brand-border grid grid-cols-3 gap-2 text-center text-[10px] font-mono flex-shrink-0">
-            <div class="bg-brand-panel p-1.5 rounded border border-brand-border">
+          <!-- Trading Performance Summary Card & Sheet Sync Button -->
+          <div id="history-stats-bar" class="p-2 bg-brand-bg/80 border-b border-brand-border flex items-center justify-between gap-2 text-center text-[10px] font-mono flex-shrink-0 flex-wrap">
+            <div class="flex-1 min-w-[95px] bg-brand-panel p-1.5 rounded border border-brand-border">
               <span class="text-brand-textMuted block text-[9px]">Tổng Lãi/Lỗ:</span>
               <b id="stat-total-closed-pnl" class="text-brand-buy text-xs">0 ₫</b>
             </div>
-            <div class="bg-brand-panel p-1.5 rounded border border-brand-border">
+            <div class="flex-1 min-w-[95px] bg-brand-panel p-1.5 rounded border border-brand-border">
               <span class="text-brand-textMuted block text-[9px]">Tỷ Lệ Thắng:</span>
               <b id="stat-win-rate" class="text-amber-400 text-xs">0.0%</b>
             </div>
-            <div class="bg-brand-panel p-1.5 rounded border border-brand-border">
+            <div class="flex-1 min-w-[110px] bg-brand-panel p-1.5 rounded border border-brand-border">
               <span class="text-brand-textMuted block text-[9px]">Tổng Lệnh Đóng:</span>
               <b id="stat-total-trades-count" class="text-slate-200 text-xs">0 (0W - 0L)</b>
             </div>
+            <button id="btn-sync-history-sheet" title="Đồng bộ lại lịch sử từ Google Sheet" class="px-2.5 py-1.5 bg-brand-panelLight hover:bg-slate-700 text-amber-400 rounded-lg text-[10px] font-bold border border-brand-border transition flex items-center space-x-1 flex-shrink-0">
+              <i class="fa-solid fa-rotate"></i>
+              <span class="hidden sm:inline">Cập nhật</span>
+            </button>
           </div>
 
           <table class="w-full text-left text-[11px] font-mono min-w-[500px]">
@@ -449,13 +465,12 @@
             <tbody id="history-tbody" class="divide-y divide-brand-border/40"></tbody>
           </table>
           <div id="history-empty" class="p-6 text-center text-brand-textMuted text-xs">
-            Chưa có lịch sử giao dịch.
+            Chưa có lịch sử giao dịch trên hệ thống.
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Right Sidebar: Order Form & Compact Orderbook -->
     <div id="section-trade" class="hidden lg:flex w-full lg:w-72 xl:w-80 flex-col bg-brand-panel flex-shrink-0 h-full overflow-y-auto">
       
       <!-- Compact Orderbook: 3 Nearest Levels with Visual Depth -->
@@ -607,6 +622,104 @@
       </div>
     </div>
   </main>
+
+  <!-- POPUP TẶNG GIFTCODE SAU 60 GIÂY TRUY CẬP (YÊU CẦU: "Tặng code 7777") -->
+  <div id="popup-giftcode-60s" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[70] flex items-center justify-center p-4 hidden">
+    <div class="relative bg-gradient-to-b from-brand-panel to-[#11141a] border-2 border-amber-400/80 w-full max-w-sm rounded-3xl p-6 shadow-2xl text-center space-y-4 animate-bounce-short">
+      
+      <!-- Close button -->
+      <button id="btn-close-60s-popup" class="absolute right-3.5 top-3.5 text-brand-textMuted hover:text-white p-1 text-sm">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <!-- Animated Gift Badge -->
+      <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black text-3xl shadow-xl shadow-amber-500/20 transform rotate-3 hover:rotate-0 transition">
+        <i class="fa-solid fa-gift"></i>
+      </div>
+
+      <div class="space-y-1">
+        <div class="text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold">
+          🎉 BẠN ĐÃ TRẢI NGHIỆM ĐƯỢC 1 PHÚT
+        </div>
+        <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+          Tặng bạn Giftcode
+        </h2>
+        <p class="text-xs text-brand-textMuted leading-relaxed px-2">
+         Nhận ngay <b class="text-emerald-400 font-mono font-bold">+7.777.000 VNĐ</b> vào ví để tiếp tục chinh chiến.
+        </p>
+      </div>
+
+      <!-- Highlight Code Display -->
+      <div class="py-2.5 px-4 bg-brand-bg/90 border border-amber-400/40 rounded-xl flex items-center justify-between font-mono">
+        <div class="flex items-center space-x-2">
+          <span class="text-xs text-brand-textMuted">Giftcode:</span>
+          <span class="text-lg font-black text-amber-400 tracking-wider">VIP777</span>
+        </div>
+        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold">+7.777.000 ₫</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2 pt-1">
+        <button id="btn-claim-60s-code" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-black text-xs uppercase tracking-wide shadow-lg shadow-amber-500/20 transition flex items-center justify-center space-x-2 active:scale-95">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>Sao Chép & Nhận Ngay</span>
+        </button>
+        <button id="btn-dismiss-60s-code" class="text-[11px] text-brand-textMuted hover:text-white transition">
+          Để sau
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GIFTCODE MODAL -->
+  <div id="giftcode-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-brand-panel border border-brand-border w-full max-w-sm rounded-2xl p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-brand-border pb-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-amber-400 flex items-center justify-center text-black font-black text-xs">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">GIFTCODE</h3>
+        </div>
+        <button id="btn-close-giftcode" class="text-brand-textMuted hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="bg-amber-400/10 border border-amber-400/20 rounded-xl p-3 text-[11px] text-amber-300 space-y-1">
+        <div class="font-bold flex items-center"><i class="fa-solid fa-sparkles mr-1.5"></i> Nhập Giftcode để nạp vốn miễn phí</div>
+        <p class="text-brand-textMuted text-[10px]">Mỗi mã giftcode có thể áp dụng 1 lần cho từng tài khoản và được ghi nhận trực tiếp trên hệ thống.</p>
+      </div>
+
+      <!-- Quick Fill Code Badges -->
+      <div class="space-y-1">
+        <label class="text-[10px] text-brand-textMuted block">Mã khả dụng hiện tại (chạm để chọn):</label>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" class="btn-quick-fill-code px-2 py-1 rounded bg-brand-panelLight hover:bg-amber-400/20 hover:text-amber-400 border border-brand-border font-mono text-[10px] text-slate-300" data-code="VIP777">
+            VIP777 (+7.777M)
+          </button>
+          <button type="button" class="btn-quick-fill-code px-2 py-1 rounded bg-brand-panelLight hover:bg-amber-400/20 hover:text-amber-400 border border-brand-border font-mono text-[10px] text-slate-300" data-code="VIP999">
+            VIP999 (+5M)
+          </button>
+          <button type="button" class="btn-quick-fill-code px-2 py-1 rounded bg-brand-panelLight hover:bg-amber-400/20 hover:text-amber-400 border border-brand-border font-mono text-[10px] text-slate-300" data-code="WIKY2026">
+            WIKY2026 (+2M)
+          </button>
+        </div>
+      </div>
+
+      <form id="giftcode-form" class="space-y-3" onsubmit="return false;">
+        <div>
+          <label class="text-brand-textMuted block mb-1 text-xs">Mã Giftcode</label>
+          <input type="text" id="input-giftcode" required placeholder="Nhập mã (VD: VIP777, VIP999)" class="w-full bg-brand-bg border border-brand-border rounded-lg px-3 py-2 text-white font-mono uppercase text-sm font-bold tracking-wider focus:outline-none focus:border-amber-400">
+        </div>
+
+        <button type="submit" id="btn-submit-giftcode" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-bold text-xs shadow-lg transition flex items-center justify-center space-x-2">
+          <span>XÁC NHẬN</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+    </div>
+  </div>
 
   <!-- Auth Modal: Login / Register -->
   <div id="auth-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
@@ -866,7 +979,7 @@
   </div>
 
   <!-- Global Loading Overlay for Asynchronous Operations -->
-  <div id="global-loading-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-[2px] z-[60] flex flex-col items-center justify-center p-4 transition-opacity duration-200 hidden">
+  <div id="global-loading-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-[2px] z-[80] flex flex-col items-center justify-center p-4 transition-opacity duration-200 hidden">
     <div class="bg-brand-panel border border-brand-border/80 px-6 py-4 rounded-2xl shadow-2xl flex flex-col items-center space-y-3">
       <div class="relative w-10 h-10 flex items-center justify-center">
         <div class="w-10 h-10 rounded-full border-2 border-brand-border border-t-amber-400 animate-spin"></div>
@@ -956,7 +1069,7 @@
     };
 
     /* Hardcoded Google Apps Script Web App Endpoint */
-    const GAS_APP_URL = "https://script.google.com/macros/s/AKfycbzTc5Elw9Y9o6t81dZSETOrlUbRvaPmVVUSzwC8uRPeeVEePlpeOlCzzTflBTQi-Twh/exec";
+    const GAS_APP_URL = "https://script.google.com/macros/s/AKfycbyPw7zA8VtvylWmB5g4rhMjRv7uUrubqeLxtkYq2U94SzbVCfzX1K-oRfaUBUYBLg/exec";
     let isGasConnected = false;
 
     /* User Authentication & Session State */
@@ -965,9 +1078,17 @@
 
     /* Built-in accounts database (Fallback memory synced with GAS) */
     const localUsersDb = {
-      'admin': { password: 'admin', role: 'user', balance: 1000000 },
-      'trader': { password: '12345', role: 'user', balance: 1000000 }
+      'admin': { password: 'admin', role: 'admin', balance: 10000000 },
+      'trader': { password: '123', role: 'user', balance: 1000000 }
     };
+
+    /* Local Giftcode Fallback Database */
+    const localGiftcodesDb = {
+      'VIP777': { reward: 7777000, maxUses: 999999, usedCount: 0, active: true },
+      'VIP999': { reward: 5000000, maxUses: 999999, usedCount: 0, active: true },
+      'WIKY2026': { reward: 2000000, maxUses: 999999, usedCount: 0, active: true }
+    };
+    const localRedeemedLogs = []; // { username, code }
 
     /* Simulation and Chart State */
     let candles = [];
@@ -988,8 +1109,8 @@
     };
 
     /* Portfolio State: Initial Balance 1,000,000 VND */
-    let initialBalance = 1000007;
-    let balance = 1000007;
+    let initialBalance = 1000000;
+    let balance = 1000000;
     let positions = [];
     let pendingOrders = [];
     let tradeHistory = [];
@@ -1040,13 +1161,11 @@
     let drawings = [];
     let currentDrawing = null;
 
-    // Snug price axis width (58px) and compact right padding (24px)
     const PRICE_AXIS_WIDTH = 58;
     const RIGHT_PADDING = 24;
 
     const REAL_CRYPTO_ASSETS = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'DOGEUSDT', 'AVAXUSDT', 'NEARUSDT'];
 
-    /* Global Loading Overlay Helpers */
     function showLoading(text = "Đang xử lý...") {
       const el = document.getElementById('global-loading-overlay');
       const txt = document.getElementById('global-loading-text');
@@ -1110,6 +1229,30 @@
         }
         return { status: 'ok', balance: payload.balance };
       }
+      if (action === 'getHistory') {
+        return { status: 'ok', history: tradeHistory };
+      }
+      if (action === 'redeemGiftcode') {
+        const code = String(payload.code || '').trim().toUpperCase();
+        const uname = String(payload.username || '').trim();
+        const hasUsed = localRedeemedLogs.some(l => l.username.toLowerCase() === uname.toLowerCase() && l.code === code);
+        if (hasUsed) {
+          return { status: 'error', message: 'Tài khoản của bạn đã nhận mã Giftcode này rồi!' };
+        }
+        const gift = localGiftcodesDb[code];
+        if (!gift || !gift.active) {
+          return { status: 'error', message: 'Mã Giftcode không tồn tại hoặc đã hết hạn!' };
+        }
+        localRedeemedLogs.push({ username: uname, code: code });
+        const newBal = (balance || 0) + gift.reward;
+        return {
+          status: 'ok',
+          message: `Chúc mừng bạn đã nhận thành công ${formatVND(gift.reward)} vào ví!`,
+          reward: gift.reward,
+          newBalance: newBal,
+          code: code
+        };
+      }
       return { status: 'ok' };
     }
 
@@ -1140,7 +1283,7 @@
         if (canvasEl) canvasEl.classList.remove('blur-sm', 'opacity-30');
       } else {
         balance = 0;
-        initialBalance = 1000007;
+        initialBalance = 1000000;
         if (overlay) overlay.classList.remove('hidden');
         if (canvasEl) canvasEl.classList.add('blur-sm', 'opacity-30');
       }
@@ -1168,7 +1311,9 @@
           btnOpenSettings.classList.remove('flex');
         }
 
-        showToast(`Đăng nhập thành công: ${user.username} (${user.role.toUpperCase()})! Vốn: ${formatVND(balance)}`, "success");
+        showToast(`Chào mừng ${user.username}! Vốn: ${formatVND(balance)}`, "success");
+        // Tự động tải lại lịch sử tài khoản từ Google Sheet khi đăng nhập
+        syncTradeHistoryFromSheet();
       } else {
         btnOpenAuth.classList.remove('hidden');
         userProfilePill.classList.add('hidden');
@@ -1189,6 +1334,115 @@
       }
       return true;
     }
+
+    /* ĐỒNG BỘ LỊCH SỬ GIAO DỊCH TỪ GOOGLE SHEET VÀ TÍNH TOÁN HIỆU SUẤT */
+    async function syncTradeHistoryFromSheet(manual = false) {
+      if (!currentUser) return;
+      if (manual) showLoading("Đang lấy lịch sử giao dịch...");
+
+      const res = await callGasApi('getHistory', { username: currentUser.username });
+      if (manual) hideLoading();
+
+      if (res && res.status === 'ok' && Array.isArray(res.history)) {
+        tradeHistory = res.history;
+        updateHistoryTable();
+        if (manual) showToast("Đã đồng bộ thành công lịch sử giao dịch!", "success");
+      } else {
+        if (manual) showToast("Không thể kết nối đến Google Sheet để lấy lịch sử.", "warning");
+      }
+    }
+
+    async function handleRedeemGiftcode(codeStr) {
+      if (!requireAuth()) return;
+
+      const code = String(codeStr || '').trim().toUpperCase();
+      if (!code) {
+        showToast("Vui lòng nhập mã Giftcode!", "warning");
+        return;
+      }
+
+      showLoading(`Đang xác thực mã "${code}" trên hệ thống...`);
+      const res = await callGasApi('redeemGiftcode', {
+        username: currentUser.username,
+        code: code
+      });
+      hideLoading();
+
+      if (res && res.status === 'ok') {
+        balance = res.newBalance;
+        currentUser.balance = res.newBalance;
+        playAudioTone('win');
+        updateHeaderBalances();
+        updateEstimates();
+        document.getElementById('giftcode-modal').classList.add('hidden');
+        document.getElementById('input-giftcode').value = '';
+        showToast(res.message || `Nhận thành công ${formatVND(res.reward)} vào ví!`, "success");
+      } else {
+        showToast(res.message || "Đổi Giftcode không thành công!", "error");
+      }
+    }
+
+    /* POPUP TỰ ĐỘNG SAU 60 GIÂY: "TẶNG CODE 7777" */
+    function init60sGiftcodePopupTimer() {
+      setTimeout(() => {
+        const popup = document.getElementById('popup-giftcode-60s');
+        if (popup) {
+          popup.classList.remove('hidden');
+          playAudioTone('win');
+        }
+      }, 60000); // 60 giây sau khi truy cập
+    }
+
+    document.getElementById('btn-close-60s-popup').addEventListener('click', () => {
+      document.getElementById('popup-giftcode-60s').classList.add('hidden');
+    });
+
+    document.getElementById('btn-dismiss-60s-code').addEventListener('click', () => {
+      document.getElementById('popup-giftcode-60s').classList.add('hidden');
+    });
+
+    document.getElementById('btn-claim-60s-code').addEventListener('click', () => {
+      document.getElementById('popup-giftcode-60s').classList.add('hidden');
+      
+      const giftModal = document.getElementById('giftcode-modal');
+      const inputGift = document.getElementById('input-giftcode');
+      giftModal.classList.remove('hidden');
+      inputGift.value = '7777';
+
+      if (!currentUser) {
+        showToast("Bạn đã nhận mã VIP777! Vui lòng đăng nhập để nạp tiền vào ví.", "info");
+      } else {
+        handleRedeemGiftcode('VIP777');
+      }
+    });
+
+    /* Nút mở Modal Giftcode trên Header */
+    document.getElementById('btn-open-giftcode').addEventListener('click', () => {
+      document.getElementById('giftcode-modal').classList.remove('hidden');
+    });
+    document.getElementById('btn-close-giftcode').addEventListener('click', () => {
+      document.getElementById('giftcode-modal').classList.add('hidden');
+    });
+
+    /* Chọn nhanh các code mẫu */
+    document.querySelectorAll('.btn-quick-fill-code').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const code = e.currentTarget.getAttribute('data-code');
+        document.getElementById('input-giftcode').value = code;
+      });
+    });
+
+    /* Xử lý gửi Form Giftcode */
+    document.getElementById('giftcode-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const code = document.getElementById('input-giftcode').value;
+      handleRedeemGiftcode(code);
+    });
+
+    /* Xử lý nút Đồng Bộ Lịch Sử Sheet trong Tab History */
+    document.getElementById('btn-sync-history-sheet').addEventListener('click', () => {
+      syncTradeHistoryFromSheet(true);
+    });
 
     function initNewMarketScenario(forcedAsset = null, notify = false) {
       const asset = forcedAsset || (selectedRealAsset === 'RANDOM'
@@ -2435,7 +2689,7 @@
 
       balance += Math.max(0, pos.margin + pnl);
 
-      tradeHistory.unshift({
+      const closedTrade = {
         id: pos.id,
         type: pos.type,
         shares: pos.shares,
@@ -2444,7 +2698,9 @@
         pnl: pnl,
         reason: reason,
         time: new Date().toLocaleTimeString('vi-VN')
-      });
+      };
+
+      tradeHistory.unshift(closedTrade);
 
       // Synchronize trade and balance to Google Sheets
       if (currentUser) {
@@ -2532,7 +2788,6 @@
       }, 1000);
     });
 
-    /* Nâng cấp Sổ Lệnh: Hiển thị đúng 3 mức giá gần nhất kèm Depth Volume Bar */
     function updateMiniOrderBook(currentPrice) {
       const asksEl = document.getElementById('mini-asks');
       const bidsEl = document.getElementById('mini-bids');
@@ -2542,7 +2797,7 @@
 
       const maxSampleVol = 60;
 
-      // 3 mức giá Bán (Asks) gần nhất (từ cao xuống tiệm cận mid price)
+      // 3 mức giá Bán (Asks) gần nhất
       for (let i = 3; i >= 1; i--) {
         const p = currentPrice + (i * WIKY_SPEC.tickSize);
         const qty = Math.floor(Math.random() * 40 + 12);
@@ -2567,7 +2822,7 @@
 
       document.getElementById('ob-mid-price').textContent = formatVND(currentPrice);
 
-      // 3 mức giá Mua (Bids) gần nhất (từ tiệm cận mid price xuống thấp hơn)
+      // 3 mức giá Mua (Bids) gần nhất
       for (let i = 1; i <= 3; i++) {
         const p = currentPrice - (i * WIKY_SPEC.tickSize);
         const qty = Math.floor(Math.random() * 40 + 12);
@@ -2608,7 +2863,6 @@
         cEl.className = 'text-[10px] sm:text-[11px] font-mono font-semibold text-brand-sell leading-none';
       }
 
-      // Giá trị cao nhất/thấp nhất trong phạm vi 10 phút thị trường
       const windowMs = 10 * 60 * 1000;
       const curTime = currentCandle ? currentCandle.time : Date.now();
       let h10m = currentCandle ? currentCandle.high : price;
@@ -2756,9 +3010,10 @@
       let losses = 0;
 
       tradeHistory.forEach(h => {
-        totalPnl += h.pnl;
-        if (h.pnl > 0) wins++;
-        else if (h.pnl < 0) losses++;
+        const p = Number(h.pnl) || 0;
+        totalPnl += p;
+        if (p > 0) wins++;
+        else if (p < 0) losses++;
       });
 
       const totalClosed = tradeHistory.length;
@@ -2782,15 +3037,16 @@
       empty.classList.add('hidden');
 
       tradeHistory.forEach(h => {
-        const isUp = h.pnl >= 0;
+        const p = Number(h.pnl) || 0;
+        const isUp = p >= 0;
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td class="py-1.5 px-3 text-brand-textMuted">${h.time}</td>
+          <td class="py-1.5 px-3 text-brand-textMuted">${h.time ? String(h.time).slice(11, 19) || h.time : '--'}</td>
           <td class="py-1.5 px-2 font-bold ${h.type === 'LONG' ? 'text-brand-buy' : 'text-brand-sell'}">${h.type}</td>
           <td class="py-1.5 px-2 text-slate-300">${formatVND(h.entryPrice)} &rarr; ${formatVND(h.exitPrice)}</td>
-          <td class="py-1.5 px-2 text-brand-textMuted text-[10px]">${h.reason}</td>
+          <td class="py-1.5 px-2 text-brand-textMuted text-[10px]">${h.reason || 'Đóng lệnh'}</td>
           <td class="py-1.5 px-3 text-right font-bold ${isUp ? 'text-brand-buy' : 'text-brand-sell'}">
-            ${isUp ? '+' : ''}${formatVND(h.pnl)}
+            ${isUp ? '+' : ''}${formatVND(p)}
           </td>
         `;
         tbody.appendChild(tr);
@@ -3133,7 +3389,6 @@
       });
     }
 
-    // Admin Settings Modal Logic
     const adminModal = document.getElementById('settings-modal');
     const modalBtnPauseToggle = document.getElementById('modal-btn-pause-toggle');
     const modalPauseIcon = document.getElementById('modal-pause-icon');
@@ -3171,7 +3426,7 @@
       tbody.innerHTML = `
         <tr>
           <td colspan="4" class="p-4 text-center text-brand-textMuted text-xs">
-            <i class="fa-solid fa-spinner animate-spin mr-1.5 text-amber-400"></i> Đang đọc dữ liệu từ Google Sheet...
+            <i class="fa-solid fa-spinner animate-spin mr-1.5 text-amber-400"></i> Đang đọc dữ liệu...
           </td>
         </tr>
       `;
@@ -3497,6 +3752,11 @@
         const t = e.currentTarget.getAttribute('data-tab');
         document.querySelectorAll('.bot-tab-content').forEach(c => c.classList.add('hidden'));
         document.getElementById(t).classList.remove('hidden');
+
+        // Khi người dùng bấm sang tab lịch sử thì đồng bộ ngay từ Google Sheet
+        if (t === 'tab-history') {
+          syncTradeHistoryFromSheet();
+        }
       });
     });
 
@@ -3551,6 +3811,7 @@
         secPos.classList.remove('hidden');
         secPos.classList.remove('h-48', 'sm:h-52', 'h-8');
         secPos.classList.add('flex-1');
+        syncTradeHistoryFromSheet();
       }
 
       if (view !== 'positions' && !isDrawerCollapsed) {
@@ -3591,6 +3852,9 @@
 
       // Mặc định ban đầu chưa đăng nhập: làm mờ biểu đồ và hiện thông báo
       setAuthenticatedUser(null);
+
+      // Kích hoạt bộ đếm thời gian 60 giây xuất hiện popup tặng Giftcode 7777
+      init60sGiftcodePopupTimer();
 
       // Tự động kiểm tra và đồng bộ kết nối Google Apps Script
       callGasApi('doGet').then((res) => {
